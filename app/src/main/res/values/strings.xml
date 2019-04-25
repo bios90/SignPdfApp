@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SignPdfApp</string>
+    <string name="ic_pin">&#xf0c6;</string>
+    <string name="ic_pen">&#xf5ac;</string>
+    <string name="ic_hands">&#xf2b5;</string>
+    <string name="ic_times">&#xf00d;</string>
+    <string name="ic_user">&#xf007;</string>
+    <string name="ic_phone">&#xf095;</string>
+    <string name="ic_adress">&#xf3c5;</string>
+    <string name="ic_date">&#xf073;</string>
+    <string name="ic_tools">&#xf5ae;</string>
+    <string name="ic_plus_circle">&#xf055;</string>
+</resources>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_gray0"
+        android:elevation="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.M"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:padding="6dp"
+            android:text="Добавление материала"
+            android:textColor="@color/white" />
+
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Наименование материала"
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_material_name"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:text="Ширина"
+                android:textColor="@color/gray3" />
+
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:text="Высота"
+                android:textColor="@color/gray3" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/et_width"
+
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="10" />
+
+            <EditText
+                android:id="@+id/et_height"
+
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="10" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Цвет профиля"
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_color"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Крепление"
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_krep"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Тип упр."
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_control"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:text="Кол-во"
+                android:textColor="@color/gray3" />
+
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:text="Цена за едн."
+                android:textColor="@color/gray3" />
+
+
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:text="Сумма"
+                android:textColor="@color/gray3" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/et_count"
+
+                android:textAlignment="center"
+                android:inputType="numberSigned"
+                android:gravity="center"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="10" />
+
+            <EditText
+                android:id="@+id/et_price"
+
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                android:gravity="center"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="10" />
+
+
+            <EditText
+                android:id="@+id/et_sum"
+
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                android:gravity="center"
+                style="@style/EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="10" />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_bottom_white"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_cancel"
+
+                android:layout_marginRight="5dp"
+                android:textColor="@color/sel_orange"
+                style="@style/Btn.Sm"
+                android:text="Отмена"
+                android:background="@drawable/btn_empty_orange_rounded"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="32dp" />
+
+
+            <Button
+                android:id="@+id/btn_ok"
+
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/sel_white"
+                style="@style/Btn.Sm"
+                android:text="Добавить"
+                android:background="@drawable/btn_grad_orange_rounded"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="32dp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@color/gray5"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View
+        android:layout_marginTop="84dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <ImageView
+        android:layout_marginTop="48dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logonoborder"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/la_begin"
+
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_grad_blue_rounded"
+        android:layout_width="260dp"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_pen"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Новый документ"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/la_finished"
+
+        android:layout_above="@id/la_begin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/btn_grad_green_rounded"
+        android:layout_width="260dp"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_pin"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Завершенные"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#FF6A00</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="orangeBase">#FF6A00</color>
+    <color name="orangeDark">#E36307</color>
+    <color name="orangeLight">#FE8733</color>
+    <color name="orangeGradMax">#FF522E</color>
+    <color name="orangeGradMin">#FF6A00</color>
+    <color name="redBase">#F51C1C</color>
+    <color name="redDark">#c70303</color>
+    <color name="yellow">#FFBB00</color>
+    <color name="yellowGradMin">#FFBB00</color>
+    <color name="yellowGradMax">#FFD153</color>
+    <color name="yellowGradDarkMin">#E4A700</color>
+    <color name="yellowGradDarkMax">#FFD153</color>
+
+    <color name="orangeGradDarkMax">#E62C08</color>
+    <color name="orangeGradDarkMin">#E86507</color>
+
+    <color name="black">#2A2D34</color>
+    <color name="white">#ffffff</color>
+    <color name="gray0">#F9F9F9</color>
+    <color name="gray1">#EBEBEC</color>
+    <color name="gray2">#C4C5C7</color>
+    <color name="gray3">#8A8C90</color>
+    <color name="gray4">#64666B</color>
+    <color name="gray5">#3D4046</color>
+
+    <color name="greenGradMin">#009B72</color>
+    <color name="greenGradMax">#0ACE9A</color>
+    <color name="greenGradDarkMin">#007E5D</color>
+    <color name="greenGradDarkMax">#00BD8B</color>
+
+    <color name="blueGradMin">#009DDC</color>
+    <color name="blueGradMax">#18BDFF</color>
+    <color name="blueGradDarkMin">#008BC3</color>
+    <color name="blueGradDarkMax">#03ACEF</color>
+
+    <color name="green">#009B72</color>
+    <color name="blue">#009DDC</color>
+</resources>
