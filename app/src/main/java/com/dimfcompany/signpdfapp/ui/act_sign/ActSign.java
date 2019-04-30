@@ -4,14 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.utils.FileManager;
+import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.PdfCreator;
+import com.dimfcompany.signpdfapp.utils.StringManager;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -39,6 +45,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         mvpView.registerListener(this);
         setContentView(mvpView.getRootView());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         if(model_document == null)
         {
             model_document = new Model_Document();
@@ -46,15 +53,22 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
+        mvpView.setSignatureSizes();
+    }
+
+    @Override
     public void clickedSignaturePad()
     {
-        navigationManager.toSignDialog(mvpView.getCurrentFileName());
+//        navigationManager.toSignDialog(mvpView.getCurrentFileName());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        model_document = collectDoucmentData();
+        model_document = collectDocumentData();
         outState.putSerializable(Constants.EXTRA_MODEL_DOCUMENT,model_document);
         super.onSaveInstanceState(outState);
     }
@@ -73,18 +87,41 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public void clickedCreatePDf()
     {
-        model_document = collectDoucmentData();
-        pdfCreator.createPdfAsync(model_document,this);
+        model_document = collectDocumentData();
+        pdfCreator.createPdfAsync(model_document,false,this);
+    }
+
+    @Override
+    public void clickedPreShow()
+    {
+        model_document = collectDocumentData();
+        pdfCreator.createPdfAsync(model_document,true,this);
+    }
+
+    @Override
+    public void onShowCallSuccess(String fileName)
+    {
+        File file = fileManager.getFileFromTemp(fileName,Constants.FOLDER_CONTRACTS, null);
+        try
+        {
+            GlobalHelper.openPdf(ActSign.this, file);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "Error on pf intent " + e.getMessage());
+            messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
+        }
     }
 
     @Override
     public void clickedMaterials()
     {
-        model_document = collectDoucmentData();
+        model_document = collectDocumentData();
+        Log.e(TAG, "clickedMaterials: "+model_document.toString() );
         navigationManager.toActProducts(Constants.RQ_PRODUCTS_SCREEN,model_document);
     }
 
-    private Model_Document collectDoucmentData()
+    private Model_Document collectDocumentData()
     {
         model_document.setCity(mvpView.getCity());
         model_document.setFio(mvpView.getFio());
@@ -92,6 +129,17 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         model_document.setPhone(mvpView.getPhone());
         model_document.setSignature_file_name(mvpView.getCurrentFileName());
         model_document.setDate(System.currentTimeMillis());
+        model_document.setCode(StringManager.getCode(mvpView.getCity()));
+
+        model_document.setSum(GlobalHelper.countSum(model_document));
+        model_document.setMontage(mvpView.getMontage());
+        model_document.setDelivery(mvpView.getDelivery());
+        model_document.setSale(mvpView.getSale());
+        model_document.setPrepay(mvpView.getPrePay());
+        model_document.setItogo_sum(GlobalHelper.countItogoSum(model_document));
+
+        model_document.setOrder_form(mvpView.getOrderForm());
+        model_document.setDop_info(mvpView.getDopInfo());
 
         return model_document;
     }

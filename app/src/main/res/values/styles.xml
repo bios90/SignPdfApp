@@ -82,6 +82,40 @@
     <style name="TVSemi.Xl" parent="TVSemi">
         <item name="android:textSize">18dp</item>
     </style>
+
+
+
+    <style name="TVBold">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/sel_white</item>
+        <item name="android:text">Ок</item>
+        <item name="android:fontFamily">@font/monbold</item>
+    </style>
+
+
+    <style name="TVBold.Xxs" parent="TVBold">
+        <item name="android:textSize">8dp</item>
+    </style>
+
+    <style name="TVBold.Xs" parent="TVBold">
+        <item name="android:textSize">10dp</item>
+    </style>
+
+    <style name="TVBold.S" parent="TVBold">
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="TVBold.M" parent="TVBold">
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="TVBold.L" parent="TVBold">
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="TVBold.Xl" parent="TVBold">
+        <item name="android:textSize">18dp</item>
+    </style>
     
     
 

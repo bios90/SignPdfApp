@@ -1,7 +1,11 @@
 package com.dimfcompany.signpdfapp.utils;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.ColorRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,6 +24,7 @@ public class MessagesManager
     public interface DialogButtonsListener
     {
         void onOkClicked(DialogInterface dialog);
+
         void onCancelClicked(DialogInterface dialog);
     }
 
@@ -32,12 +37,12 @@ public class MessagesManager
 
     public void showRedAlerter(String title, String text)
     {
-        showAlerter(title,text,R.color.redBase);
+        showAlerter(title, text, R.color.redBase);
     }
 
     public void showGreenAlerter(String title, String text)
     {
-        showAlerter(title,text,R.color.green);
+        showAlerter(title, text, R.color.green);
     }
 
     public void showAlerter(String title, String text, @ColorRes int color)
@@ -60,7 +65,7 @@ public class MessagesManager
 
     public void showSimpleDialog(String title, String text, String btnOkText, String btnCancelText, final DialogButtonsListener listener)
     {
-        View dialogView = layoutInflater.inflate(R.layout.dialog,null);
+        View dialogView = layoutInflater.inflate(R.layout.dialog, null);
 
         TextView tvTitle = dialogView.findViewById(R.id.tv_title);
         TextView tvText = dialogView.findViewById(R.id.tv_text);
@@ -95,5 +100,25 @@ public class MessagesManager
         });
 
         dialog.show();
+    }
+
+    public void vibrate()
+    {
+        vibrate(200);
+    }
+
+    public void vibrate(long miliseconds)
+    {
+        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            v.vibrate(VibrationEffect.createOneShot(miliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+        else
+        {
+
+            v.vibrate(miliseconds);
+        }
     }
 }

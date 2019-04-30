@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.base.adapters.Adapter_Finished;
 import com.dimfcompany.signpdfapp.models.Model_Document;
@@ -53,10 +54,17 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
         mvpView.bindDocuments(documents, this);
     }
 
+
+    @Override
+    public void clickedDelete(Model_Document document)
+    {
+        Log.e(TAG, "clickedDelete: Will delete");
+    }
+
     @Override
     public void clickedCard(Model_Document document)
     {
-        File file = fileManager.getFileFromTemp(document.getPdf_file_name(), null);
+        File file = fileManager.getFileFromTemp(document.getPdf_file_name(),Constants.FOLDER_CONTRACTS, null);
         if (!file.exists())
         {
             messagesManager.showRedAlerter("Ошибка", "Файл не найден");
@@ -74,16 +82,11 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
         }
     }
 
-    @Override
-    public void clickedDelete(Model_Document document)
-    {
-        Log.e(TAG, "clickedDelete: Will delete");
-    }
 
     @Override
     public void clickedSend(Model_Document document)
     {
-        File file = fileManager.getFileFromTemp(document.getPdf_file_name(), null);
+        File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
         if (!file.exists())
         {
             messagesManager.showRedAlerter("Ошибка", "Файл не найден");

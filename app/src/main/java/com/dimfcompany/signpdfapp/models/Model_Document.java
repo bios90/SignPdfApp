@@ -13,7 +13,18 @@ public class Model_Document implements Serializable
     String phone;
     String signature_file_name;
     String pdf_file_name;
+    String code;
     long date;
+
+    double sum;
+    double montage;
+    double delivery;
+    double sale;
+    double itogo_sum;
+    double prepay;
+
+    String order_form;
+    String dop_info;
 
     List<Model_Product> listOfProducts = new ArrayList<>();
 
@@ -31,6 +42,16 @@ public class Model_Document implements Serializable
     public void setListOfProducts(List<Model_Product> listOfProducts)
     {
         this.listOfProducts = listOfProducts;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
     }
 
     public int getId_local()
@@ -111,5 +132,110 @@ public class Model_Document implements Serializable
     public void setSignature_file_name(String signature_file_name)
     {
         this.signature_file_name = signature_file_name;
+    }
+
+
+    public double getSum()
+    {
+        return sum;
+    }
+
+    public void setSum(double sum)
+    {
+        this.sum = sum;
+    }
+
+    public double getMontage()
+    {
+        return montage;
+    }
+
+    public void setMontage(double montage)
+    {
+        this.montage = montage;
+    }
+
+    public double getDelivery()
+    {
+        return delivery;
+    }
+
+    public void setDelivery(double delivery)
+    {
+        this.delivery = delivery;
+    }
+
+    public double getSale()
+    {
+        return sale;
+    }
+
+    public void setSale(double sale)
+    {
+        this.sale = sale;
+    }
+
+    public double getItogo_sum()
+    {
+        return itogo_sum;
+    }
+
+    public void setItogo_sum(double itogo_sum)
+    {
+        this.itogo_sum = itogo_sum;
+    }
+
+    public double getPrepay()
+    {
+        return prepay;
+    }
+
+    public void setPrepay(double prepay)
+    {
+        this.prepay = prepay;
+    }
+
+    public String getOrder_form()
+    {
+        return order_form;
+    }
+
+    public void setOrder_form(String order_form)
+    {
+        this.order_form = order_form;
+    }
+
+    public String getDop_info()
+    {
+        return dop_info;
+    }
+
+    public void setDop_info(String dop_info)
+    {
+        this.dop_info = dop_info;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Model_Document{" +
+                "id_local=" + id_local +
+                ", city=" + city +
+                ", fio='" + fio + '\'' +
+                ", adress='" + adress + '\'' +
+                ", phone='" + phone + '\'' +
+                ", signature_file_name='" + signature_file_name + '\'' +
+                ", pdf_file_name='" + pdf_file_name + '\'' +
+                ", date=" + date +
+                ", sum=" + sum +
+                ", montage=" + montage +
+                ", delivery=" + delivery +
+                ", sale=" + sale +
+                ", itogo_sum=" + itogo_sum +
+                ", prepay=" + prepay +
+                ", order_form='" + order_form + '\'' +
+                ", dop_info='" + dop_info + '\'' +
+                ", listOfProducts=" + listOfProducts +
+                '}';
     }
 }

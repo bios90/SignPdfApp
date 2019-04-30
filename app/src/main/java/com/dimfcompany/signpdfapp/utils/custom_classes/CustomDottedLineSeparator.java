@@ -1,0 +1,39 @@
+package com.dimfcompany.signpdfapp.utils.custom_classes;
+
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+
+public class CustomDottedLineSeparator extends DottedLineSeparator
+{
+    protected float dash = 0;
+    protected float phase = 2.5f;
+
+    public float getDash()
+    {
+        return dash;
+    }
+
+    public float getPhase()
+    {
+        return phase;
+    }
+
+    public void setDash(float dash)
+    {
+        this.dash = dash;
+    }
+
+    public void setPhase(float phase)
+    {
+        this.phase = phase;
+    }
+
+    public void draw(PdfContentByte canvas, float llx, float lly, float urx, float ury, float y)
+    {
+        canvas.saveState();
+        canvas.setLineWidth(lineWidth);
+        canvas.setLineDash(dash, gap, phase);
+        drawLine(canvas, llx, urx, y);
+        canvas.restoreState();
+    }
+}

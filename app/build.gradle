@@ -19,6 +19,9 @@ android {
 }
 
 dependencies {
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation 'com.github.pedromassango:doubleClick:3.0'
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
     implementation 'com.jmedeisis:draglinearlayout:1.1.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.itextpdf:itext-pdfa:5.5.10'

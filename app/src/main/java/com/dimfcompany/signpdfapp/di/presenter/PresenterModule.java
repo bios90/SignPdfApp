@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import com.dimfcompany.signpdfapp.base.viewmvcfactory.ViewMvcFactory;
 import com.dimfcompany.signpdfapp.sqlite.CrudHelper;
 import com.dimfcompany.signpdfapp.utils.FileManager;
+import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.NavigationManager;
 import com.dimfcompany.signpdfapp.utils.PdfCreator;
@@ -44,9 +45,9 @@ public class PresenterModule
     }
 
     @Provides
-    ViewMvcFactory getViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager)
+    ViewMvcFactory getViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager,GlobalHelper globalHelper, MessagesManager messagesManager)
     {
-        return new ViewMvcFactory(layoutInflater, fileManager, stringManager);
+        return new ViewMvcFactory(layoutInflater, fileManager, stringManager, globalHelper, messagesManager);
     }
 
     @Provides
@@ -85,4 +86,9 @@ public class PresenterModule
         return new StringManager(activity);
     }
 
+    @Provides
+    GlobalHelper gertGlobalHelper(Context context)
+    {
+        return new GlobalHelper(context);
+    }
 }

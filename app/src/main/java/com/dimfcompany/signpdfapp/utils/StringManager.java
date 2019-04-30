@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
 
@@ -14,12 +16,14 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 public class StringManager
 {
     private static final String TAG = "StringManager";
+    public static final String FORMAT_FOR_CODE = "ddMMyyHHmm";
 
     private AppCompatActivity activity;
     private static final String DATA = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -43,6 +47,10 @@ public class StringManager
 
     public static String formatFioForOthcet(String fio)
     {
+        if (TextUtils.isEmpty(fio))
+        {
+            return "";
+        }
         String formated = null;
 
         List<String> wordsAsList = new ArrayList<String>(Arrays.asList(fio.split(" ")));
@@ -118,7 +126,6 @@ public class StringManager
     }
 
 
-
     public static String formatWithPattern(String value, String pattern)
     {
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
@@ -127,7 +134,6 @@ public class StringManager
         DecimalFormat df = new DecimalFormat(pattern, formatSymbols);
         return df.format(Double.valueOf(value));
     }
-
 
 
     public SpannableString getBoldSpannable(String str, int color)
@@ -157,6 +163,39 @@ public class StringManager
         sb.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         return SpannableString.valueOf(sb);
+    }
+
+    public static String getCode(int city)
+    {
+        if (city > 3 || city < 0)
+        {
+            city = 0;
+        }
+
+        String code;
+
+        switch (city)
+        {
+            case 0:
+                code = "77";
+                break;
+            case 1:
+                code = "78";
+                break;
+            case 2:
+                code = "23";
+                break;
+            case 3:
+                code = "63";
+                break;
+
+            default:
+                code = "77";
+        }
+        code += "-";
+        code+=DateFormat.format(FORMAT_FOR_CODE, new Date()).toString();
+
+        return code;
     }
 
 }

@@ -1,1 +1,3 @@
-include ':app'
+
+include ':app',':signature-pad'
+//project(':signature-pad').projectDir = new File('libs/signature-pad')

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:background="@color/gray0"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray0">
 
     <TextView
         android:id="@+id/header"
@@ -14,114 +14,122 @@
         android:text="Материалы договора" />
 
     <ScrollView
-        android:layout_below="@id/header"
-        android:layout_above="@id/la_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/card_bottom"
+        android:layout_below="@id/header">
 
         <com.jmedeisis.draglinearlayout.DragLinearLayout
             android:id="@+id/drag_la"
 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingTop="4dp"
-            android:paddingBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingBottom="20dp">
 
         </com.jmedeisis.draglinearlayout.DragLinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/la_bottom"
 
-        android:orientation="vertical"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="20dp">
 
         <LinearLayout
-            android:paddingTop="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:paddingLeft="8dp"
-                android:gravity="left"
-                android:textColor="@color/gray3"
-                android:text="Материалов :"
-                style="@style/TVReg.S"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp">
 
-            <TextView
-                android:id="@+id/tv_all_product_count"
+                <TextView
+                    style="@style/TVReg.S"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="left"
+                    android:paddingLeft="8dp"
+                    android:text="Материалов :"
+                    android:textColor="@color/gray3" />
 
-                android:gravity="left"
-                android:textColor="@color/blue"
-                android:text="24"
-                style="@style/TVSemi.M"
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_all_product_count"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="left"
+                    android:text="24"
+                    android:textColor="@color/blue" />
 
 
-            <TextView
-                android:paddingLeft="8dp"
-                android:gravity="left"
-                android:textColor="@color/gray3"
-                android:text="Сумма :"
-                style="@style/TVReg.S"
-                android:layout_weight="10"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/TVReg.S"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="left"
+                    android:paddingLeft="8dp"
+                    android:text="Сумма :"
+                    android:textColor="@color/gray3" />
 
-            <TextView
-                android:id="@+id/tv_all_product_sum"
+                <TextView
+                    android:id="@+id/tv_all_product_sum"
 
-                android:gravity="left"
-                android:textColor="@color/green"
-                android:text="97 000 р"
-                style="@style/TVSemi.M"
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="left"
+                    android:text="97 000 р"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/la_add_product"
+
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_plus_circle" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Добавить материал" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/la_add_product"
-
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/btn_grad_orange_rounded">
-
-            <TextView
-                style="@style/IconTv.L"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:text="@string/ic_plus_circle" />
-
-
-            <TextView
-                style="@style/TVSemi.S"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="Добавить материал" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

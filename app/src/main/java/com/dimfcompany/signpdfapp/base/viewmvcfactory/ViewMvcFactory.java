@@ -17,6 +17,8 @@ import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvpView;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvpView;
 import com.dimfcompany.signpdfapp.utils.FileManager;
+import com.dimfcompany.signpdfapp.utils.GlobalHelper;
+import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.StringManager;
 
 public class ViewMvcFactory
@@ -24,12 +26,16 @@ public class ViewMvcFactory
     private final LayoutInflater layoutInflater;
     private final FileManager fileManager;
     private final StringManager stringManager;
+    private final GlobalHelper globalHelper;
+    private final MessagesManager messagesManager;
 
-    public ViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager)
+    public ViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager, GlobalHelper globalHelper, MessagesManager messagesManager)
     {
         this.layoutInflater = layoutInflater;
         this.fileManager = fileManager;
         this.stringManager = stringManager;
+        this.globalHelper = globalHelper;
+        this.messagesManager = messagesManager;
     }
 
 
@@ -40,7 +46,7 @@ public class ViewMvcFactory
 
     public ActSignMvp.MvpView getActSignMvpView(@Nullable ViewGroup parent)
     {
-        return new ActSignMvpView(layoutInflater,parent,fileManager);
+        return new ActSignMvpView(layoutInflater,parent,fileManager,globalHelper, messagesManager);
     }
 
     public ActSignatureDialogMvp.MvpView getActSignatureDialogMvpView(@Nullable ViewGroup parent)

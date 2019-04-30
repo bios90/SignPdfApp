@@ -13,10 +13,17 @@ public interface ActSignMvp
         String getAdress();
         String getPhone();
         String getCurrentFileName();
+        double getMontage();
+        double getDelivery();
+        double getSale();
+        double getPrePay();
+        String getOrderForm();
+        String getDopInfo();
 
         void bindModelDocument(Model_Document document);
         void bindSignatureFile(String filename);
         void updateMaterialButton();
+        void setSignatureSizes();
     }
 
     interface ViewListener
@@ -24,6 +31,7 @@ public interface ActSignMvp
         void clickedSignaturePad();
         void clickedCreatePDf();
         void clickedMaterials();
+        void clickedPreShow();
         Model_Document getDocument();
     }
 }

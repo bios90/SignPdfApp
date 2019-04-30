@@ -19,4 +19,7 @@ public class Constants
 
     public static final String EXTANSION_PNG = "png";
     public static final String EXTANSION_PDF = "pdf";
+
+    public static final String FOLDER_TEMP_FILES = "temp_files";
+    public static final String FOLDER_CONTRACTS = "contracts";
 }

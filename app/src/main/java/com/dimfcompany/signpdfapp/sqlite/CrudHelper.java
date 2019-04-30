@@ -13,7 +13,7 @@ import com.dimfcompany.signpdfapp.sqlite.SqliteHelper.ColumnsDocuments;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrudHelper
+public class CrudHelper implements LocalDatabase
 {
     private static final String TAG = "CrudHelper";
 
@@ -25,7 +25,7 @@ public class CrudHelper
     }
 
 
-    public Integer insertDocument(Model_Document document)
+    public void insertDocument(Model_Document document)
     {
         ContentValues values = new ContentValues();
         values.put(ColumnsDocuments.CITY,document.getCity());
@@ -37,8 +37,6 @@ public class CrudHelper
 
         Uri uri = context.getContentResolver().insert(WintecProvider.CONTENT_URI_TABLE_DOCUMENTS,values);
         Log.e(TAG, "INSERTED URI IS " +uri);
-
-        return (int) ContentUris.parseId(uri);
     }
 
     public List<Model_Document> getAllSavedDocuments()

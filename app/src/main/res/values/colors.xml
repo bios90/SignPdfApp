@@ -28,6 +28,7 @@
     <color name="gray3">#8A8C90</color>
     <color name="gray4">#64666B</color>
     <color name="gray5">#3D4046</color>
+    <color name="gray5Trans">#333D4046</color>
 
     <color name="greenGradMin">#009B72</color>
     <color name="greenGradMax">#0ACE9A</color>
@@ -41,4 +42,5 @@
 
     <color name="green">#009B72</color>
     <color name="blue">#009DDC</color>
+    <color name="prenColor">#4169e1</color>
 </resources>

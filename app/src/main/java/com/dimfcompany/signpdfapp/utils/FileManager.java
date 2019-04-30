@@ -28,12 +28,17 @@ public class FileManager
 
     public File createRandomNameFile(String extansion)
     {
+        return createRandomNameFile(extansion,Constants.FOLDER_TEMP_FILES);
+    }
+
+    public File createRandomNameFile(String extansion,String folder)
+    {
         try
         {
             File file;
 
             String root = context.getExternalFilesDir(null).toString();
-            File dir_temp_files = new File(root + "/temp_files");
+            File dir_temp_files = new File(root +"/"+ folder);
             if (!dir_temp_files.exists())
             {
                 dir_temp_files.mkdirs();
@@ -50,14 +55,19 @@ public class FileManager
         }
     }
 
-
     public File getFileFromTemp(String fileName, @Nullable String extansion)
+    {
+        return getFileFromTemp(fileName,Constants.FOLDER_TEMP_FILES,extansion);
+    }
+
+
+    public File getFileFromTemp(String fileName,String folder, @Nullable String extansion)
     {
         try
         {
             File file;
             String root = context.getExternalFilesDir(null).toString();
-            File dir_temp_files = new File(root + "/temp_files");
+            File dir_temp_files = new File(root +"/"+folder);
             if (extansion != null)
             {
                 fileName += "."+extansion;

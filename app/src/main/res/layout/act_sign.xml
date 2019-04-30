@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:clipToPadding="false"
     android:orientation="vertical">
 
@@ -15,80 +20,120 @@
         android:text="Создание документа" />
 
     <ScrollView
+        android:id="@+id/scroll"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/header">
+        android:layout_above="@id/card_bottom"
+        android:layout_below="@id/header"
+        android:clipToPadding="false"
+        android:padding="6dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:layout_margin="4dp"
             android:background="@drawable/rounded_gray0"
-            android:elevation="12dp">
+            android:elevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/TVSemi.M"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
                     android:background="@drawable/rounded_top_black"
-                    android:padding="6dp"
-                    android:text="Выберите город"
-                    android:textColor="@color/white" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <RadioGroup
-                    android:id="@+id/rg_city"
+                    <TextView
+                        style="@style/TVSemi.M"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="52dp"
+                        android:text="Выберите город"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_city_arrow"
+
+                        android:textColor="@color/sel_white"
+                        android:layout_marginRight="6dp"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/ic_down_arrow"
+                        style="@style/IconTv.L"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp" />
+
+                </RelativeLayout>
+
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/exp_cities"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="24dp"
-                    android:paddingRight="24dp">
+                    app:el_duration="300"
+                    app:el_expanded="false"
+                    app:el_parallax="0.5">
 
-                    <RadioButton
-                        android:checked="true"
+                    <RadioGroup
+                        android:id="@+id/rg_city"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:buttonTint="@color/orangeBase"
-                        android:fontFamily="@font/monmedium"
-                        android:text="Москва"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
+                        android:checkedButton="@id/rb_moscow"
+                        android:orientation="vertical"
+                        android:paddingLeft="24dp"
+                        android:paddingRight="24dp">
 
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="@color/orangeBase"
-                        android:fontFamily="@font/monmedium"
-                        android:text="Санкт-Петербург"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
+                        <RadioButton
+                            android:id="@+id/rb_moscow"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/orangeBase"
+                            android:fontFamily="@font/monmedium"
+                            android:text="Москва"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
+
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/orangeBase"
+                            android:fontFamily="@font/monmedium"
+                            android:text="Санкт-Петербург"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
 
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="@color/orangeBase"
-                        android:fontFamily="@font/monmedium"
-                        android:text="Сочи"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/orangeBase"
+                            android:fontFamily="@font/monmedium"
+                            android:text="Сочи"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="@color/orangeBase"
-                        android:fontFamily="@font/monmedium"
-                        android:text="Самара"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/orangeBase"
+                            android:fontFamily="@font/monmedium"
+                            android:text="Самара"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-                </RadioGroup>
+                    </RadioGroup>
+
+
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+
 
 
                 <TextView
@@ -132,40 +177,18 @@
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="4dp"
                     android:hint="Телефон"
                     android:inputType="phone" />
 
-                <TextView
-                    style="@style/TVSemi.M"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/gray5"
-                    android:padding="6dp"
-                    android:text="Подпись"
-                    android:textColor="@color/white" />
-
-                <ImageView
-                    android:id="@+id/img_for_sign"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/rounded_white_gray_stroke"
-                    android:padding="4dp" />
-
 
                 <TextView
                     style="@style/TVSemi.M"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:background="@color/gray5"
                     android:padding="6dp"
                     android:text="Материалы"
@@ -175,6 +198,7 @@
                 <RelativeLayout
                     android:id="@+id/la_materials"
 
+                    android:elevation="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="34dp"
                     android:layout_alignParentBottom="true"
@@ -186,6 +210,7 @@
                     android:background="@drawable/btn_grad_green_rounded">
 
                     <TextView
+                        android:textColor="@color/sel_white"
                         style="@style/IconTv.L"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -207,43 +232,526 @@
                 </RelativeLayout>
 
 
-                <RelativeLayout
-                    android:id="@+id/la_create_pdf"
-
+                <TextView
+                    style="@style/TVSemi.M"
                     android:layout_width="match_parent"
-                    android:layout_height="34dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="8dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray5"
+                    android:padding="6dp"
+                    android:text="Оплата"
+                    android:textColor="@color/white" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/btn_grad_orange_rounded">
+                    android:layout_marginTop="4dp"
+                    android:gravity="left"
+                    android:text="Сумма"
+                    android:textColor="@color/gray3" />
+
+
+                <EditText
+                    android:id="@+id/et_sum"
+
+                    android:text="0"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/rounded_gray_gray_stroke"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:enabled="false"
+                    tools:text="19 787" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/IconTv.L"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="8dp"
-                        android:text="@string/ic_hands" />
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Монтаж"
+                        android:textColor="@color/gray3" />
 
 
                     <TextView
                         style="@style/TVSemi.S"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:text="Создать договор" />
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Доставка"
+                        android:textColor="@color/gray3" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_montage"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="10"
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/et_delivery"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="10"
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Скидка в Р"
+                        android:textColor="@color/gray3" />
+
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Скидка в %"
+                        android:textColor="@color/gray3" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_sale_rub"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="10"
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/et_sale_percent"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="10"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/rounded_white"
+                    android:elevation="6dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        style="@style/TVSemi.M"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="10"
+                        android:padding="6dp"
+                        android:text="Итого :"
+                        android:textColor="@color/gray4" />
+
+                    <TextView
+                        android:id="@+id/tv_itogo_sum"
+
+                        style="@style/TVBold.M"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="10"
+                        android:padding="6dp"
+                        android:text="0 р."
+                        android:textColor="@color/green" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Предоплата"
+                        android:textColor="@color/gray3" />
+
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Доплата"
+                        android:textColor="@color/gray3" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_marginBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_prepay"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="10"
+                        android:inputType="numberDecimal"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/et_postpay"
+
+                        android:text="0"
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="10"
+                        android:background="@drawable/rounded_gray_gray_stroke"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    style="@style/TVSemi.M"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray5"
+                    android:padding="6dp"
+                    android:text="Дополнительная информация"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="left"
+                    android:text="Форма заказа на :"
+                    android:textColor="@color/gray3" />
+
+
+                <EditText
+                    android:id="@+id/et_order_form"
+
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/rounded_white_gray_stroke"
+                    />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="left"
+                    android:text="Дополнительная информация :"
+                    android:textColor="@color/gray3" />
+
+
+                <EditText
+                    android:id="@+id/et_dop_info"
+
+                    android:gravity="top|left"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:minLines="4"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/rounded_white_gray_stroke"
+                    />
+
+
+
+                <TextView
+                    style="@style/TVSemi.M"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/gray5"
+                    android:padding="6dp"
+                    android:text="Подпись"
+                    android:textColor="@color/white" />
+
+                <RelativeLayout
+                    android:id="@+id/la_for_signature_rel"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/la_for_signature"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rounded_white_gray_stroke"
+                        android:padding="2dp">
+
+
+                        <com.github.gcacace.signaturepad.views.SignaturePad
+                            android:id="@+id/signature_pad"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"
+                            app:penColor="@color/penRoyalBlue" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_clear"
+
+                        android:enabled="false"
+                        style="@style/IconTv.S"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="false"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/oval_red"
+                        android:text="@string/ic_times" />
+
+
+                    <TextView
+                        android:id="@+id/tv_lock"
+
+                        style="@style/IconTv.Xl"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="false"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginRight="12dp"
+                        android:text="@string/ic_lock_close"
+                        android:textColor="@color/redBase" />
+
 
                 </RelativeLayout>
 
-
             </LinearLayout>
 
-
         </RelativeLayout>
+
     </ScrollView>
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="0dp"
+        app:cardElevation="20dp"
+        android:id="@+id/card_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:clipToPadding="false"
+            android:padding="8dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:id="@+id/la_pre_show"
+
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_marginRight="4dp"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_empty_orange_rounded">
+
+                <TextView
+                    android:textColor="@color/sel_orange"
+                    style="@style/IconTv.S"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/ic_eye" />
+
+
+                <TextView
+                    android:textColor="@color/sel_orange"
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Предпросмотр" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_create_pdf"
+
+                android:layout_marginLeft="4dp"
+                android:layout_weight="10"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.S"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/ic_hands" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Создать договор" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+
 
 </RelativeLayout>

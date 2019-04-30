@@ -133,8 +133,8 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
         material.setName(et_material_name.getText().toString().trim());
         product.setMaterial(material);
 
-        product.setWidth(Float.valueOf(et_width.getText().toString().trim()));
-        product.setHeight(Float.valueOf(et_height.getText().toString().trim()));
+        product.setWidth(GlobalHelper.getEtFloatValue(et_width));
+        product.setHeight(GlobalHelper.getEtFloatValue(et_height));
 
         Model_Color color = new Model_Color();
         color.setName(et_color.getText().toString().trim());
@@ -148,9 +148,9 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
         control.setName(et_control.getText().toString().trim());
         product.setControl(control);
 
-        product.setCount(Integer.valueOf(et_count.getText().toString().trim()));
-        product.setPrice(Double.valueOf(et_price.getText().toString().trim()));
-        product.setSum(Double.valueOf(et_sum.getText().toString().trim()));
+        product.setCount(GlobalHelper.getEtIntegerValue(et_count));
+        product.setPrice(GlobalHelper.getEtDoubleValue(et_price));
+        product.setSum(GlobalHelper.getEtDoubleValue(et_sum));
 
         return product;
     }
@@ -206,7 +206,7 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
             }
 
 
-        if(product.getPrice() < 0)
+        if(product.getPrice() < 1)
         {
             ImageManager.setBackgroundDrawable(et_price,redBox);
         }
@@ -215,7 +215,7 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
                 ImageManager.setBackgroundDrawable(et_price,greenBox);
             }
 
-        if(product.getSum() < 0)
+        if(product.getSum() < 1)
         {
             ImageManager.setBackgroundDrawable(et_sum,redBox);
         }

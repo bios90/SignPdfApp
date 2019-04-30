@@ -10,4 +10,9 @@
     <string name="ic_date">&#xf073;</string>
     <string name="ic_tools">&#xf5ae;</string>
     <string name="ic_plus_circle">&#xf055;</string>
+    <string name="ic_lock_close">&#xf023;</string>
+    <string name="ic_lock_open">&#xf09c;</string>
+    <string name="ic_eye">&#xf06e;</string>
+    <string name="ic_down_caret">&#xf0d7;</string>
+    <string name="ic_down_arrow">&#xf107;</string>
 </resources>
