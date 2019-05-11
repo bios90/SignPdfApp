@@ -3,14 +3,13 @@ package com.dimfcompany.signpdfapp.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.dimfcompany.signpdfapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

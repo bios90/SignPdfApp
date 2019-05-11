@@ -22,4 +22,8 @@ public class Constants
 
     public static final String FOLDER_TEMP_FILES = "temp_files";
     public static final String FOLDER_CONTRACTS = "contracts";
+    public static final String FOLDER_CHECKS = "checks";
+
+    public static final String WINTEC_SITES= "WINTEC.RU | WINTEC-DESIGNO.RU | WINTECHO.RU | WINKARNIZ.RU | WINPATIO.RU | PERGOTENTA.RU | WINLIFT.RU | WINSHADE.RU | WINPLISSE.RU | WINSAILS.RU | RAFSHTORY.RU | WINSTREET.RU | SAMARSKY-DOM.RU";
+    public static final String WINTEC_DESC= "Всю дополнительную информация по продукции вы можете найти по данной QR ссылке , а так же на наших сайтах и по телефонам";
 }

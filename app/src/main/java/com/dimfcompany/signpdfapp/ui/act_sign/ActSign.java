@@ -1,14 +1,18 @@
 package com.dimfcompany.signpdfapp.ui.act_sign;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
+
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
+import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
+import com.dimfcompany.signpdfapp.local_db.room.RoomCrudHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.utils.FileManager;
@@ -31,6 +35,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     PdfCreator pdfCreator;
     @Inject
     MessagesManager messagesManager;
+    @Inject
+    LocalDatabase localDatabase;
 
     ActSignMvp.MvpView mvpView;
 
@@ -46,7 +52,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         setContentView(mvpView.getRootView());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        if(model_document == null)
+        if (model_document == null)
         {
             model_document = new Model_Document();
         }
@@ -69,7 +75,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     protected void onSaveInstanceState(Bundle outState)
     {
         model_document = collectDocumentData();
-        outState.putSerializable(Constants.EXTRA_MODEL_DOCUMENT,model_document);
+        outState.putSerializable(Constants.EXTRA_MODEL_DOCUMENT, model_document);
         super.onSaveInstanceState(outState);
     }
 
@@ -78,7 +84,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     {
         super.onRestoreInstanceState(savedInstanceState);
         model_document = (Model_Document) savedInstanceState.getSerializable(Constants.EXTRA_MODEL_DOCUMENT);
-        if(model_document != null)
+        if (model_document != null)
         {
             mvpView.bindModelDocument(model_document);
         }
@@ -88,25 +94,24 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     public void clickedCreatePDf()
     {
         model_document = collectDocumentData();
-        pdfCreator.createPdfAsync(model_document,false,this);
+        pdfCreator.createPdfAsync(model_document, false, this);
     }
 
     @Override
     public void clickedPreShow()
     {
         model_document = collectDocumentData();
-        pdfCreator.createPdfAsync(model_document,true,this);
+        pdfCreator.createPdfAsync(model_document, true, this);
     }
 
     @Override
     public void onShowCallSuccess(String fileName)
     {
-        File file = fileManager.getFileFromTemp(fileName,Constants.FOLDER_CONTRACTS, null);
+        File file = fileManager.getFileFromTemp(fileName, Constants.FOLDER_CONTRACTS, null);
         try
         {
             GlobalHelper.openPdf(ActSign.this, file);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             Log.e(TAG, "Error on pf intent " + e.getMessage());
             messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
@@ -117,8 +122,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     public void clickedMaterials()
     {
         model_document = collectDocumentData();
-        Log.e(TAG, "clickedMaterials: "+model_document.toString() );
-        navigationManager.toActProducts(Constants.RQ_PRODUCTS_SCREEN,model_document);
+        Log.e(TAG, "clickedMaterials: " + model_document.toString());
+        navigationManager.toActProducts(Constants.RQ_PRODUCTS_SCREEN, model_document);
     }
 
     private Model_Document collectDocumentData()
@@ -148,21 +153,21 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK)
+        if (resultCode == Activity.RESULT_OK)
         {
             switch (requestCode)
             {
                 case Constants.RQ_TAKE_SIGNATURE:
                     String fileName = data.getStringExtra(Constants.EXTRA_SIGNATURE_FILE_NAME);
-                    if(fileName != null)
+                    if (fileName != null)
                     {
                         mvpView.bindSignatureFile(fileName);
                     }
                     break;
 
                 case Constants.RQ_PRODUCTS_SCREEN:
-                    model_document = (Model_Document)data.getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
-                    if(model_document != null)
+                    model_document = (Model_Document) data.getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
+                    if (model_document != null)
                     {
                         mvpView.bindModelDocument(model_document);
                     }
@@ -174,20 +179,41 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     }
 
     @Override
-    public void onSuccessPdfCreation()
+    public void onSuccessPdfCreation(Model_Document model_document)
     {
-        messagesManager.showGreenAlerter("Завершено","Новый договор успешно создан");
+        localDatabase.insertDocument(model_document);
+        messagesManager.showGreenAlerter("Успешно", "Новый договор успешно создан");
     }
 
     @Override
     public void onErrorPdfCreation()
     {
-        messagesManager.showRedAlerter("Ошибка","Не удалось создать новый договор");
+        messagesManager.showRedAlerter("Ошибка", "Не удалось создать новый договор");
     }
 
     @Override
     public Model_Document getDocument()
     {
         return model_document;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        messagesManager.showSimpleDialog("Выйти", "Выйти из редактирования? Незавершенный прогресс будет потерян.", "Выйти", "Отмена", new MessagesManager.DialogButtonsListener()
+        {
+            @Override
+            public void onOkClicked(DialogInterface dialog)
+            {
+                dialog.dismiss();
+                finish();
+            }
+
+            @Override
+            public void onCancelClicked(DialogInterface dialog)
+            {
+                dialog.dismiss();
+            }
+        });
     }
 }

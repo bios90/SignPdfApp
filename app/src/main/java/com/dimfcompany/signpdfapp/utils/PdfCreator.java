@@ -1,24 +1,18 @@
 package com.dimfcompany.signpdfapp.utils;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Product;
-import com.dimfcompany.signpdfapp.sqlite.CrudHelper;
-import com.dimfcompany.signpdfapp.sqlite.LocalDatabase;
-import com.dimfcompany.signpdfapp.sqlite.SqliteHelper;
-import com.dimfcompany.signpdfapp.sqlite.WintecProvider;
+import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -49,7 +43,7 @@ public class PdfCreator
 
     public interface PdfCreationCallback
     {
-        void onSuccessPdfCreation();
+        void onSuccessPdfCreation(Model_Document model_document);
 
         void onShowCallSuccess(String fileName);
 
@@ -67,6 +61,8 @@ public class PdfCreator
     BaseFont globalReg;
     BaseFont globalBold;
     BaseFont globalItalic;
+    BaseFont globalPt;
+    BaseFont globalTimesNewRoman;
 
     BaseColor yellow;
     BaseColor trans;
@@ -79,8 +75,16 @@ public class PdfCreator
     Font bold10;
     Font bold8;
     Font italic10;
+    Font timesNewRoman10;
 
-    boolean borderMode = true;
+    Font pt46;
+    Font pt36;
+    Font pt30;
+    Font pt28;
+    Font pt26;
+    Font pt24;
+
+    boolean borderMode = false;
     boolean showMode;
 
     Model_Document model_document;
@@ -110,7 +114,7 @@ public class PdfCreator
         }).start();
     }
 
-    public void createPdfSync(Model_Document model_document)
+    public void createPdfSync(final Model_Document model_document)
     {
         this.model_document = model_document;
 
@@ -139,6 +143,8 @@ public class PdfCreator
             document.add(getBottomInfoText());
             document.add(new Paragraph(14, "\u00a0"));
             document.add(getBottomSignature());
+            document.add(new Paragraph(14, "\u00a0"));
+            document.add(getBottomStamp());
 
             document.close();
 
@@ -146,18 +152,32 @@ public class PdfCreator
             {
                 String fileName = FileManager.getFileName(file);
                 callback.onShowCallSuccess(fileName);
-            } else
-            {
-                makeSqliteInsert(file);
-                new Handler(Looper.getMainLooper()).post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        callback.onSuccessPdfCreation();
-                    }
-                });
+                return;
             }
+
+            makeCheck(model_document);
+
+
+            String newMainFileName = getRenamedFile(false);
+            newMainFileName+=".pdf";
+            if(FileManager.rename(file,newMainFileName,null));
+            {
+                file = fileManager.getFileFromTemp(newMainFileName,Constants.FOLDER_CONTRACTS,null);
+            };
+
+            String fileName = FileManager.getFileName(file);
+            Log.e(TAG, "createPdfSync: Main file name is "+fileName );
+            model_document.setPdf_file_name(fileName);
+
+            new Handler(Looper.getMainLooper()).post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    callback.onSuccessPdfCreation(model_document);
+                }
+            });
+
 
         } catch (Exception e)
         {
@@ -173,6 +193,320 @@ public class PdfCreator
                     }
                 });
             }
+        }
+    }
+
+    private void makeCheck(Model_Document model_document)
+    {
+        try
+        {
+            float totalHeight = 0;
+            totalHeight += 40;
+
+            PdfPTable tableCheckTop = new PdfPTable(1);
+            tableCheckTop.setWidths(new int[]{100});
+            tableCheckTop.setTotalWidth(545);
+            tableCheckTop.setLockedWidth(true);
+
+            Image wintecLogo = getImageFromAsset("logo_border.png");
+            PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
+            cellLogo.setBorder(Rectangle.NO_BORDER);
+            cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellLogo.setFixedHeight(140);
+            tableCheckTop.addCell(cellLogo);
+
+            PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+            tableCheckTop.addCell(cellSite);
+
+            PdfPCell cellCities = getParCell("Москва|Санкт-Петербург|Сочи|Самара", pt26, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+            tableCheckTop.addCell(cellCities);
+
+            PdfPCell cellOoo = getParCell("ООО \"Лаборатория Уюта\"", pt36,borderMode,null,null,Element.ALIGN_CENTER,null);
+            cellOoo.setPaddingTop(16);
+            tableCheckTop.addCell(cellOoo);
+            tableCheckTop.addCell(getEmptyCell(1,1,false,8));
+
+
+            String codeText = "Заказ "+model_document.getCode();
+            String fromDate = "от "+GlobalHelper.getDateString(model_document.getDate(),GlobalHelper.FORMAT_FULL_MONTH);
+            tableCheckTop.addCell(getParCell(codeText, pt30,borderMode,null,null,Element.ALIGN_CENTER,null));
+            tableCheckTop.addCell(getParCell(fromDate, pt30,borderMode,null,null,Element.ALIGN_CENTER,null));
+
+
+            String starLine = StringManager.repeatingString(null,"x",40);
+            PdfPCell cellLine = getParCell(starLine, pt26,borderMode,null,null,null,null);
+            cellLine.setFixedHeight(32);
+            tableCheckTop.addCell(cellLine);
+
+
+            PdfPTable tableProducts = getCheckProductsTable();
+            PdfPTable tableCheckBottom = getCheckBottomTable();
+            PdfPTable tableBottomInfo = getTableBottomInfoTable();
+
+            totalHeight += tableCheckTop.getTotalHeight();
+            totalHeight += tableProducts.getTotalHeight();
+            totalHeight += tableCheckBottom.getTotalHeight();
+            totalHeight += tableBottomInfo.getTotalHeight();
+
+            File fileCheck = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_CHECKS);
+            document = new Document(new Rectangle(595, totalHeight), 20, 20, 20, 20);
+            FileOutputStream fos = new FileOutputStream(fileCheck);
+            writer = PdfWriter.getInstance(document, fos);
+            writer.setCompressionLevel(9);
+            document.open();
+
+            document.add(tableCheckTop);
+            document.add(tableProducts);
+            document.add(tableBottomInfo);
+            document.add(tableCheckBottom);
+
+            document.close();
+
+
+            String newChekFileName = getRenamedFile(true);
+            newChekFileName+=".pdf";
+            if(FileManager.rename(fileCheck,newChekFileName,null));
+            {
+                Log.e(TAG, "makeCheck: renamed ok" );
+                fileCheck = fileManager.getFileFromTemp(newChekFileName,Constants.FOLDER_CHECKS,null);
+            };
+
+            Log.e(TAG, "makeCheck: fileCheckName is "+fileCheck.getName() );
+
+            String check_file_name = FileManager.getFileName(fileCheck);
+            Log.e(TAG, "makeCheck: CheckFile NAme is "+check_file_name );
+            model_document.setCheck_file_name(check_file_name);
+
+        } catch (Exception e)
+        {
+            Log.e(TAG, "makeCheck: Exception on creating Check " + e.getMessage());
+        }
+    }
+
+
+
+
+    private PdfPTable getCheckProductsTable()
+    {
+        float padding = 4f;
+        try
+        {
+            PdfPTable tableProducts = new PdfPTable(4);
+            tableProducts.setTotalWidth(545);
+            tableProducts.setLockedWidth(true);
+            tableProducts.setWidths(new int[]{30, 25, 20, 25});
+
+            for(Model_Product product : model_document.getListOfProducts())
+            {
+                double sum = product.getPrice()*product.getCount();
+                String strPrice = StringManager.formatNum(product.getPrice(),false);
+                String strCount = "*"+product.getCount();
+                String strSum = "= "+StringManager.formatNum(sum,false);
+
+                PdfPCell cellFirstLine = getParCell(product.getMaterial().getName(), pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
+                tableProducts.addCell(cellFirstLine);
+
+                String secondLine = product.getColor().getName()+" Ш-"+StringManager.formatNum(product.getWidth(),true);
+                secondLine+=" В-"+StringManager.formatNum(product.getHeight(),true);
+                PdfPCell cellSecondLine = getParCell(secondLine, pt24,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
+                tableProducts.addCell(cellSecondLine);
+
+                tableProducts.addCell(getEmptyCell(1,1,borderMode));
+                tableProducts.addCell(getParCell(strPrice, pt26,padding,borderMode,null,null,Element.ALIGN_LEFT,null));
+                tableProducts.addCell(getParCell(strCount, pt26,padding,borderMode,null,null));
+                tableProducts.addCell(getParCell(strSum, pt26,padding,borderMode,null,null,Element.ALIGN_RIGHT,null));
+
+                PdfPCell cellLine = getCellLine();
+                cellLine.setColspan(4);
+                tableProducts.addCell(cellLine);
+            }
+
+
+
+//            String bottomLine = StringManager.repeatingString(null,"_",40);
+//            PdfPCell cellLine = getParCell(bottomLine, pt26,borderMode,4,null,null,null);
+//            tableProducts.addCell(cellLine);
+
+
+
+
+            String strMontage = StringManager.formatNum(model_document.getMontage(),false);
+            String strDelivery = StringManager.formatNum(model_document.getDelivery(),false);
+            String strSale = StringManager.formatNum(model_document.getSale(),false);
+
+            tableProducts.addCell(getParCell("Монтаж", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getEmptyCell(1,1,borderMode));
+            tableProducts.addCell(getParCell(strMontage, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
+            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
+            tableProducts.addCell(getParCell("= "+strMontage, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+
+
+            tableProducts.addCell(getParCell("Доставка", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getEmptyCell(1,1,borderMode));
+            tableProducts.addCell(getParCell(strDelivery, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
+            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
+            tableProducts.addCell(getParCell("= "+strDelivery, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+
+
+            tableProducts.addCell(getParCell("Скидка", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getEmptyCell(1,1,borderMode));
+            tableProducts.addCell(getParCell(strSale, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
+            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
+            tableProducts.addCell(getParCell("= "+strSale, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+
+
+            PdfPCell cellLine2 = getCellLine();
+            cellLine2.setColspan(4);
+            tableProducts.addCell(cellLine2);
+
+            String itogoSum = StringManager.formatNum(GlobalHelper.countItogoSum(model_document),false);
+            PdfPCell emptyCell18 = getEmptyCell(1,4,borderMode);
+            emptyCell18.setFixedHeight(18);
+
+            tableProducts.addCell(emptyCell18);
+            tableProducts.addCell(getParCell("ИТОГ", pt46,borderMode,2,null,Element.ALIGN_CENTER,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getParCell(itogoSum, pt36,borderMode,2,null,Element.ALIGN_CENTER,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(emptyCell18);
+
+
+            tableProducts.addCell(cellLine2);
+
+
+
+
+            double postPay = GlobalHelper.countItogoSum(model_document)-model_document.getPrepay();
+            String prePayStr = StringManager.formatNum(model_document.getPrepay(),false);
+            String postPayStr = StringManager.formatNum(postPay,false);
+
+            tableProducts.addCell(getParCell("Предоплата", pt28,borderMode,2,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getParCell("= "+prePayStr, pt26,borderMode,2,null,Element.ALIGN_RIGHT,null));
+
+            PdfPCell emptyCell6 = getEmptyCell(1,4,borderMode);
+            emptyCell6.setFixedHeight(6);
+            tableProducts.addCell(emptyCell6);
+
+            tableProducts.addCell(getParCell("Доплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+            tableProducts.addCell(getParCell("= "+postPayStr  , pt26, borderMode, 2, null,Element.ALIGN_RIGHT,null));
+
+
+            return tableProducts;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getCheckProductsTable: Exception on creating CheckProductsTable "+e.getMessage());
+            return null;
+        }
+    }
+
+    private PdfPTable getCheckBottomTable()
+    {
+        try
+        {
+            PdfPTable tableCheckBottom = new PdfPTable(1);
+            tableCheckBottom.setWidths(new int[]{100});
+            tableCheckBottom.setTotalWidth(545);
+            tableCheckBottom.setLockedWidth(true);
+
+            Image qr_wintec = getImageFromAsset("qr_wintec.png");
+            PdfPCell cellQr = new PdfPCell(qr_wintec, true);
+            cellQr.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellQr.setBorder(Rectangle.NO_BORDER);
+            cellQr.setFixedHeight(180);
+            tableCheckBottom.addCell(cellQr);
+
+            tableCheckBottom.addCell(getParCell(Constants.WINTEC_DESC, pt24,borderMode,null,null,Element.ALIGN_CENTER,null));
+
+            PdfPCell cellEmptySpace = getEmptyCell(1,1,borderMode);
+            cellEmptySpace.setFixedHeight(14);
+            tableCheckBottom.addCell(cellEmptySpace);
+
+            PdfPCell cellSites =getParCell(Constants.WINTEC_SITES, pt24,borderMode,null,null,Element.ALIGN_CENTER,null);
+            tableCheckBottom.addCell(cellSites);
+
+            String starLine = StringManager.repeatingString(null,"x",34);
+            tableCheckBottom.addCell(getParCell(starLine, pt24,borderMode,null,null));
+
+            tableCheckBottom.addCell(getParCell("E-MAIL: INFO@WINTEC.RU", pt24,borderMode,null,null));
+            tableCheckBottom.addCell(getParCell("МОСКВА +7.495.369.11.29", pt24,borderMode,null,null));
+            tableCheckBottom.addCell(getParCell("САМАРА +7.846.244.00.10", pt24,borderMode,null,null));
+            tableCheckBottom.addCell(getParCell("РОССИЯ +7.903.250.22.09", pt24,borderMode,null,null));
+
+            return tableCheckBottom;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getCheckBottomTable: Exception on crating CheckBottom table "+e.getMessage() );
+            return null;
+        }
+    }
+
+
+    private PdfPTable getTableBottomInfoTable()
+    {
+        try
+        {
+            PdfPCell cellEmptySpace = getEmptyCell(1,1,borderMode);
+            cellEmptySpace.setFixedHeight(14);
+
+
+            PdfPTable tableCheckBottomInfo = new PdfPTable(1);
+            tableCheckBottomInfo.setWidths(new int[]{100});
+            tableCheckBottomInfo.setTotalWidth(545);
+            tableCheckBottomInfo.setLockedWidth(true);
+
+            tableCheckBottomInfo.addCell(getCellLine());
+            tableCheckBottomInfo.addCell(cellEmptySpace);
+
+            tableCheckBottomInfo.addCell(getParCell("Адрес", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
+            String adress = "Не указан";
+            if(model_document.getAdress() != null && model_document.getAdress().trim().length()>0)
+            {
+                adress = model_document.getAdress();
+            }
+            PdfPCell cellAdress = getParCell(adress,pt28,borderMode,null,null,Element.ALIGN_RIGHT,null);
+            tableCheckBottomInfo.addCell(cellAdress);
+            tableCheckBottomInfo.addCell(cellEmptySpace);
+
+            tableCheckBottomInfo.addCell(getParCell("Телефон", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
+            String phone = "Не указан";
+            if(model_document.getPhone() != null && model_document.getPhone().trim().length()>0)
+            {
+                phone = model_document.getPhone();
+            }
+            tableCheckBottomInfo.addCell(getParCell(phone,pt28,borderMode,null,null,Element.ALIGN_RIGHT,null));
+            tableCheckBottomInfo.addCell(cellEmptySpace);
+
+
+            tableCheckBottomInfo.addCell(getParCell("Заказчик", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
+            String fio = "Не указано";
+            if(model_document.getFio() != null && model_document.getFio().trim().length()>0)
+            {
+                fio = model_document.getFio();
+            }
+            tableCheckBottomInfo.addCell(getParCell(fio, pt28,borderMode,null,null,Element.ALIGN_RIGHT,null));
+
+            PdfPCell cellEmpty8 = getEmptyCell(1,1,false);
+            cellEmpty8.setFixedHeight(8);
+            tableCheckBottomInfo.addCell(cellEmpty8);
+
+            PdfPCell cellEmpty = getEmptyCell(1,1,borderMode);
+            cellEmpty.setBorder(Rectangle.BOX);
+            cellEmpty.setFixedHeight(132);
+            cellEmpty.setBorderWidth(2);
+            tableCheckBottomInfo.addCell(cellEmpty);
+            tableCheckBottomInfo.addCell(getParCell("(Подпись)",pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
+
+            tableCheckBottomInfo.addCell(cellEmptySpace);
+            tableCheckBottomInfo.addCell(getCellLine());
+            tableCheckBottomInfo.addCell(cellEmptySpace);
+
+            return tableCheckBottomInfo;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.e(TAG, "getTableBottomInfoTable: Error on creating bottom info table "+e.getMessage());
+            return null;
         }
     }
 
@@ -260,9 +594,12 @@ public class PdfCreator
             tableLarge.addCell(getEmptyCell(1, 1, false));
 
 
+            PdfPCell cellEmptySpace = getEmptyCell(1,3,false,6);
+            tableLarge.addCell(cellEmptySpace);
+
             tableLarge.addCell(getEmptyCell(1, 1, false));
             Paragraph parAddress = new Paragraph("  " + model_document.getAdress());
-            parAddress.setLeading(25, 0);
+            parAddress.setLeading(18, 0);
             parAddress.setFont(reg10Underline);
             parAddress.add(lineChunk);
 
@@ -279,7 +616,7 @@ public class PdfCreator
 
             tableLarge.addCell(getEmptyCell(1, 1, false));
             PdfPCell cellPhone = getParCell("  " + model_document.getPhone(), reg10Underline, false, null, null, true, 44f);
-            cellPhone.setPaddingTop(23);
+            cellPhone.setPaddingTop(17);
             cellPhone.setVerticalAlignment(Element.ALIGN_TOP);
             cellPhone.setHorizontalAlignment(Element.ALIGN_LEFT);
             tableLarge.addCell(cellPhone);
@@ -354,10 +691,10 @@ public class PdfCreator
         float padding = 4;
         tableProducts.addCell(getEmptyCell(1, 1, true));
 
-        tableProducts.addCell(getParCell("Наименование материала", bold8, padding, true, null, null));
+        tableProducts.addCell(getParCell("Наименование товара", bold8, padding, true, null, null));
         tableProducts.addCell(getParCell("Ширина", bold8, padding, true, null, null));
-        tableProducts.addCell(getParCell("Высота", bold8, padding, true, null, null));
-        tableProducts.addCell(getParCell("Цвет профиля", bold8, padding, true, null, null));
+        tableProducts.addCell(getParCell("Высота/вынос", bold8, padding, true, null, null));
+        tableProducts.addCell(getParCell("Цвет комплектации", bold8, padding, true, null, null));
         tableProducts.addCell(getParCell("Крепление", bold8, padding, true, null, null));
         tableProducts.addCell(getParCell("Тип упр.", bold8, padding, true, null, null));
         tableProducts.addCell(getParCell("Кол-во", bold8, padding, true, null, null));
@@ -368,6 +705,7 @@ public class PdfCreator
     private void fillProductWithElement(PdfPTable tableProducts, Model_Product product)
     {
         float padding = 6;
+        float paddingSmall = 2;
 
         String id = String.valueOf(model_document.getListOfProducts().indexOf(product) + 1);
 
@@ -382,8 +720,7 @@ public class PdfCreator
         if (product.getWidth() == 0)
         {
             width = "-";
-        }
-        else
+        } else
         {
             width = StringManager.formatNum(product.getWidth(), true);
         }
@@ -393,25 +730,24 @@ public class PdfCreator
         if (product.getHeight() == 0)
         {
             height = "-";
-        }
-        else
+        } else
         {
             height = StringManager.formatNum(product.getHeight(), true);
         }
 
-        String color = "";
+        String color = "-";
         if (GlobalHelper.validateProductColor(product))
         {
             color = product.getColor().getName();
         }
 
-        String krep = "";
+        String krep = "-";
         if (GlobalHelper.validateProductKrep(product))
         {
             krep = product.getKrep().getName();
         }
 
-        String control = "";
+        String control = "-";
         if (GlobalHelper.validateProductControl(product))
         {
             control = product.getControl().getName();
@@ -423,12 +759,12 @@ public class PdfCreator
 
 
         tableProducts.addCell(getParCell(id, reg10, padding, true, null, null));
-        tableProducts.addCell(getParCell(material, reg10, padding, true, null, null));
+        tableProducts.addCell(getParCell(material, reg10, paddingSmall, true, null, null));
         tableProducts.addCell(getParCell(width, reg10, padding, true, null, null));
         tableProducts.addCell(getParCell(height, reg10, padding, true, null, null));
-        tableProducts.addCell(getParCell(color, reg10, padding, true, null, null));
-        tableProducts.addCell(getParCell(krep, reg10, padding, true, null, null));
-        tableProducts.addCell(getParCell(control, reg10, padding, true, null, null));
+        tableProducts.addCell(getParCell(color, reg10, paddingSmall, true, null, null));
+        tableProducts.addCell(getParCell(krep, reg10, paddingSmall, true, null, null));
+        tableProducts.addCell(getParCell(control, reg10, paddingSmall, true, null, null));
         tableProducts.addCell(getParCell(count, reg10, padding, true, null, null));
         tableProducts.addCell(getParCell(price, reg10, padding, true, null, null));
         tableProducts.addCell(getParCell(sum, reg10, padding, true, null, null));
@@ -452,6 +788,7 @@ public class PdfCreator
             String dopInfo = model_document.getDop_info();
 
             PdfPTable bottomTable = new PdfPTable(3);
+            bottomTable.setKeepTogether(true);
             bottomTable.setWidthPercentage(90);
             bottomTable.setWidths(new int[]{1420, 360, 468});
 
@@ -498,6 +835,7 @@ public class PdfCreator
         {
             float padding = 4;
             PdfPTable tableSign = new PdfPTable(2);
+            tableSign.setKeepTogether(true);
             tableSign.setWidthPercentage(80);
             tableSign.setWidths(new int[]{1080, 980});
             tableSign.addCell(getEmptyCell(1, 1, false));
@@ -527,6 +865,56 @@ public class PdfCreator
         }
     }
 
+    private PdfPTable getBottomStamp()
+    {
+        try
+        {
+            PdfPTable tableWide = new PdfPTable(3);
+            tableWide.setKeepTogether(true);
+            tableWide.setWidthPercentage(100);
+            tableWide.setWidths(new int[]{890,1064,540});
+            tableWide.addCell(getEmptyCell(1,1,borderMode));
+
+
+
+            PdfPTable tableStamp = new PdfPTable(2);
+            tableStamp.setWidthPercentage(100);
+            tableStamp.setWidths(new int[]{475,590});
+
+            PdfPCell cellGenDir = getParCell("Генеральный директор",timesNewRoman10,borderMode,null,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
+            cellGenDir.setPaddingTop(11);
+            tableStamp.addCell(cellGenDir);
+
+            PdfPCell cellStamp = new PdfPCell(getImageFromAsset("sign_stamp.png"));
+            cellStamp.setRowspan(2);
+            cellStamp.setBorder(Rectangle.NO_BORDER);
+            cellStamp.setFixedHeight(112);
+            tableStamp.addCell(cellStamp);
+
+            PdfPCell cellFio = getParCell("/Рыбакина Л.В./",timesNewRoman10,borderMode,null,null,Element.ALIGN_RIGHT,Element.ALIGN_TOP);
+            cellFio.setPaddingTop(12);
+            tableStamp.addCell(cellFio);
+
+
+
+            PdfPCell cellMiddle = new PdfPCell(tableStamp);
+            cellMiddle.setBorder(Rectangle.NO_BORDER);
+
+            tableWide.addCell(cellMiddle);
+            tableWide.addCell(getEmptyCell(1,1,borderMode));
+
+
+            return tableWide;
+
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getBottomStamp: Exception on creating stamp TAble "+e.getMessage() );
+            return null;
+        }
+    }
+
+
 
     private void initAll()
     {
@@ -535,6 +923,8 @@ public class PdfCreator
             globalReg = BaseFont.createFont("assets/segreg.ttf", "Cp1251", BaseFont.EMBEDDED);
             globalBold = BaseFont.createFont("assets/segbold.ttf", "Cp1251", BaseFont.EMBEDDED);
             globalItalic = BaseFont.createFont("assets/segitalic.ttf", "Cp1251", BaseFont.EMBEDDED);
+            globalPt = BaseFont.createFont("assets/pt_mono.ttf", "Cp1251", BaseFont.EMBEDDED);
+            globalTimesNewRoman = BaseFont.createFont("assets/tnr.ttf", "Cp1251", BaseFont.EMBEDDED);
 
             reg10 = new Font(globalReg, 10);
             reg10Underline = new Font(globalReg, 10, Font.UNDERLINE);
@@ -542,6 +932,14 @@ public class PdfCreator
             bold10 = new Font(globalBold, 10);
             bold8 = new Font(globalBold, 8);
             italic10 = new Font(globalItalic, 10);
+            timesNewRoman10 = new Font(globalTimesNewRoman,10);
+
+            pt46 = new Font(globalPt, 46);
+            pt36 = new Font(globalPt, 36);
+            pt30 = new Font(globalPt, 30);
+            pt28 = new Font(globalPt, 28);
+            pt26 = new Font(globalPt, 26);
+            pt24 = new Font(globalPt, 24);
 
             yellow = new BaseColor(255, 192, 0);
             trans = new BaseColor(0, 0, 0, 0);
@@ -576,6 +974,7 @@ public class PdfCreator
 
         return cell;
     }
+
 
     private PdfPCell getParCell(String text, Font font, float padding, boolean border, @Nullable Integer colSpawn, @Nullable Integer rowSpawn, @Nullable Integer alignHor, @Nullable Integer alignVert)
     {
@@ -651,6 +1050,11 @@ public class PdfCreator
 
     private PdfPCell getEmptyCell(int rowSpawn, int colSpawn, boolean border)
     {
+        return getEmptyCell(rowSpawn,colSpawn,border,null);
+    }
+
+    private PdfPCell getEmptyCell(int rowSpawn, int colSpawn, boolean border,@Nullable Integer fixedHight)
+    {
         PdfPCell emptyCell = new PdfPCell();
         emptyCell.setRowspan(rowSpawn);
         emptyCell.setColspan(colSpawn);
@@ -660,6 +1064,11 @@ public class PdfCreator
         } else
         {
             emptyCell.setBorder(Rectangle.NO_BORDER);
+        }
+
+        if(fixedHight != null)
+        {
+            emptyCell.setFixedHeight(fixedHight);
         }
 
         return emptyCell;
@@ -693,6 +1102,20 @@ public class PdfCreator
         pdfPCell.setPaddingLeft(0);
 
         return pdfPCell;
+    }
+
+
+    private PdfPCell getCellLine()
+    {
+        Paragraph paragraph = new Paragraph();
+
+        LineSeparator line = new LineSeparator(2, 100, BaseColor.BLACK, Element.ALIGN_CENTER, -2.2f);
+        paragraph.add(new Chunk(line));
+
+        PdfPCell cell = new PdfPCell(paragraph);
+        cell.setBorder(Rectangle.NO_BORDER);
+
+        return  cell;
     }
 
     private Image getImageFromFiles(File img)
@@ -759,13 +1182,6 @@ public class PdfCreator
         }
     }
 
-    private void makeSqliteInsert(File file)
-    {
-        String fileName = FileManager.getFileName(file);
-        model_document.setPdf_file_name(fileName);
-        localDatabase.insertDocument(model_document);
-    }
-
     private PdfPTable getFormOrderTable()
     {
         try
@@ -793,6 +1209,24 @@ public class PdfCreator
             Log.e(TAG, "getFormOrderTable: Exception on creatingOrder Table");
             return null;
         }
+    }
+
+    public String getRenamedFile(boolean isCheck)
+    {
+        String name = model_document.getCode();
+        if(model_document.getFio()!= null && model_document.getFio().trim().length()>0)
+        {
+            name = StringManager.transliterate(model_document.getFio())+"_"+name;
+        }
+
+        if(isCheck)
+        {
+            name+="_check";
+        }
+
+        name = name.replaceAll("\\s+","_");
+
+        return name;
     }
 
     class PageBgHelper extends PdfPageEventHelper
@@ -836,7 +1270,7 @@ public class PdfCreator
 
                 cb.addTemplate(page, 0, 0);
 
-                document.setMargins(0, 0, 52, 200);
+                document.setMargins(0, 0, 52, 88);
 
             } catch (Exception e)
             {

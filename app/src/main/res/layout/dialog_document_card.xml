@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:background="@drawable/rounded_gray0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/la_open_dogovor"
+
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_orange_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_hands"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Открыть договор"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_open_check"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_orange_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_check"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Открыть чек"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/la_send_dogovor"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_blue_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_share"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Отправить договор"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_send_check"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_blue_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_share"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Отправить чек"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_print_check"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_green_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_print"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Распечатать чек"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/la_edit"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_grad_green_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_edit"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Редактировать"
+            style="@style/TVSemi.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_delete"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_empty_red_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:textColor="@color/sel_red"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:text="@string/ic_delete"
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+        <TextView
+            android:textColor="@color/sel_red"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Удалить"
+            style="@style/TVBold.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

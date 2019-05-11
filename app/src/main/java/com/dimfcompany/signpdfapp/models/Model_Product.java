@@ -1,22 +1,55 @@
 package com.dimfcompany.signpdfapp.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "products")
 public class Model_Product implements Serializable
 {
-    Model_Material material;
+    @PrimaryKey(autoGenerate = true)
+    long id;
+    long document_id;
     float width;
     float height;
-    Model_Color color;
-    Model_Krep krep;
-    Model_Control control;
     int count;
     double price;
     double sum;
 
+    @Ignore
+    Model_Color color;
+    @Ignore
+    Model_Krep krep;
+    @Ignore
+    Model_Control control;
+    @Ignore
+    Model_Material material;
+
     public Model_Product()
     {
 
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    public long getDocument_id()
+    {
+        return document_id;
+    }
+
+    public void setDocument_id(long document_id)
+    {
+        this.document_id = document_id;
     }
 
     public Model_Material getMaterial()

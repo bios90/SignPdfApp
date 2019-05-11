@@ -1,7 +1,9 @@
 package com.dimfcompany.signpdfapp.ui.act_main;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+
+import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 

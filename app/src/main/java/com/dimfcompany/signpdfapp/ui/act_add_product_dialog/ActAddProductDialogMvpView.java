@@ -1,6 +1,5 @@
 package com.dimfcompany.signpdfapp.ui.act_add_product_dialog;
 
-import android.support.annotation.DrawableRes;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
 
 import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.base.mvpview.BaseObservableViewAbstr;
@@ -279,7 +280,7 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
             et_sum.setText(String.valueOf(product.getSum()));
         }
 
-        tv_header.setText("Редактирование материала");
+        tv_header.setText("Редактирование товара");
         btn_ok.setText("Сохранить");
     }
 }

@@ -1,11 +1,15 @@
 package com.dimfcompany.signpdfapp.di.presenter;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.dimfcompany.signpdfapp.base.viewmvcfactory.ViewMvcFactory;
-import com.dimfcompany.signpdfapp.sqlite.CrudHelper;
+import com.dimfcompany.signpdfapp.local_db.raw.CrudHelper;
+import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
+import com.dimfcompany.signpdfapp.local_db.room.AppDatabase;
+import com.dimfcompany.signpdfapp.local_db.room.RoomCrudHelper;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -90,5 +94,11 @@ public class PresenterModule
     GlobalHelper gertGlobalHelper(Context context)
     {
         return new GlobalHelper(context);
+    }
+
+    @Provides
+    LocalDatabase getLocalDatabase(AppDatabase appDatabase)
+    {
+        return new RoomCrudHelper(appDatabase);
     }
 }

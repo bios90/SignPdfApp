@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SignPdfApp</string>
+    <string name="app_name">WINTEC Договор</string>
     <string name="ic_pin">&#xf0c6;</string>
     <string name="ic_pen">&#xf5ac;</string>
     <string name="ic_hands">&#xf2b5;</string>
@@ -15,4 +15,10 @@
     <string name="ic_eye">&#xf06e;</string>
     <string name="ic_down_caret">&#xf0d7;</string>
     <string name="ic_down_arrow">&#xf107;</string>
+    <string name="ic_left_arrow">&#xf053;</string>
+    <string name="ic_check">&#xf543;</string>
+    <string name="ic_share">&#xf1e0;</string>
+    <string name="ic_print">&#xf02f;</string>
+    <string name="ic_edit">&#xf303;</string>
+    <string name="ic_delete">&#xf1f8;</string>
 </resources>

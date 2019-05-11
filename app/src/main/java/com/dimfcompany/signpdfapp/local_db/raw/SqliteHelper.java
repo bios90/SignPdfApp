@@ -1,4 +1,4 @@
-package com.dimfcompany.signpdfapp.sqlite;
+package com.dimfcompany.signpdfapp.local_db.raw;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,14 +35,15 @@ public class SqliteHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        createDocumentsTable(db);
+        //TODO stoped DB creation here
+//        createDocumentsTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DOCUMENTS);
-        createDocumentsTable(db);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DOCUMENTS);
+//        createDocumentsTable(db);
     }
 
 

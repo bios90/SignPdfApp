@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_top_black"
             android:padding="6dp"
-            android:text="Добавление материала"
+            android:text="Добавление товара"
             android:textColor="@color/white" />
 
 
@@ -35,7 +35,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="2dp"
             android:gravity="left"
-            android:text="Наименование материала"
+            android:text="Наименование и описание товара"
             android:textColor="@color/gray3" />
 
         <EditText
@@ -77,7 +77,7 @@
                 android:layout_marginBottom="2dp"
                 android:layout_weight="10"
                 android:gravity="left"
-                android:text="Высота"
+                android:text="Высота/вынос"
                 android:textColor="@color/gray3" />
 
 
@@ -128,7 +128,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="2dp"
             android:gravity="left"
-            android:text="Цвет профиля"
+            android:text="Цвет комплектации"
             android:textColor="@color/gray3" />
 
         <EditText
@@ -275,8 +275,10 @@
             <EditText
                 android:id="@+id/et_sum"
 
+                android:background="@drawable/rounded_gray_gray_stroke"
                 android:textAlignment="center"
-                android:inputType="numberDecimal"
+                android:inputType="none"
+                android:enabled="false"
                 android:gravity="center"
                 style="@style/EditText"
                 android:layout_width="0dp"

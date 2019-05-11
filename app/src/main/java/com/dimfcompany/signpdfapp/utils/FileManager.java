@@ -3,8 +3,9 @@ package com.dimfcompany.signpdfapp.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.itextpdf.text.Image;
@@ -80,6 +81,30 @@ public class FileManager
         {
             Log.e(TAG, "createRandomNameFile: Excetpion on getting file" + e.getMessage());
             return null;
+        }
+    }
+
+    public static boolean rename(File from, String newName, @Nullable String extansion)
+    {
+        try
+        {
+            File dir = from.getParentFile();
+            if (extansion != null)
+            {
+                newName = newName+"."+extansion;
+            }
+
+            File destinaition = new File(dir, newName);
+            destinaition.createNewFile();
+
+            Log.e(TAG, "rename: new file on rename " + destinaition.getAbsolutePath());
+
+            return from.getParentFile().exists() && from.exists() && from.renameTo(destinaition);
+
+        } catch (Exception e)
+        {
+            Log.e(TAG, "rename: " + e.getMessage());
+            return false;
         }
     }
 

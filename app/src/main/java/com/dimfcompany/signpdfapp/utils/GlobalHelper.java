@@ -2,10 +2,14 @@ package com.dimfcompany.signpdfapp.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -13,12 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.dimfcompany.signpdfapp.models.Model_Color;
+import com.dimfcompany.signpdfapp.models.Model_Control;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_Krep;
+import com.dimfcompany.signpdfapp.models.Model_Material;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 
 import java.io.File;
 import java.util.Date;
 import java.util.Random;
+
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
 
 public class GlobalHelper
 {
@@ -87,7 +98,7 @@ public class GlobalHelper
             Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(intent);
         } else
         {
@@ -109,7 +120,7 @@ public class GlobalHelper
             intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setType("application/pdf");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(Intent.createChooser(intent, "Отправить отчет"));
 
         } else
@@ -118,8 +129,59 @@ public class GlobalHelper
             intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setType("application/pdf");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(Intent.createChooser(intent, "Отправить отчет"));
+        }
+    }
+
+    public Uri getUriFromFile(File file)
+    {
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+    }
+
+
+
+
+    public void sendToPrint(File file)
+    {
+        Uri uri = getUriFromFile(file);
+
+//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//        intent.setFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.setType("application/pdf");
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+
+        
+        final String appPackageName = "ru.a402d.rawbtprinter";
+        PackageManager pm = context.getPackageManager();
+
+        PackageInfo pi = null;
+        if (pm != null)
+        {
+            try
+            {
+                pi = pm.getPackageInfo(appPackageName, 0);
+            } catch (PackageManager.NameNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        if (pi == null)
+        {
+            try
+            {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe)
+            {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
+        } else
+        {
+            intent.setPackage(appPackageName);
+            context.startActivity(intent);
         }
     }
 
@@ -130,20 +192,20 @@ public class GlobalHelper
             return false;
         }
 
-        if (!validateProductColor(product))
-        {
-            return false;
-        }
-
-        if (!validateProductKrep(product))
-        {
-            return false;
-        }
-
-        if (!validateProductControl(product))
-        {
-            return false;
-        }
+//        if (!validateProductColor(product))
+//        {
+//            return false;
+//        }
+//
+//        if (!validateProductKrep(product))
+//        {
+//            return false;
+//        }
+//
+//        if (!validateProductControl(product))
+//        {
+//            return false;
+//        }
 
         if (product.getCount() <= 0)
         {
@@ -262,11 +324,17 @@ public class GlobalHelper
     {
         double sum = countSum(document);
 
+        sum = sum - ((sum / 100.0f) * percent);
+
         sum += montage;
         sum += delivery;
-        sum = sum - ((sum / 100.0f)*percent);
 
         return sum;
+    }
+
+    public static double countSumMinusPercent(double sum, int percent)
+    {
+        return sum - ((sum / 100) * percent);
     }
 
     public static void invalidateRecursive(ViewGroup layout)
@@ -313,7 +381,7 @@ public class GlobalHelper
             String str = editText.getText().toString().trim();
             str = str.replaceAll("[^\\d.]", "");
             int percent = Integer.valueOf(str);
-            if(percent > 100)
+            if (percent > 100)
             {
                 percent = 100;
             }
@@ -352,17 +420,107 @@ public class GlobalHelper
 
     public static int getPercentFromTwoNums(double sum, double sale)
     {
-        if(sum == 0)
+        if (sum == 0)
         {
             return 0;
         }
 
-        Log.e(TAG, "Sum is "+sum+" | SaleRub is "+sale+" percent is "+(int)((sale * 100.0f) / sum) );
-        return (int)((sale * 100.0f) / sum);
+        Log.e(TAG, "Sum is " + sum + " | SaleRub is " + sale + " percent is " + (int) ((sale * 100.0f) / sum));
+        return (int) ((sale * 100.0f) / sum);
     }
 
     public static double getSumAfterPercentCut(double sum, int sale)
     {
         return (sum / 100) * sale;
+    }
+
+    public static Model_Product copyProduct(Model_Product productOriginal)
+    {
+        if(productOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Product productCopy = new Model_Product();
+
+        productCopy.setId(productOriginal.getId());
+        productCopy.setDocument_id(productOriginal.getDocument_id());
+        productCopy.setHeight(productOriginal.getHeight());
+        productCopy.setWidth(productOriginal.getWidth());
+        productCopy.setCount(productOriginal.getCount());
+        productCopy.setPrice(productOriginal.getPrice());
+        productCopy.setSum(productOriginal.getSum());
+
+        productCopy.setColor(copyColor(productOriginal.getColor()));
+        productCopy.setControl(copyControl(productOriginal.getControl()));
+        productCopy.setKrep(copyKrep(productOriginal.getKrep()));
+        productCopy.setMaterial(copyMaterial(productOriginal.getMaterial()));
+
+        return productCopy;
+    }
+
+    public static Model_Color copyColor(Model_Color colorOriginal)
+    {
+        if(colorOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Color colorCopy = new Model_Color();
+
+        colorCopy.setId(colorOriginal.getId());
+        colorCopy.setProduct_id(colorOriginal.getProduct_id());
+        colorCopy.setName(colorOriginal.getName());
+
+        return colorCopy;
+    }
+    
+    public static Model_Control copyControl(Model_Control controlOriginal)
+    {
+        if(controlOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Control controlCopy = new Model_Control();
+
+        controlCopy.setId(controlOriginal.getId());
+        controlCopy.setProduct_id(controlOriginal.getProduct_id());
+        controlCopy.setName(controlOriginal.getName());
+
+        return controlCopy;
+    }  
+    
+    public static Model_Krep copyKrep(Model_Krep krepOriginal)
+    {
+        if(krepOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Krep krepCopy = new Model_Krep();
+
+        krepCopy.setId(krepOriginal.getId());
+        krepCopy.setProduct_id(krepOriginal.getProduct_id());
+        krepCopy.setName(krepOriginal.getName());
+
+        return krepCopy;
+    }    
+    
+    
+    public static Model_Material copyMaterial(Model_Material materialOriginal)
+    {
+        if(materialOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Material materialCopy = new Model_Material();
+
+        materialCopy.setId(materialOriginal.getId());
+        materialCopy.setProduct_id(materialOriginal.getProduct_id());
+        materialCopy.setName(materialOriginal.getName());
+
+        return materialCopy;
     }
 }

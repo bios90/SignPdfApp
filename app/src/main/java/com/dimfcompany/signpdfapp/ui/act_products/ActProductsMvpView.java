@@ -1,6 +1,6 @@
 package com.dimfcompany.signpdfapp.ui.act_products;
 
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.core.content.res.ResourcesCompat;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,6 +31,8 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
 
     TextView tv_all_product_count;
     TextView tv_all_product_sum;
+    TextView tv_back_top;
+    RelativeLayout la_back;
 
     final StringManager stringManager;
 
@@ -50,6 +52,8 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
         drag_la = findViewById(R.id.drag_la);
         tv_all_product_count = findViewById(R.id.tv_all_product_count);
         tv_all_product_sum = findViewById(R.id.tv_all_product_sum);
+        tv_back_top = findViewById(R.id.tv_back_top);
+        la_back = findViewById(R.id.la_back);
 
         drag_la.setOnViewSwapListener(this);
     }
@@ -62,6 +66,24 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
             public void onClick(View v)
             {
                 getListener().clickedAddProduct();
+            }
+        });
+
+        la_back.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getListener().clickedBack();
+            }
+        });
+
+        tv_back_top.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getListener().clickedBack();
             }
         });
     }
@@ -120,6 +142,16 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
                 public void onClick(View v)
                 {
                     getListener().clickedEditProduct(product);
+                }
+            });
+
+            product_view.setOnLongClickListener(new View.OnLongClickListener()
+            {
+                @Override
+                public boolean onLongClick(View v)
+                {
+                    getListener().clickedLongProduct(product);
+                    return true;
                 }
             });
 

@@ -1,6 +1,5 @@
-package com.dimfcompany.signpdfapp.sqlite;
+package com.dimfcompany.signpdfapp.local_db.raw;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.dimfcompany.signpdfapp.models.Model_Document;
-import com.dimfcompany.signpdfapp.sqlite.SqliteHelper.ColumnsDocuments;
+import com.dimfcompany.signpdfapp.local_db.raw.SqliteHelper.ColumnsDocuments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class CrudHelper implements LocalDatabase
 
         while (cursor.moveToNext())
         {
-            int id = cursor.getInt(cursor.getColumnIndex(ColumnsDocuments._ID));
+            long id = cursor.getInt(cursor.getColumnIndex(ColumnsDocuments._ID));
             int city = cursor.getInt(cursor.getColumnIndex(ColumnsDocuments.CITY));
             String fio = cursor.getString(cursor.getColumnIndex(ColumnsDocuments.FIO));
             String adress = cursor.getString(cursor.getColumnIndex(ColumnsDocuments.ADRESS));
@@ -72,7 +71,7 @@ public class CrudHelper implements LocalDatabase
             Log.e(TAG, "getAllSavedDocuments: Getted date is "+date );
 
             Model_Document document = new Model_Document();
-            document.setId_local(id);
+            document.setId(id);
             document.setCity(city);
             document.setFio(fio);
             document.setAdress(adress);
@@ -84,5 +83,11 @@ public class CrudHelper implements LocalDatabase
         }
 
         return listOfDocuments;
+    }
+
+    @Override
+    public void deleteDocument(Model_Document document)
+    {
+
     }
 }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:sign="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:keepScreenOn="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -138,60 +139,12 @@
 
                 <TextView
                     style="@style/TVSemi.M"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:background="@color/gray5"
-                    android:padding="6dp"
-                    android:text="Данные заказчика"
-                    android:textColor="@color/white" />
-
-                <EditText
-                    android:id="@+id/et_fio"
-
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
-                    android:hint="Фамилия Имя Отчество..." />
-
-
-                <EditText
-                    android:id="@+id/et_adress"
-
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="4dp"
-                    android:hint="Адрес..." />
-
-                <EditText
-                    android:id="@+id/et_phone"
-
-                    style="@style/EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="4dp"
-                    android:hint="Телефон"
-                    android:inputType="phone" />
-
-
-                <TextView
-                    style="@style/TVSemi.M"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray5"
                     android:padding="6dp"
-                    android:text="Материалы"
+                    android:text="Список заказываемой продукции"
                     android:textColor="@color/white" />
 
 
@@ -227,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
-                        android:text="Материалы (0)" />
+                        android:text="Товары (0)" />
 
                 </RelativeLayout>
 
@@ -254,11 +207,10 @@
                     android:text="Сумма"
                     android:textColor="@color/gray3" />
 
-
                 <EditText
                     android:id="@+id/et_sum"
 
-                    android:text="0"
+                    android:text=""
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -271,6 +223,7 @@
                     android:inputType="none"
                     android:enabled="false"
                     tools:text="19 787" />
+
 
 
                 <LinearLayout
@@ -314,32 +267,36 @@
                     <EditText
                         android:id="@+id/et_montage"
 
-                        android:text="0"
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="4dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_weight="10"
                         android:inputType="numberDecimal"
+                        android:text=""
                         android:textAlignment="center" />
 
                     <EditText
                         android:id="@+id/et_delivery"
 
-                        android:text="0"
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_weight="10"
                         android:inputType="numberDecimal"
+                        android:text=""
                         android:textAlignment="center" />
 
                 </LinearLayout>
+
+
+
+
 
 
                 <LinearLayout
@@ -383,7 +340,7 @@
                     <EditText
                         android:id="@+id/et_sale_rub"
 
-                        android:text="0"
+                        android:text=""
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -397,7 +354,7 @@
                     <EditText
                         android:id="@+id/et_sale_percent"
 
-                        android:text="0"
+                        android:text=""
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -471,6 +428,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="10"
+                        android:gravity="left"
+                        android:text="Предоплата %"
+                        android:textColor="@color/gray3" />
+
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_weight="10"
@@ -489,7 +460,7 @@
                     <EditText
                         android:id="@+id/et_prepay"
 
-                        android:text="0"
+                        android:text=""
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -501,9 +472,24 @@
                         android:textAlignment="center" />
 
                     <EditText
+                        android:id="@+id/et_prepay_percent"
+
+                        android:text=""
+                        style="@style/EditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="10"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textAlignment="center" />
+
+                    <EditText
                         android:id="@+id/et_postpay"
 
-                        android:text="0"
+                        android:text=""
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -586,12 +572,60 @@
                     />
 
 
-
                 <TextView
                     style="@style/TVSemi.M"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:background="@color/gray5"
+                    android:padding="6dp"
+                    android:text="Данные заказчика"
+                    android:textColor="@color/white" />
+
+                <EditText
+                    android:id="@+id/et_fio"
+
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:hint="Фамилия Имя Отчество..." />
+
+
+                <EditText
+                    android:id="@+id/et_adress"
+
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="Адрес..." />
+
+                <EditText
+                    android:id="@+id/et_phone"
+
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:hint="Телефон"
+                    android:inputType="phone" />
+
+
+
+                <TextView
+                    style="@style/TVSemi.M"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/gray5"
                     android:padding="6dp"
                     android:text="Подпись"
@@ -663,7 +697,7 @@
 
     </ScrollView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         app:cardCornerRadius="0dp"
         app:cardElevation="20dp"
         android:id="@+id/card_bottom"
@@ -748,7 +782,7 @@
         </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 

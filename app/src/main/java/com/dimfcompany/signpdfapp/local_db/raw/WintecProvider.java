@@ -1,4 +1,4 @@
-package com.dimfcompany.signpdfapp.sqlite;
+package com.dimfcompany.signpdfapp.local_db.raw;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -8,9 +8,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class WintecProvider extends ContentProvider
 {

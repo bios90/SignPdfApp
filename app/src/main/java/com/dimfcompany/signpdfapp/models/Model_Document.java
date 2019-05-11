@@ -1,18 +1,25 @@
 package com.dimfcompany.signpdfapp.models;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "documents")
 public class Model_Document implements Serializable
 {
-    int id_local;
+    @PrimaryKey(autoGenerate = true)
+    long id;
     Integer city;
     String fio;
     String adress;
     String phone;
     String signature_file_name;
     String pdf_file_name;
+    String check_file_name;
     String code;
     long date;
 
@@ -26,6 +33,7 @@ public class Model_Document implements Serializable
     String order_form;
     String dop_info;
 
+    @Ignore
     List<Model_Product> listOfProducts = new ArrayList<>();
 
     public Model_Document()
@@ -44,6 +52,16 @@ public class Model_Document implements Serializable
         this.listOfProducts = listOfProducts;
     }
 
+    public String getCheck_file_name()
+    {
+        return check_file_name;
+    }
+
+    public void setCheck_file_name(String check_file_name)
+    {
+        this.check_file_name = check_file_name;
+    }
+
     public String getCode()
     {
         return code;
@@ -54,14 +72,14 @@ public class Model_Document implements Serializable
         this.code = code;
     }
 
-    public int getId_local()
+    public long getId()
     {
-        return id_local;
+        return id;
     }
 
-    public void setId_local(int id_local)
+    public void setId(long id)
     {
-        this.id_local = id_local;
+        this.id = id;
     }
 
     public String getPdf_file_name()
@@ -219,7 +237,7 @@ public class Model_Document implements Serializable
     public String toString()
     {
         return "Model_Document{" +
-                "id_local=" + id_local +
+                "id_local=" + id +
                 ", city=" + city +
                 ", fio='" + fio + '\'' +
                 ", adress='" + adress + '\'' +

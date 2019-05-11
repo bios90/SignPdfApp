@@ -19,6 +19,8 @@ public interface ActProductsMvp
         void clickedAddProduct();
         void clickedDeleteProduct(Model_Product product);
         void clickedEditProduct(Model_Product product);
+        void clickedBack();
+        void clickedLongProduct(Model_Product product);
         Model_Document getDocument();
     }
 }

@@ -2,7 +2,10 @@ package com.dimfcompany.signpdfapp.di.application;
 
 import android.app.Application;
 
+import androidx.room.Room;
+
 import com.dimfcompany.signpdfapp.base.Constants;
+import com.dimfcompany.signpdfapp.local_db.room.AppDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -26,6 +29,8 @@ public class ApplicationModule
         this.application = application;
     }
 
+
+
     @Singleton
     @Provides
     Retrofit getRetrofit()
@@ -45,6 +50,16 @@ public class ApplicationModule
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
+                .build();
+    }
+
+    @Singleton
+    @Provides
+    AppDatabase getAppDatabase()
+    {
+        return Room.databaseBuilder(application,AppDatabase.class,"wintec_db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build();
     }
 

@@ -1,8 +1,9 @@
 package com.dimfcompany.signpdfapp.base.viewmvcfactory;
 
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvpView;

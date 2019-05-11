@@ -1,12 +1,13 @@
 package com.dimfcompany.signpdfapp.base.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.models.Model_Document;
@@ -44,7 +45,7 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
         final Model_Document document = listOfDocuments.get(i);
         String date = GlobalHelper.getDateString(document.getDate(),GlobalHelper.FORMAT_FULL_MONTH);
         String city = GlobalHelper.getCityOfDocument(document);
-        String header = "77-"+GlobalHelper.getRandomBeetwen(1000,1999)+" | "+date+" | "+city;
+        String header = document.getCode()+" | "+date+" | "+city;
 
         cardFinished.tv_header.setText(header);
         cardFinished.tv_fio.setText(document.getFio());

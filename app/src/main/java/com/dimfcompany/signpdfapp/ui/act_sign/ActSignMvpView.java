@@ -1,12 +1,13 @@
 package com.dimfcompany.signpdfapp.ui.act_sign;
 
 import android.graphics.Bitmap;
-import android.support.v4.content.res.ResourcesCompat;
+
+import androidx.core.content.res.ResourcesCompat;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -25,8 +26,6 @@ import com.dimfcompany.signpdfapp.utils.ImageManager;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.StringManager;
 import com.github.gcacace.signaturepad.views.SignaturePad;
-import com.pedromassango.doubleclick.DoubleClick;
-import com.pedromassango.doubleclick.DoubleClickListener;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -44,7 +43,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
     RadioGroup rg_city;
     EditText et_fio, et_adress, et_phone;
-    EditText et_sum, et_montage, et_delivery, et_sale_rub, et_sale_percent, et_prepay, et_postpay,et_order_form,et_dop_info;
+    EditText et_sum, et_montage, et_delivery, et_sale_rub, et_sale_percent, et_prepay, et_prepay_percent, et_postpay, et_order_form, et_dop_info;
     TextView tv_itogo_sum;
     String lastBitmapFileName;
     RelativeLayout la_create_pdf;
@@ -64,6 +63,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
     TextWatcher percentWatcher;
     TextWatcher priceWatcher;
+    TextWatcher prepayPercentWatcher;
 
     public ActSignMvpView(LayoutInflater layoutInflater, ViewGroup parent, FileManager fileManager, GlobalHelper globalHelper, MessagesManager messagesManager)
     {
@@ -99,6 +99,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         et_postpay = findViewById(R.id.et_postpay);
         et_order_form = findViewById(R.id.et_order_form);
         et_dop_info = findViewById(R.id.et_dop_info);
+        et_prepay_percent = findViewById(R.id.et_prepay_percent);
 
         tv_clear = findViewById(R.id.tv_clear);
         tv_lock = findViewById(R.id.tv_lock);
@@ -253,12 +254,28 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         }
 
         double sum = GlobalHelper.countSum(document);
-        et_sum.setText(StringManager.formatNum(sum,false));
+        et_sum.setText(StringManager.formatNum(sum, false));
 
-        et_montage.setText(StringManager.formatNum(document.getMontage(),false));
-        et_delivery.setText(StringManager.formatNum(document.getDelivery(),false));
-        et_sale_rub.setText(StringManager.formatNum(document.getSale(),false));
-        et_prepay.setText(StringManager.formatNum(document.getPrepay(),false));
+        if (document.getMontage() != 0)
+        {
+            et_montage.setText(StringManager.formatNum(document.getMontage(), false));
+        }
+
+        if (document.getDelivery() != 0)
+        {
+            et_delivery.setText(StringManager.formatNum(document.getDelivery(), false));
+        }
+
+        if (document.getSale() != 0)
+        {
+            Log.e(TAG, "bindModelDocument: Doc sale is " + document.getSale());
+            et_sale_rub.setText(StringManager.formatNum(document.getSale(), false));
+        }
+
+        if (document.getPrepay() != 0)
+        {
+            et_prepay.setText(StringManager.formatNum(document.getPrepay(), false));
+        }
 
         if (document.getOrder_form() != null)
         {
@@ -269,8 +286,31 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         {
             et_dop_info.setText(document.getDop_info());
         }
+
+        removeTextWatchers();
+        countNormal();
+        addTextWatchers();
     }
 
+    private void addTextWatchers()
+    {
+        et_montage.addTextChangedListener(priceWatcher);
+        et_delivery.addTextChangedListener(priceWatcher);
+        et_sale_rub.addTextChangedListener(priceWatcher);
+        et_sale_percent.addTextChangedListener(percentWatcher);
+        et_prepay.addTextChangedListener(priceWatcher);
+        et_prepay_percent.addTextChangedListener(prepayPercentWatcher);
+    }
+
+    private void removeTextWatchers()
+    {
+        et_montage.removeTextChangedListener(priceWatcher);
+        et_delivery.removeTextChangedListener(priceWatcher);
+        et_sale_rub.removeTextChangedListener(priceWatcher);
+        et_sale_percent.removeTextChangedListener(percentWatcher);
+        et_prepay.removeTextChangedListener(priceWatcher);
+        et_prepay_percent.removeTextChangedListener(prepayPercentWatcher);
+    }
 
 
     private void setPriceListeners()
@@ -292,19 +332,9 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
             @Override
             public void afterTextChanged(Editable s)
             {
-                et_montage.removeTextChangedListener(priceWatcher);
-                et_delivery.removeTextChangedListener(priceWatcher);
-                et_sale_rub.removeTextChangedListener(priceWatcher);
-                et_prepay.removeTextChangedListener(priceWatcher);
-
-                et_sale_percent.removeTextChangedListener(percentWatcher);
+                removeTextWatchers();
                 countPercent();
-                et_sale_percent.addTextChangedListener(percentWatcher);
-
-                et_montage.addTextChangedListener(priceWatcher);
-                et_delivery.addTextChangedListener(priceWatcher);
-                et_sale_rub.addTextChangedListener(priceWatcher);
-                et_prepay.addTextChangedListener(priceWatcher);
+                addTextWatchers();
             }
         };
 
@@ -325,9 +355,32 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
             @Override
             public void afterTextChanged(Editable s)
             {
-                et_sale_percent.removeTextChangedListener(percentWatcher);
+                removeTextWatchers();
                 countNormal();
-                et_sale_percent.addTextChangedListener(percentWatcher);
+                addTextWatchers();
+            }
+        };
+
+        prepayPercentWatcher = new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                removeTextWatchers();
+                countPrepayPercent();
+                addTextWatchers();
             }
         };
 
@@ -335,8 +388,8 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         et_delivery.addTextChangedListener(priceWatcher);
         et_sale_rub.addTextChangedListener(priceWatcher);
         et_prepay.addTextChangedListener(priceWatcher);
-
         et_sale_percent.addTextChangedListener(percentWatcher);
+        et_prepay_percent.addTextChangedListener(prepayPercentWatcher);
     }
 
 
@@ -372,7 +425,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         TextView tv_materials_btn = getRootView().findViewById(R.id.tv_materials_btn);
         int count = getListener().getDocument().getListOfProducts().size();
 
-        tv_materials_btn.setText("Материалы (" + count + ")");
+        tv_materials_btn.setText("Товары (" + count + ")");
     }
 
     @Override
@@ -408,6 +461,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public double getSale()
     {
+        Log.e(TAG, "getSale: Sale is " + GlobalHelper.getEtDoubleValue(et_sale_rub));
         return GlobalHelper.getEtDoubleValue(et_sale_rub);
     }
 
@@ -439,7 +493,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
         Bitmap bitmap = signature_pad.getSignatureBitmap();
 
-        Log.e(TAG, "getCurrentFileName: Bitmap not Null!!" );
+        Log.e(TAG, "getCurrentFileName: Bitmap not Null!!");
         File file = fileManager.saveBitmapToFile(bitmap);
         return FileManager.getFileName(file);
     }
@@ -455,16 +509,16 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
         double itogoSum = GlobalHelper.countItogoSumWithPercent(getListener().getDocument(), montage, delivery, percent);
 
-        double sale_rub = sum+montage+delivery-itogoSum;
-        et_sale_rub.setText(StringManager.formatNum(sale_rub,false));
+        double sale_rub = sum + montage + delivery - itogoSum;
+        et_sale_rub.setText(StringManager.formatNum(sale_rub, false));
 
         et_sum.setText(StringManager.formatNum(sum, false));
         tv_itogo_sum.setText(StringManager.formatNum(itogoSum, false) + " р");
 
         double prepay = getPrePay();
-        double postPay = itogoSum-prepay;
+        double postPay = itogoSum - prepay;
 
-        et_postpay.setText(StringManager.formatNum(postPay,false));
+        et_postpay.setText(StringManager.formatNum(postPay, false));
 
     }
 
@@ -478,17 +532,37 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
         double itogoSum = GlobalHelper.countItogoSum(getListener().getDocument(), montage, delivery, sale_rub);
 
-        double salePercent = GlobalHelper.getPercentFromTwoNums(sum+montage+delivery,sale_rub);
-        Log.e(TAG, "countNormal: Percent of sale is "+salePercent );
+        double salePercent = GlobalHelper.getPercentFromTwoNums(sum, sale_rub);
+        Log.e(TAG, "countNormal: Percent of sale is " + salePercent);
 
-        et_sale_percent.setText(StringManager.formatNum(salePercent,false));
+        et_sale_percent.setText(StringManager.formatNum(salePercent, false));
 
         et_sum.setText(StringManager.formatNum(sum, false));
         tv_itogo_sum.setText(StringManager.formatNum(itogoSum, false) + " р");
 
         double prepay = getPrePay();
-        double postPay = itogoSum-prepay;
+        double postPay = itogoSum - prepay;
+        double prepayPercent = GlobalHelper.getPercentFromTwoNums(itogoSum, prepay);
 
-        et_postpay.setText(StringManager.formatNum(postPay,false));
+        et_prepay_percent.setText(StringManager.formatNum(prepayPercent, false));
+        et_postpay.setText(StringManager.formatNum(postPay, false));
     }
+
+    private void countPrepayPercent()
+    {
+        int percent = GlobalHelper.getEtIntegerPercent(et_prepay_percent);
+        double montage = getMontage();
+        double delivery = getDelivery();
+        double sale_rub = getSale();
+
+        double itogoSum = GlobalHelper.countItogoSum(getListener().getDocument(), montage, delivery, sale_rub);
+
+        double postpay = GlobalHelper.countSumMinusPercent(itogoSum, percent);
+        double prepay = itogoSum - postpay;
+
+        et_postpay.setText(StringManager.formatNum(postpay, false));
+        et_prepay.setText(StringManager.formatNum(prepay, false));
+    }
+
+
 }
