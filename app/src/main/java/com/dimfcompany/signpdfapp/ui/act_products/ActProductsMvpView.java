@@ -111,8 +111,8 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
             tv_material.setText(product.getMaterial().getName());
             tv_position.setText(String.valueOf(document.getListOfProducts().indexOf(product) + 1));
 
-            String width = StringManager.formatNum(product.getWidth(),true);
-            String height = StringManager.formatNum(product.getHeight(),true);
+            String width = product.getWidth();
+            String height = product.getHeight();
             String count = StringManager.formatNum(product.getCount(),false);
             String sum = StringManager.formatNum(product.getSum(),false);
 

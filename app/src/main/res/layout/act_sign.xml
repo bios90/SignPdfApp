@@ -267,6 +267,7 @@
                     <EditText
                         android:id="@+id/et_montage"
 
+                        android:nextFocusDown="@+id/et_delivery"
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -281,6 +282,7 @@
                     <EditText
                         android:id="@+id/et_delivery"
 
+                        android:nextFocusDown="@id/et_sale_rub"
                         style="@style/EditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -354,6 +356,7 @@
                     <EditText
                         android:id="@+id/et_sale_percent"
 
+                        android:nextFocusDown="@id/et_prepay"
                         android:text=""
                         style="@style/EditText"
                         android:layout_width="0dp"
@@ -518,10 +521,10 @@
                     style="@style/TVSemi.S"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="1dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="1dp"
                     android:gravity="left"
                     android:text="Форма заказа на :"
                     android:textColor="@color/gray3" />
@@ -653,7 +656,7 @@
                             android:id="@+id/signature_pad"
 
                             android:layout_width="match_parent"
-                            android:layout_height="160dp"
+                            android:layout_height="0dp"
                             app:penColor="@color/penRoyalBlue" />
 
                     </LinearLayout>

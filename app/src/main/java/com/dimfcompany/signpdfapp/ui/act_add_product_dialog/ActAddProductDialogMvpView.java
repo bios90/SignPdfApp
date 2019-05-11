@@ -1,6 +1,7 @@
 package com.dimfcompany.signpdfapp.ui.act_add_product_dialog;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,8 +135,8 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
         material.setName(et_material_name.getText().toString().trim());
         product.setMaterial(material);
 
-        product.setWidth(GlobalHelper.getEtFloatValue(et_width));
-        product.setHeight(GlobalHelper.getEtFloatValue(et_height));
+        product.setWidth(et_width.getText().toString().trim());
+        product.setHeight(et_height.getText().toString().trim());
 
         Model_Color color = new Model_Color();
         color.setName(et_color.getText().toString().trim());
@@ -240,14 +241,14 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
             et_material_name.setText(product.getMaterial().getName());
         }
 
-        if (product.getWidth() > 0)
+        if (!TextUtils.isEmpty(product.getWidth()))
         {
-            et_width.setText(String.valueOf(product.getWidth()));
+            et_width.setText(product.getWidth());
         }
 
-        if (product.getHeight() > 0)
+        if (!TextUtils.isEmpty(product.getHeight()))
         {
-            et_height.setText(String.valueOf(product.getHeight()));
+            et_height.setText(product.getHeight());
         }
 
         if (product.getColor() != null && product.getColor().getName() != null)

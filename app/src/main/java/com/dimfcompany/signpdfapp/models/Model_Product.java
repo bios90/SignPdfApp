@@ -12,8 +12,8 @@ public class Model_Product implements Serializable
     @PrimaryKey(autoGenerate = true)
     long id;
     long document_id;
-    float width;
-    float height;
+    String width;
+    String height;
     int count;
     double price;
     double sum;
@@ -62,22 +62,22 @@ public class Model_Product implements Serializable
         this.material = material;
     }
 
-    public float getWidth()
+    public String getWidth()
     {
         return width;
     }
 
-    public void setWidth(float width)
+    public void setWidth(String width)
     {
         this.width = width;
     }
 
-    public float getHeight()
+    public String getHeight()
     {
         return height;
     }
 
-    public void setHeight(float height)
+    public void setHeight(String height)
     {
         this.height = height;
     }

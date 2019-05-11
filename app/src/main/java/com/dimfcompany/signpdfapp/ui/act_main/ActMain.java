@@ -26,7 +26,7 @@ public class ActMain extends BaseActivity implements ActMainMvp.ViewListener
     @Override
     public void clickedMakeNewSign()
     {
-        navigationManager.toSignActivity(null);
+        navigationManager.toSignActivity(null,null);
     }
 
     @Override

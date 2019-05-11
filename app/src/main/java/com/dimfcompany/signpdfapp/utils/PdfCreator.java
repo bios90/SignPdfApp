@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -306,8 +307,8 @@ public class PdfCreator
                 PdfPCell cellFirstLine = getParCell(product.getMaterial().getName(), pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
                 tableProducts.addCell(cellFirstLine);
 
-                String secondLine = product.getColor().getName()+" Ш-"+StringManager.formatNum(product.getWidth(),true);
-                secondLine+=" В-"+StringManager.formatNum(product.getHeight(),true);
+                String secondLine = product.getColor().getName()+" Ш-"+product.getWidth();
+                secondLine+=" В-"+product.getHeight();
                 PdfPCell cellSecondLine = getParCell(secondLine, pt24,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
                 tableProducts.addCell(cellSecondLine);
 
@@ -478,7 +479,7 @@ public class PdfCreator
 
 
             tableCheckBottomInfo.addCell(getParCell("Заказчик", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
-            String fio = "Не указано";
+            String fio = "Не указан";
             if(model_document.getFio() != null && model_document.getFio().trim().length()>0)
             {
                 fio = model_document.getFio();
@@ -717,22 +718,22 @@ public class PdfCreator
 
 
         String width;
-        if (product.getWidth() == 0)
+        if (TextUtils.isEmpty(product.getWidth()))
         {
             width = "-";
         } else
         {
-            width = StringManager.formatNum(product.getWidth(), true);
+            width = product.getWidth();
         }
 
         String height;
 
-        if (product.getHeight() == 0)
+        if (TextUtils.isEmpty(product.getHeight()))
         {
             height = "-";
         } else
         {
-            height = StringManager.formatNum(product.getHeight(), true);
+            height = product.getHeight();
         }
 
         String color = "-";

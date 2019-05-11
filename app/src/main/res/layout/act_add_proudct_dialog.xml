@@ -92,8 +92,9 @@
             <EditText
                 android:id="@+id/et_width"
 
+                android:nextFocusDown="@+id/et_height"
+                android:inputType="text"
                 android:textAlignment="center"
-                android:inputType="numberDecimal"
                 style="@style/EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -105,8 +106,8 @@
             <EditText
                 android:id="@+id/et_height"
 
+                android:inputType="text"
                 android:textAlignment="center"
-                android:inputType="numberDecimal"
                 style="@style/EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -246,6 +247,7 @@
             <EditText
                 android:id="@+id/et_count"
 
+                android:nextFocusDown="@+id/et_price"
                 android:textAlignment="center"
                 android:inputType="numberSigned"
                 android:gravity="center"

@@ -160,7 +160,9 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
             @Override
             public void clickedEdit()
             {
-
+                GlobalHelper.resetDocumentIds(document);
+                navigationManager.toSignActivity(null,document);
+                finish();
             }
 
             @Override

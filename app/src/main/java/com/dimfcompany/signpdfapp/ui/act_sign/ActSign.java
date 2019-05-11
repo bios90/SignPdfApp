@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
@@ -29,6 +30,20 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
 {
     private static final String TAG = "ActSign";
 
+    public static void startScreenOver(AppCompatActivity activity, @Nullable Integer request_code, @Nullable Model_Document document)
+    {
+        Intent intent = new Intent(activity, ActSign.class);
+        intent.putExtra(Constants.EXTRA_MODEL_DOCUMENT, document);
+
+        if (request_code == null)
+        {
+            activity.startActivity(intent);
+        } else
+        {
+            activity.startActivityForResult(intent, request_code);
+        }
+    }
+
     @Inject
     FileManager fileManager;
     @Inject
@@ -42,6 +57,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
 
     Model_Document model_document;
 
+    boolean editMode;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -52,18 +69,18 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         setContentView(mvpView.getRootView());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        if (model_document == null)
-        {
-            model_document = new Model_Document();
-        }
     }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
         super.onWindowFocusChanged(hasFocus);
         mvpView.setSignatureSizes();
+        checkForEditMode();
     }
+
+
 
     @Override
     public void clickedSignaturePad()
@@ -215,5 +232,18 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
                 dialog.dismiss();
             }
         });
+    }
+
+    private void checkForEditMode()
+    {
+        model_document = (Model_Document)getIntent().getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
+        if (model_document == null)
+        {
+            model_document = new Model_Document();
+            return;
+        }
+
+        editMode = true;
+        mvpView.bindModelDocument(model_document);
     }
 }

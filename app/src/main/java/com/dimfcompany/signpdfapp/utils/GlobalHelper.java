@@ -523,4 +523,34 @@ public class GlobalHelper
 
         return materialCopy;
     }
+
+    public static void resetDocumentIds(Model_Document document)
+    {
+        document.setId(0);
+        
+        for(Model_Product product : document.getListOfProducts())
+        {
+            product.setId(0);
+            
+            if(product.getColor() !=null)
+            {
+                product.getColor().setId(0);
+            }            
+            
+            if(product.getControl() !=null)
+            {
+                product.getControl().setId(0);
+            }            
+            
+            if(product.getKrep() !=null)
+            {
+                product.getKrep().setId(0);
+            }
+            
+            if (product.getMaterial() != null)
+            {
+                product.getMaterial().setId(0);
+            }
+        }
+    }
 }

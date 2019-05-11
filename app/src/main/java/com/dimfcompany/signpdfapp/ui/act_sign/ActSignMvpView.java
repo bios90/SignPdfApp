@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -221,6 +222,9 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         la_for_signature_rel.setLayoutParams(relParams);
 
         GlobalHelper.invalidateRecursive(la_for_signature_rel);
+        signature_pad.invalidate();
+
+        Log.e(TAG, "setSignatureSizes: New Sizes Are Width is " + signature_pad.getWidth() + " *** Height is " + signature_pad.getHeight());
     }
 
 
@@ -396,10 +400,22 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public void bindSignatureFile(String filename)
     {
-        File file = fileManager.getFileFromTemp(filename, null);
+        final File file = fileManager.getFileFromTemp(filename, null);
         if (file != null)
         {
-            signature_pad.setSignatureBitmap(ImageManager.getBitmapFromFile(file));
+            //Made this way because of signature pad dunamic height
+            signature_pad.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener()
+                    {
+                        @Override
+                        public void onGlobalLayout()
+                        {
+
+                            signature_pad.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                            signature_pad.setSignatureBitmap(ImageManager.getBitmapFromFile(file));
+
+                        }
+                    });
         }
     }
 

@@ -23,9 +23,9 @@ public class NavigationManager
         this.activity = activity;
     }
 
-    public void toSignActivity(@Nullable Integer requestCode)
+    public void toSignActivity(@Nullable Integer requestCode, @Nullable Model_Document document)
     {
-        BaseActivity.startScreen(activity, ActSign.class,requestCode);
+        ActSign.startScreenOver(activity, requestCode, document);
     }
 
 
@@ -36,17 +36,17 @@ public class NavigationManager
 
     public void toActFinished(@Nullable Integer requestCode)
     {
-        BaseActivity.startScreen(activity, ActFinished.class,requestCode);
+        BaseActivity.startScreen(activity, ActFinished.class, requestCode);
     }
 
 
     public void toActProducts(@Nullable Integer requestCode, Model_Document document)
     {
-        ActProducts.startScreenOver(activity,requestCode,document);
+        ActProducts.startScreenOver(activity, requestCode, document);
     }
 
-    public void toActAddProductDialog(@Nullable Integer requestCode,@Nullable Model_Product product)
+    public void toActAddProductDialog(@Nullable Integer requestCode, @Nullable Model_Product product)
     {
-        ActAddProductDialog.startScreenOver(activity,requestCode,product);
+        ActAddProductDialog.startScreenOver(activity, requestCode, product);
     }
 }
