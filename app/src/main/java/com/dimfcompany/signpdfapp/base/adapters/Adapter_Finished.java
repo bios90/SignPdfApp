@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.base.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,14 +81,17 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
             }
         });
 
-        cardFinished.tv_phone.setOnClickListener(new View.OnClickListener()
+        if(!TextUtils.isEmpty(document.getPhone()))
         {
-            @Override
-            public void onClick(View v)
+            cardFinished.tv_phone.setOnClickListener(new View.OnClickListener()
             {
-                callback.clickedPhone(document);
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    callback.clickedPhone(document);
+                }
+            });
+        }
     }
 
     @Override

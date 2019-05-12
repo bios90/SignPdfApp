@@ -15,7 +15,7 @@ public interface DaoDocument extends BaseDao<Model_Document>
     @Query("SELECT * FROM products WHERE document_id=:document_id")
     List<Model_Product> getDocumentProducts(long document_id);
 
-    @Query("SELECT * FROM documents")
+    @Query("SELECT * FROM documents ORDER BY date DESC")
     List<Model_Document> getAllDocuments();
 
     @Query("SELECT * FROM documents WHERE id=:id LIMIT 1")
