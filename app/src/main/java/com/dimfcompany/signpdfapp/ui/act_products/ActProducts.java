@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,6 +55,8 @@ public class ActProducts extends BaseActivity implements ActProductsMvp.ViewList
         setContentView(mvpView.getRootView());
 
         model_document = (Model_Document) getIntent().getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
+
+
         mvpView.displayProducts();
         mvpView.updateBottomInfo();
     }

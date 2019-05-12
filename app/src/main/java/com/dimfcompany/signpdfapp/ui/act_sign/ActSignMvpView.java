@@ -26,11 +26,15 @@ import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.ImageManager;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.StringManager;
+import com.dimfcompany.signpdfapp.utils.custom_classes.CustomEditTextNullFocusedChanged;
+import com.dimfcompany.signpdfapp.utils.custom_classes.CustomNullTextWatcher;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListener>
         implements ActSignMvp.MvpView
@@ -65,6 +69,8 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     TextWatcher percentWatcher;
     TextWatcher priceWatcher;
     TextWatcher prepayPercentWatcher;
+
+    boolean signaturePadSizeSetted = false;
 
     public ActSignMvpView(LayoutInflater layoutInflater, ViewGroup parent, FileManager fileManager, GlobalHelper globalHelper, MessagesManager messagesManager)
     {
@@ -202,34 +208,53 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public void setSignatureSizes()
     {
-        int width = signature_pad.getWidth();
-        int height = (int) (width * 0.4);
-        int laHeight = (int) (height + globalHelper.pxFromDp(20f));
+        signature_pad.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener()
+                {
+                    @Override
+                    public void onGlobalLayout()
+                    {
+                        if(!signaturePadSizeSetted)
+                        {
+                            int width = signature_pad.getWidth();
+                            int height = (int) (width * 0.4);
+                            int laHeight = (int) (height + globalHelper.pxFromDp(20f));
 
-        ViewGroup.LayoutParams layoutParams = signature_pad.getLayoutParams();
-        layoutParams.height = height;
-        signature_pad.setLayoutParams(layoutParams);
+                            ViewGroup.LayoutParams layoutParams = signature_pad.getLayoutParams();
+                            layoutParams.height = height;
+                            signature_pad.setLayoutParams(layoutParams);
 
-        LinearLayout la_for_signature = getRootView().findViewById(R.id.la_for_signature);
-        RelativeLayout la_for_signature_rel = findViewById(R.id.la_for_signature_rel);
+                            LinearLayout la_for_signature = getRootView().findViewById(R.id.la_for_signature);
+                            RelativeLayout la_for_signature_rel = findViewById(R.id.la_for_signature_rel);
 
-        ViewGroup.LayoutParams linearParams = la_for_signature.getLayoutParams();
-        linearParams.height = laHeight;
-        la_for_signature.setLayoutParams(linearParams);
+                            ViewGroup.LayoutParams linearParams = la_for_signature.getLayoutParams();
+                            linearParams.height = laHeight;
+                            la_for_signature.setLayoutParams(linearParams);
 
-        ViewGroup.LayoutParams relParams = la_for_signature_rel.getLayoutParams();
-        relParams.height = laHeight;
-        la_for_signature_rel.setLayoutParams(relParams);
+                            ViewGroup.LayoutParams relParams = la_for_signature_rel.getLayoutParams();
+                            relParams.height = laHeight;
+                            la_for_signature_rel.setLayoutParams(relParams);
 
-        GlobalHelper.invalidateRecursive(la_for_signature_rel);
-        signature_pad.invalidate();
+                            GlobalHelper.invalidateRecursive(la_for_signature_rel);
+                            signature_pad.invalidate();
+                            if(signature_pad.getHeight() > 0)
+                            {
+                                signaturePadSizeSetted = true;
+                                signature_pad.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                if(getListener().getSignatureFile() != null)
+                                {
+                                    signature_pad.setSignatureBitmap(ImageManager.getBitmapFromFile(getListener().getSignatureFile()));
+                                }
+                            }
 
-        Log.e(TAG, "setSignatureSizes: New Sizes Are Width is " + signature_pad.getWidth() + " *** Height is " + signature_pad.getHeight());
+                        }
+                    }
+                });
     }
 
 
     @Override
-    public void bindModelDocument(Model_Document document)
+    public void bindModelDocument(final Model_Document document)
     {
         if (document.getCity() != null)
         {
@@ -258,25 +283,28 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         }
 
         double sum = GlobalHelper.countSum(document);
-        et_sum.setText(StringManager.formatNum(sum, false));
 
-        if (document.getMontage() != 0)
+        if (sum > 0)
+        {
+            et_sum.setText(StringManager.formatNum(sum, false));
+        }
+
+        if (document.getMontage() > 0)
         {
             et_montage.setText(StringManager.formatNum(document.getMontage(), false));
         }
 
-        if (document.getDelivery() != 0)
+        if (document.getDelivery() > 0)
         {
             et_delivery.setText(StringManager.formatNum(document.getDelivery(), false));
         }
 
-        if (document.getSale() != 0)
+        if (document.getSale() > 0)
         {
-            Log.e(TAG, "bindModelDocument: Doc sale is " + document.getSale());
             et_sale_rub.setText(StringManager.formatNum(document.getSale(), false));
         }
 
-        if (document.getPrepay() != 0)
+        if (document.getPrepay() > 0)
         {
             et_prepay.setText(StringManager.formatNum(document.getPrepay(), false));
         }
@@ -400,23 +428,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public void bindSignatureFile(String filename)
     {
-        final File file = fileManager.getFileFromTemp(filename, null);
-        if (file != null)
-        {
-            //Made this way because of signature pad dunamic height
-            signature_pad.getViewTreeObserver().addOnGlobalLayoutListener(
-                    new ViewTreeObserver.OnGlobalLayoutListener()
-                    {
-                        @Override
-                        public void onGlobalLayout()
-                        {
-
-                            signature_pad.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            signature_pad.setSignatureBitmap(ImageManager.getBitmapFromFile(file));
-
-                        }
-                    });
-        }
+        setSignatureSizes();
     }
 
     @Override
@@ -524,18 +536,40 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         int percent = GlobalHelper.getEtIntegerPercent(et_sale_percent);
 
         double itogoSum = GlobalHelper.countItogoSumWithPercent(getListener().getDocument(), montage, delivery, percent);
-
         double sale_rub = sum + montage + delivery - itogoSum;
-        et_sale_rub.setText(StringManager.formatNum(sale_rub, false));
 
-        et_sum.setText(StringManager.formatNum(sum, false));
+        if(sale_rub > 0)
+        {
+            et_sale_rub.setText(StringManager.formatNum(sale_rub, false));
+        }
+        else
+            {
+                et_sale_rub.setText("");
+            }
+
+        if(sum > 0)
+        {
+            et_sum.setText(StringManager.formatNum(sum, false));
+        }
+        else
+            {
+                et_sum.setText("");
+            }
+
         tv_itogo_sum.setText(StringManager.formatNum(itogoSum, false) + " р");
 
         double prepay = getPrePay();
         double postPay = itogoSum - prepay;
 
-        et_postpay.setText(StringManager.formatNum(postPay, false));
 
+        if(postPay > 0)
+        {
+            et_postpay.setText(StringManager.formatNum(postPay, false));
+        }
+        else
+            {
+                et_postpay.setText("");
+            }
     }
 
     private void countNormal()
@@ -549,19 +583,48 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         double itogoSum = GlobalHelper.countItogoSum(getListener().getDocument(), montage, delivery, sale_rub);
 
         double salePercent = GlobalHelper.getPercentFromTwoNums(sum, sale_rub);
-        Log.e(TAG, "countNormal: Percent of sale is " + salePercent);
 
-        et_sale_percent.setText(StringManager.formatNum(salePercent, false));
+        if(salePercent > 0)
+        {
+            et_sale_percent.setText(StringManager.formatNum(salePercent, false));
+        }
+        else
+            {
+                et_sale_percent.setText("");
+            }
 
-        et_sum.setText(StringManager.formatNum(sum, false));
+        if(sum > 0)
+        {
+            et_sum.setText(StringManager.formatNum(sum, false));
+        }
+        else
+            {
+                et_sum.setText("");
+            }
+
         tv_itogo_sum.setText(StringManager.formatNum(itogoSum, false) + " р");
 
         double prepay = getPrePay();
         double postPay = itogoSum - prepay;
         double prepayPercent = GlobalHelper.getPercentFromTwoNums(itogoSum, prepay);
 
-        et_prepay_percent.setText(StringManager.formatNum(prepayPercent, false));
-        et_postpay.setText(StringManager.formatNum(postPay, false));
+        if(prepayPercent > 0)
+        {
+            et_prepay_percent.setText(StringManager.formatNum(prepayPercent, false));
+        }
+        else
+            {
+                et_prepay_percent.setText("");
+            }
+
+        if(postPay > 0)
+        {
+            et_postpay.setText(StringManager.formatNum(postPay, false));
+        }
+        else
+            {
+                et_postpay.setText("");
+            }
     }
 
     private void countPrepayPercent()
@@ -576,8 +639,23 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         double postpay = GlobalHelper.countSumMinusPercent(itogoSum, percent);
         double prepay = itogoSum - postpay;
 
-        et_postpay.setText(StringManager.formatNum(postpay, false));
-        et_prepay.setText(StringManager.formatNum(prepay, false));
+        if(postpay > 0)
+        {
+            et_postpay.setText(StringManager.formatNum(postpay, false));
+        }
+        else
+            {
+                et_postpay.setText("");
+            }
+
+        if(prepay > 0)
+        {
+            et_prepay.setText(StringManager.formatNum(prepay, false));
+        }
+        else
+            {
+                et_prepay.setText("");
+            }
     }
 
 

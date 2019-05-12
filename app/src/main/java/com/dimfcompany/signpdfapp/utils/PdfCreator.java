@@ -601,8 +601,9 @@ public class PdfCreator
             tableLarge.addCell(getEmptyCell(1, 1, false));
             Paragraph parAddress = new Paragraph("  " + model_document.getAdress());
             parAddress.setLeading(18, 0);
-            parAddress.setFont(reg10Underline);
-            parAddress.add(lineChunk);
+            parAddress.setFont(reg10);
+//            parAddress.setFont(reg10Underline);
+//            parAddress.add(lineChunk);
 
             PdfPCell cellAdress = new PdfPCell();
             cellAdress.addElement(parAddress);

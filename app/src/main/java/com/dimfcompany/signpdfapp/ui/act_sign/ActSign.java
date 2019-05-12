@@ -69,24 +69,10 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         setContentView(mvpView.getRootView());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-    }
-
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
-        super.onWindowFocusChanged(hasFocus);
         mvpView.setSignatureSizes();
         checkForEditMode();
     }
 
-
-
-    @Override
-    public void clickedSignaturePad()
-    {
-//        navigationManager.toSignDialog(mvpView.getCurrentFileName());
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
@@ -133,6 +119,18 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
             Log.e(TAG, "Error on pf intent " + e.getMessage());
             messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
         }
+    }
+
+    @Override
+    public File getSignatureFile()
+    {
+        if(model_document == null || model_document.getSignature_file_name() == null)
+        {
+            return null;
+        }
+
+        File file = fileManager.getFileFromTemp(model_document.getSignature_file_name(),null);
+        return file;
     }
 
     @Override
@@ -239,11 +237,13 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         model_document = (Model_Document)getIntent().getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
         if (model_document == null)
         {
+            Log.e(TAG, "checkForEditMode: Document is Null");
             model_document = new Model_Document();
             return;
         }
 
         editMode = true;
         mvpView.bindModelDocument(model_document);
+        mvpView.updateMaterialButton();
     }
 }
