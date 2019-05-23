@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -459,18 +460,31 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public String getFio()
     {
+        if(TextUtils.isEmpty(et_fio.getText().toString().trim()))
+        {
+            return null;
+        }
         return et_fio.getText().toString().trim();
     }
 
     @Override
     public String getAdress()
     {
+        if(TextUtils.isEmpty(et_adress.getText().toString().trim()))
+        {
+            return null;
+        }
+
         return et_adress.getText().toString().trim();
     }
 
     @Override
     public String getPhone()
     {
+        if(TextUtils.isEmpty(et_phone.getText().toString().trim()))
+        {
+            return null;
+        }
         return et_phone.getText().toString().trim();
     }
 
@@ -502,12 +516,21 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     @Override
     public String getOrderForm()
     {
+        if(TextUtils.isEmpty(et_order_form.getText().toString().trim()))
+        {
+            return null;
+        }
+
         return et_order_form.getText().toString().trim();
     }
 
     @Override
     public String getDopInfo()
     {
+        if(TextUtils.isEmpty(et_dop_info.getText().toString().trim()))
+        {
+            return null;
+        }
         return et_dop_info.getText().toString().trim();
     }
 

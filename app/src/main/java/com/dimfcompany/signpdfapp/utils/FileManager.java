@@ -27,6 +27,36 @@ public class FileManager
         this.context = context;
     }
 
+    public File createFileWithName(String fileName,String folder)
+    {
+        try
+        {
+            File file;
+
+            String root = context.getExternalFilesDir(null).toString();
+            File folderFile = new File(root +"/"+ folder);
+            if (!folderFile.exists())
+            {
+                folderFile.mkdirs();
+            }
+
+            file = new File(folderFile, fileName);
+            if(file.exists())
+            {
+                file.delete();
+            }
+            file.createNewFile();
+
+            return file;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.e(TAG, "createFileWithName: Exception on creating file with name" );
+            return null;
+        }
+    }
+
     public File createRandomNameFile(String extansion)
     {
         return createRandomNameFile(extansion,Constants.FOLDER_TEMP_FILES);
@@ -145,5 +175,52 @@ public class FileManager
             Log.e(TAG, "getTemplateStream: Exception On opening dogovor.pdf");
             return null;
         }
+    }
+
+    public void deleteAllFiles()
+    {
+        deleteSignatures();
+        deleteDocuments();
+        deleteChecks();
+    }
+
+    private void deleteSignatures()
+    {
+        String root = context.getExternalFilesDir(null).toString();
+        File folder = new File(root +"/"+Constants.FOLDER_TEMP_FILES);
+        if(folder != null && folder.exists())
+        {
+            deleteRecursive(folder);
+        }
+    }
+
+    private void deleteDocuments()
+    {
+        String root = context.getExternalFilesDir(null).toString();
+        File folder = new File(root +"/"+Constants.FOLDER_CONTRACTS);
+        if(folder != null && folder.exists())
+        {
+            deleteRecursive(folder);
+        }
+    }
+
+    private void deleteChecks()
+    {
+        String root = context.getExternalFilesDir(null).toString();
+        File folder = new File(root +"/"+Constants.FOLDER_CHECKS);
+        if(folder != null && folder.exists())
+        {
+            deleteRecursive(folder);
+        }
+    }
+
+    void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+
     }
 }

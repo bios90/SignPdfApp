@@ -10,7 +10,12 @@ import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialog;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
+import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
+import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
+import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNew;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProducts;
+import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialog;
+import com.dimfcompany.signpdfapp.ui.act_register.ActRegister;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialog;
 
@@ -23,11 +28,15 @@ public class NavigationManager
         this.activity = activity;
     }
 
+    public void toRegisterActivity(@Nullable Integer requestCode)
+    {
+        ActRegister.startScreen(activity, ActRegister.class, requestCode);
+    }
+
     public void toSignActivity(@Nullable Integer requestCode, @Nullable Model_Document document)
     {
         ActSign.startScreenOver(activity, requestCode, document);
     }
-
 
     public void toSignDialog(@Nullable String fileName)
     {
@@ -39,7 +48,6 @@ public class NavigationManager
         BaseActivity.startScreen(activity, ActFinished.class, requestCode);
     }
 
-
     public void toActProducts(@Nullable Integer requestCode, Model_Document document)
     {
         ActProducts.startScreenOver(activity, requestCode, document);
@@ -48,5 +56,20 @@ public class NavigationManager
     public void toActAddProductDialog(@Nullable Integer requestCode, @Nullable Model_Product product)
     {
         ActAddProductDialog.startScreenOver(activity, requestCode, product);
+    }
+
+    public void toActMainNew(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActMainNew.class, requestCode);
+    }
+
+    public void toActProfileDialog(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActProfileDialog.class, requestCode);
+    }
+
+    public void toActFirst(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActFirst.class, requestCode);
     }
 }

@@ -88,4 +88,10 @@ public abstract class BaseActivity extends AppCompatActivity
             Log.e(TAG, "Error on screen rotaion block In Base Activity");
         }
     }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+    }
 }

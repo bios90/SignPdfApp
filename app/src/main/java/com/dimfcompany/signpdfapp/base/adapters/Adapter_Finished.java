@@ -23,8 +23,7 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
     public interface CardFinishedCallback
     {
         void clickedCard(Model_Document document);
-        void clickedDelete(Model_Document document);
-        void clickedSend(Model_Document document);
+
         void clickedPhone(Model_Document document);
     }
 
@@ -36,7 +35,7 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
     public CardFinished onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
     {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View card = inflater.inflate(R.layout.item_finished_dogovor,viewGroup,false);
+        View card = inflater.inflate(R.layout.item_finished_dogovor, viewGroup, false);
         return new CardFinished(card);
     }
 
@@ -44,15 +43,31 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
     public void onBindViewHolder(@NonNull CardFinished cardFinished, int i)
     {
         final Model_Document document = listOfDocuments.get(i);
-        String date = GlobalHelper.getDateString(document.getDate(),GlobalHelper.FORMAT_FULL_MONTH);
+        String date = GlobalHelper.getDateString(document.getDate(), GlobalHelper.FORMAT_FULL_MONTH);
         String city = GlobalHelper.getCityOfDocument(document);
-        String header = document.getCode()+" | "+date+" | "+city;
+        String header = document.getCode() + " | " + date;
+
+        String address = city;
+        if(document.getAdress() != null)
+        {
+            address += " " + document.getAdress();
+        }
 
         cardFinished.tv_header.setText(header);
         cardFinished.tv_fio.setText(document.getFio());
         cardFinished.tv_phone.setText(document.getPhone());
-        cardFinished.tv_adress.setText(city+" "+document.getAdress());
+        cardFinished.tv_adress.setText(address );
         cardFinished.tv_date.setText(date);
+
+        if (document.getSync_status() == 0)
+        {
+            cardFinished.tv_status_0.setVisibility(View.VISIBLE);
+            cardFinished.tv_status_1.setVisibility(View.GONE);
+        } else if (document.getSync_status() == 1)
+        {
+            cardFinished.tv_status_1.setVisibility(View.VISIBLE);
+            cardFinished.tv_status_0.setVisibility(View.GONE);
+        }
 
         cardFinished.root_view.setOnClickListener(new View.OnClickListener()
         {
@@ -63,25 +78,7 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
             }
         });
 
-        cardFinished.btn_send.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                callback.clickedSend(document);
-            }
-        });
-
-        cardFinished.btn_delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                callback.clickedDelete(document);
-            }
-        });
-
-        if(!TextUtils.isEmpty(document.getPhone()))
+        if (!TextUtils.isEmpty(document.getPhone()))
         {
             cardFinished.tv_phone.setOnClickListener(new View.OnClickListener()
             {
@@ -97,7 +94,7 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
     @Override
     public int getItemCount()
     {
-        if(listOfDocuments == null)
+        if (listOfDocuments == null)
         {
             return 0;
         }
@@ -124,6 +121,8 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
         TextView tv_phone;
         TextView tv_adress;
         TextView tv_date;
+        TextView tv_status_1;
+        TextView tv_status_0;
         Button btn_delete;
         Button btn_send;
         View root_view;
@@ -140,6 +139,8 @@ public class Adapter_Finished extends RecyclerView.Adapter<Adapter_Finished.Card
             btn_delete = itemView.findViewById(R.id.btn_delete);
             btn_send = itemView.findViewById(R.id.btn_send);
             root_view = itemView.findViewById(R.id.root_view);
+            tv_status_0 = itemView.findViewById(R.id.tv_status_0);
+            tv_status_1 = itemView.findViewById(R.id.tv_status_1);
         }
     }
 }

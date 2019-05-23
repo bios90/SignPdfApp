@@ -49,7 +49,7 @@ public class PresenterModule
     }
 
     @Provides
-    ViewMvcFactory getViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager,GlobalHelper globalHelper, MessagesManager messagesManager)
+    ViewMvcFactory getViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager, GlobalHelper globalHelper, MessagesManager messagesManager)
     {
         return new ViewMvcFactory(layoutInflater, fileManager, stringManager, globalHelper, messagesManager);
     }
@@ -60,16 +60,11 @@ public class PresenterModule
         return new NavigationManager(activity);
     }
 
-    @Provides
-    FileManager getFileManager(AppCompatActivity activity)
-    {
-        return new FileManager(activity);
-    }
 
     @Provides
-    PdfCreator getPdfCreator(Context context,FileManager fileManager, CrudHelper crudHelper)
+    PdfCreator getPdfCreator(Context context, FileManager fileManager, CrudHelper crudHelper)
     {
-        return  new PdfCreator(context,fileManager, crudHelper);
+        return new PdfCreator(context, fileManager, crudHelper);
     }
 
     @Provides
@@ -85,20 +80,8 @@ public class PresenterModule
     }
 
     @Provides
-    StringManager getStringManager(AppCompatActivity activity)
-    {
-        return new StringManager(activity);
-    }
-
-    @Provides
     GlobalHelper gertGlobalHelper(Context context)
     {
         return new GlobalHelper(context);
-    }
-
-    @Provides
-    LocalDatabase getLocalDatabase(AppDatabase appDatabase)
-    {
-        return new RoomCrudHelper(appDatabase);
     }
 }

@@ -13,7 +13,6 @@ import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.base.adapters.Adapter_Finished;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.models.Model_Document;
-import com.dimfcompany.signpdfapp.local_db.raw.CrudHelper;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -59,11 +58,6 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
     }
 
 
-    @Override
-    public void clickedDelete(Model_Document document)
-    {
-        Log.e(TAG, "clickedDelete: Will delete");
-    }
 
     @Override
     public void clickedCard(final Model_Document document)
@@ -182,7 +176,7 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
             public void onOkClicked(DialogInterface dialog)
             {
                 dialog.dismiss();
-                localDatabase.deleteDocument(document);
+                localDatabase.deleteDocumentFull(document);
                 loadLocalData();
             }
 
@@ -196,16 +190,17 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
 
 
     @Override
-    public void clickedSend(Model_Document document)
-    {
-
-    }
-
-    @Override
     public void clickedPhone(Model_Document document)
     {
         String phone = document.getPhone();
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        mvpView.unregisterListener(this);
+        super.onDestroy();
     }
 }

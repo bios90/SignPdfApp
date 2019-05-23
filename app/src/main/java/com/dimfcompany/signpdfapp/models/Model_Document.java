@@ -3,9 +3,14 @@ package com.dimfcompany.signpdfapp.models;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.dimfcompany.signpdfapp.local_db.room.DateConverter;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "documents")
@@ -13,6 +18,7 @@ public class Model_Document implements Serializable
 {
     @PrimaryKey(autoGenerate = true)
     long id;
+    long user_id;
     Integer city;
     String fio;
     String adress;
@@ -21,7 +27,9 @@ public class Model_Document implements Serializable
     String pdf_file_name;
     String check_file_name;
     String code;
-    long date;
+
+    @TypeConverters({DateConverter.class})
+    Date date;
 
     double sum;
     double montage;
@@ -30,10 +38,16 @@ public class Model_Document implements Serializable
     double itogo_sum;
     double prepay;
 
+    @TypeConverters({DateConverter.class})
+    Date deleted_at;
+
     String order_form;
     String dop_info;
 
+    int sync_status;
+
     @Ignore
+    @SerializedName("products")
     List<Model_Product> listOfProducts = new ArrayList<>();
 
     public Model_Document()
@@ -50,6 +64,16 @@ public class Model_Document implements Serializable
     public void setListOfProducts(List<Model_Product> listOfProducts)
     {
         this.listOfProducts = listOfProducts;
+    }
+
+    public long getUser_id()
+    {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id)
+    {
+        this.user_id = user_id;
     }
 
     public String getCheck_file_name()
@@ -92,12 +116,12 @@ public class Model_Document implements Serializable
         this.pdf_file_name = pdf_file_name;
     }
 
-    public long getDate()
+    public Date getDate()
     {
         return date;
     }
 
-    public void setDate(long date)
+    public void setDate(Date date)
     {
         this.date = date;
     }
@@ -233,17 +257,40 @@ public class Model_Document implements Serializable
         this.dop_info = dop_info;
     }
 
+    public int getSync_status()
+    {
+        return sync_status;
+    }
+
+    public void setSync_status(int sync_status)
+    {
+        this.sync_status = sync_status;
+    }
+
+    public Date getDeleted_at()
+    {
+        return deleted_at;
+    }
+
+    public void setDeleted_at(Date deleted_at)
+    {
+        this.deleted_at = deleted_at;
+    }
+
     @Override
     public String toString()
     {
         return "Model_Document{" +
-                "id_local=" + id +
+                "id=" + id +
+                ", user_id=" + user_id +
                 ", city=" + city +
                 ", fio='" + fio + '\'' +
                 ", adress='" + adress + '\'' +
                 ", phone='" + phone + '\'' +
                 ", signature_file_name='" + signature_file_name + '\'' +
                 ", pdf_file_name='" + pdf_file_name + '\'' +
+                ", check_file_name='" + check_file_name + '\'' +
+                ", code='" + code + '\'' +
                 ", date=" + date +
                 ", sum=" + sum +
                 ", montage=" + montage +
@@ -251,9 +298,10 @@ public class Model_Document implements Serializable
                 ", sale=" + sale +
                 ", itogo_sum=" + itogo_sum +
                 ", prepay=" + prepay +
+                ", deleted_at=" + deleted_at +
                 ", order_form='" + order_form + '\'' +
                 ", dop_info='" + dop_info + '\'' +
-                ", listOfProducts=" + listOfProducts +
+                ", sync_status=" + sync_status +
                 '}';
     }
 }

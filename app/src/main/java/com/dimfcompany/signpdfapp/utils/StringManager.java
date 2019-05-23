@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.utils;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -12,6 +13,9 @@ import android.text.style.TypefaceSpan;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dimfcompany.signpdfapp.base.Constants;
+import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.utils.custom_classes.CustomTypefaceSpan;
 
 import java.text.DecimalFormat;
@@ -27,13 +31,15 @@ public class StringManager
     private static final String TAG = "StringManager";
     public static final String FORMAT_FOR_CODE = "ddMMyyHHmmss";
 
-    private AppCompatActivity activity;
+    private final Context context;
+    private final SharedPrefsHelper sharedPrefsHelper;
     private static final String DATA = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static Random RANDOM = new Random();
 
-    public StringManager(AppCompatActivity activity)
+    public StringManager(Context context, SharedPrefsHelper sharedPrefsHelper)
     {
-        this.activity = activity;
+        this.context = context;
+        this.sharedPrefsHelper = sharedPrefsHelper;
     }
 
     public static String repeatingString(@Nullable String str, String element, int times)
@@ -183,19 +189,19 @@ public class StringManager
 
     public SpannableString getBoldSpannable(String str, int color)
     {
-        Typeface segBold = Typeface.createFromAsset(activity.getAssets(), "monextrabold.ttf");
+        Typeface segBold = Typeface.createFromAsset(context.getAssets(), "monextrabold.ttf");
         return getSpannableString(str, segBold, color);
     }
 
     public SpannableString getRegSpannable(String str, int color)
     {
-        Typeface segReg = Typeface.createFromAsset(activity.getAssets(), "monmedium.ttf");
+        Typeface segReg = Typeface.createFromAsset(context.getAssets(), "monmedium.ttf");
         return getSpannableString(str, segReg, color);
     }
 
     public SpannableString getSemiSpannable(String str, int color)
     {
-        Typeface segSemi = Typeface.createFromAsset(activity.getAssets(), "monsemibold.ttf");
+        Typeface segSemi = Typeface.createFromAsset(context.getAssets(), "monsemibold.ttf");
         return getSpannableString(str, segSemi, color);
     }
 
@@ -208,6 +214,32 @@ public class StringManager
         sb.setSpan(new ForegroundColorSpan(color), 0, str.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         return SpannableString.valueOf(sb);
+    }
+
+    public String getUserPrivateFolderUrl()
+    {
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+        if(user == null)
+        {
+            return null;
+        }
+
+        return Constants.URL_BASE+"storage/"+user.getId()+"/";
+    }
+
+    public String getUserDocumentsUrl()
+    {
+        return getUserPrivateFolderUrl()+"documents/";
+    }
+
+    public String getUserSignaturesUrl()
+    {
+        return getUserPrivateFolderUrl()+"signatures/";
+    }
+
+    public String getUserChecksUrl()
+    {
+        return getUserPrivateFolderUrl()+"checks/";
     }
 
     public static String getCode(int city)

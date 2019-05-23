@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@drawable/bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View
+        android:layout_marginTop="64dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <ImageView
+        android:id="@+id/img_logo"
+
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logonoborder"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp" />
+
+
+    <LinearLayout
+        android:id="@+id/la_center"
+
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/img_logo"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_white"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            android:elevation="4dp"
+            android:background="@drawable/rounded_top_black"
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:padding="6dp"
+            android:text="Регистрация"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/et_email"
+
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:hint="Email..."
+            style="@style/EditText"
+            android:paddingRight="40dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp" />
+
+
+        <EditText
+            android:id="@+id/et_first_name"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:hint="Имя..."
+            style="@style/EditText"
+            android:paddingRight="40dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp" />
+
+
+        <EditText
+            android:id="@+id/et_last_name"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:hint="Фамилия..."
+            style="@style/EditText"
+            android:paddingRight="40dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp" />
+
+        <EditText
+            android:id="@+id/et_password1"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:hint="Пароль..."
+            style="@style/EditText"
+            android:paddingRight="40dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp" />
+
+
+        <EditText
+            android:id="@+id/et_password2"
+
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:hint="Повторите пароль..."
+            style="@style/EditText"
+            android:paddingRight="40dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp" />
+
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_register"
+
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/la_center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_grad_blue_rounded"
+        android:layout_width="304dp"
+        android:layout_height="42dp">
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Отправить"
+            style="@style/TVBold.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

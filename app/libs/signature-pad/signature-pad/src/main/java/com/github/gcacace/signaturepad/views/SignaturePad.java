@@ -94,7 +94,7 @@ public class SignaturePad extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
 
-        //Dirty rectangle to update only the changed portion of the view
+        //Dirty rectangle to updateFinishedCardUi only the changed portion of the view
         mDirtyRect = new RectF();
 
         clearView();

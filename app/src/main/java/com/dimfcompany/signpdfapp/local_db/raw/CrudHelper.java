@@ -10,6 +10,7 @@ import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.local_db.raw.SqliteHelper.ColumnsDocuments;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CrudHelper implements LocalDatabase
@@ -23,6 +24,30 @@ public class CrudHelper implements LocalDatabase
         this.context = context;
     }
 
+    @Override
+    public List<Model_Document> getNotSyncedDocuments()
+    {
+        return null;
+    }
+
+    @Override
+    public void deleteDocumentSoft(Model_Document document)
+    {
+            //???
+    }
+
+    @Override
+    public void deleteAllLocalData()
+    {
+
+    }
+
+    @Override
+    public boolean hasNotSynced()
+    {
+        //???
+        return false;
+    }
 
     public void insertDocument(Model_Document document)
     {
@@ -32,7 +57,7 @@ public class CrudHelper implements LocalDatabase
         values.put(ColumnsDocuments.ADRESS,document.getAdress());
         values.put(ColumnsDocuments.PHONE,document.getPhone());
         values.put(ColumnsDocuments.PDF_FILE_NAME,document.getPdf_file_name());
-        values.put(ColumnsDocuments.DATE,document.getDate()/1000);
+//  ????      values.put(ColumnsDocuments.DATE,document.getDate()/1000);
 
         Uri uri = context.getContentResolver().insert(WintecProvider.CONTENT_URI_TABLE_DOCUMENTS,values);
         Log.e(TAG, "INSERTED URI IS " +uri);
@@ -77,7 +102,7 @@ public class CrudHelper implements LocalDatabase
             document.setAdress(adress);
             document.setPhone(phone);
             document.setPdf_file_name(pdf_file_name);
-            document.setDate(date);
+            document.setDate(new Date(date));
 
             listOfDocuments.add(document);
         }
@@ -86,7 +111,7 @@ public class CrudHelper implements LocalDatabase
     }
 
     @Override
-    public void deleteDocument(Model_Document document)
+    public void deleteDocumentFull(Model_Document document)
     {
 
     }

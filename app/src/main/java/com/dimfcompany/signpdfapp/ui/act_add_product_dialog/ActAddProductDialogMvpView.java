@@ -135,20 +135,38 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
         material.setName(et_material_name.getText().toString().trim());
         product.setMaterial(material);
 
-        product.setWidth(et_width.getText().toString().trim());
-        product.setHeight(et_height.getText().toString().trim());
+        if(!TextUtils.isEmpty(et_width.getText().toString().trim()))
+        {
+            product.setWidth(et_width.getText().toString().trim());
+        }
 
-        Model_Color color = new Model_Color();
-        color.setName(et_color.getText().toString().trim());
-        product.setColor(color);
+        if(!TextUtils.isEmpty(et_height.getText().toString().trim()))
+        {
+            product.setHeight(et_height.getText().toString().trim());
+        }
 
-        Model_Krep krep = new Model_Krep();
-        krep.setName(et_krep.getText().toString().trim());
-        product.setKrep(krep);
+        if(!TextUtils.isEmpty(et_color.getText().toString().trim()))
+        {
+            Model_Color color = new Model_Color();
+            color.setName(et_color.getText().toString().trim());
+            product.setColor(color);
+        }
 
-        Model_Control control = new Model_Control();
-        control.setName(et_control.getText().toString().trim());
-        product.setControl(control);
+
+        if(!TextUtils.isEmpty(et_krep.getText().toString().trim()))
+        {
+            Model_Krep krep = new Model_Krep();
+            krep.setName(et_krep.getText().toString().trim());
+            product.setKrep(krep);
+        }
+
+        if(!TextUtils.isEmpty(et_control.getText().toString().trim()))
+        {
+            Model_Control control = new Model_Control();
+            control.setName(et_control.getText().toString().trim());
+            product.setControl(control);
+        }
+
 
         product.setCount(GlobalHelper.getEtIntegerValue(et_count));
         product.setPrice(GlobalHelper.getEtDoubleValue(et_price));

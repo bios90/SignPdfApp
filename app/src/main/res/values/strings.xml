@@ -21,4 +21,11 @@
     <string name="ic_print">&#xf02f;</string>
     <string name="ic_edit">&#xf303;</string>
     <string name="ic_delete">&#xf1f8;</string>
+    <string name="ic_key">&#xf084;</string>
+    <string name="ic_file_pdf">&#xf1c1;</string>
+    <string name="ic_tick">&#xf00c;</string>
+    <string name="ic_sync">&#xf2f1;</string>
+    <string name="ic_email">&#xf0e0;</string>
+    <string name="ic_exit">&#xf2f5;</string>
+    <string name="ic_case">&#xf0b1;</string>
 </resources>

@@ -10,7 +10,7 @@ import com.dimfcompany.signpdfapp.models.Model_Krep;
 import com.dimfcompany.signpdfapp.models.Model_Material;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 
-@Database(entities = {Model_Document.class, Model_Product.class,Model_Color.class, Model_Control.class, Model_Krep.class, Model_Material.class},version = 2)
+@Database(entities = {Model_Document.class, Model_Product.class,Model_Color.class, Model_Control.class, Model_Krep.class, Model_Material.class},version = 4)
 public abstract class AppDatabase extends RoomDatabase
 {
     public abstract DaoDocument getDaoDocument();

@@ -120,7 +120,7 @@ public class WintecProvider extends ContentProvider
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs)
     {
-        Log.e(TAG, "delete: Called Delete on Wintec Provider");
+        Log.e(TAG, "deleteFull: Called Delete on Wintec Provider");
 
         final int matched = uriMatcher.match(uri);
         final SQLiteDatabase db;
@@ -152,11 +152,11 @@ public class WintecProvider extends ContentProvider
 
         if (count > 0)
         {
-            Log.d(TAG, "delete: setting notify changed with " + uri);
+            Log.d(TAG, "deleteFull: setting notify changed with " + uri);
             getContext().getContentResolver().notifyChange(uri, null);
         } else
         {
-            Log.d(TAG, "delete: nothing deleted");
+            Log.d(TAG, "deleteFull: nothing deleted");
         }
 
         return count;
@@ -195,11 +195,11 @@ public class WintecProvider extends ContentProvider
 
         if (count > 0)
         {
-            Log.d(TAG, "update: setting notify changed with " + uri);
+            Log.d(TAG, "updateFinishedCardUi: setting notify changed with " + uri);
             getContext().getContentResolver().notifyChange(uri, null);
         } else
         {
-            Log.d(TAG, "update: nothing update");
+            Log.d(TAG, "updateFinishedCardUi: nothing updateFinishedCardUi");
         }
 
         return count;

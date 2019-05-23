@@ -18,5 +18,5 @@ public interface BaseDao<Model>
     void update(Model... models);
 
     @Delete
-    void delete(Model... models);
+    void deleteFull(Model... models);
 }

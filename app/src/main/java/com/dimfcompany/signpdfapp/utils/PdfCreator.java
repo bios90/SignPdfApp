@@ -14,9 +14,11 @@ import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -35,7 +37,9 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class PdfCreator
@@ -160,14 +164,15 @@ public class PdfCreator
 
 
             String newMainFileName = getRenamedFile(false);
-            newMainFileName+=".pdf";
-            if(FileManager.rename(file,newMainFileName,null));
+            newMainFileName += ".pdf";
+            if (FileManager.rename(file, newMainFileName, null)) ;
             {
-                file = fileManager.getFileFromTemp(newMainFileName,Constants.FOLDER_CONTRACTS,null);
-            };
+                file = fileManager.getFileFromTemp(newMainFileName, Constants.FOLDER_CONTRACTS, null);
+            }
+
 
             String fileName = FileManager.getFileName(file);
-            Log.e(TAG, "createPdfSync: Main file name is "+fileName );
+            Log.e(TAG, "createPdfSync: Main file name is " + fileName);
             model_document.setPdf_file_name(fileName);
 
             new Handler(Looper.getMainLooper()).post(new Runnable()
@@ -182,6 +187,7 @@ public class PdfCreator
 
         } catch (Exception e)
         {
+            e.printStackTrace();
             Log.e(TAG, "createPdfSync: Exception on creating pdf!" + e.getMessage() + " ||| Line  is " + e.getStackTrace()[0].getLineNumber());
             if (callback != null)
             {
@@ -197,131 +203,134 @@ public class PdfCreator
         }
     }
 
-    private void makeCheck(Model_Document model_document)
+    private void makeCheck(Model_Document model_document) throws DocumentException, IOException
     {
-        try
+        float totalHeight = 0;
+        totalHeight += 40;
+
+        PdfPTable tableCheckTop = new PdfPTable(1);
+        tableCheckTop.setWidths(new int[]{100});
+        tableCheckTop.setTotalWidth(545);
+        tableCheckTop.setLockedWidth(true);
+
+        Image wintecLogo = getImageFromAsset("logo_border.png");
+        PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
+        cellLogo.setBorder(Rectangle.NO_BORDER);
+        cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellLogo.setFixedHeight(140);
+        tableCheckTop.addCell(cellLogo);
+
+        PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+        tableCheckTop.addCell(cellSite);
+
+        PdfPCell cellCities = getParCell("Москва|Санкт-Петербург|Сочи|Самара", pt26, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+        tableCheckTop.addCell(cellCities);
+
+        PdfPCell cellOoo = getParCell("ООО \"Лаборатория Уюта\"", pt36, borderMode, null, null, Element.ALIGN_CENTER, null);
+        cellOoo.setPaddingTop(16);
+        tableCheckTop.addCell(cellOoo);
+        tableCheckTop.addCell(getEmptyCell(1, 1, false, 8));
+
+
+        String codeText = "Заказ " + model_document.getCode();
+        String fromDate = "от " + GlobalHelper.getDateString(model_document.getDate(), GlobalHelper.FORMAT_FULL_MONTH);
+        tableCheckTop.addCell(getParCell(codeText, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
+        tableCheckTop.addCell(getParCell(fromDate, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
+
+
+        String starLine = StringManager.repeatingString(null, "x", 40);
+        PdfPCell cellLine = getParCell(starLine, pt26, borderMode, null, null, null, null);
+        cellLine.setFixedHeight(32);
+        tableCheckTop.addCell(cellLine);
+
+
+        PdfPTable tableProducts = getCheckProductsTable();
+        PdfPTable tableCheckBottom = getCheckBottomTable();
+        PdfPTable tableBottomInfo = getTableBottomInfoTable();
+
+        totalHeight += tableCheckTop.getTotalHeight();
+        totalHeight += tableProducts.getTotalHeight();
+        totalHeight += tableCheckBottom.getTotalHeight();
+        totalHeight += tableBottomInfo.getTotalHeight();
+
+        File fileCheck = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_CHECKS);
+        document = new Document(new Rectangle(595, totalHeight), 20, 20, 20, 20);
+        FileOutputStream fos = new FileOutputStream(fileCheck);
+        writer = PdfWriter.getInstance(document, fos);
+        writer.setCompressionLevel(9);
+        document.open();
+
+        document.add(tableCheckTop);
+        document.add(tableProducts);
+        document.add(tableBottomInfo);
+        document.add(tableCheckBottom);
+
+        document.close();
+
+
+        String newChekFileName = getRenamedFile(true);
+        newChekFileName += ".pdf";
+        if (FileManager.rename(fileCheck, newChekFileName, null)) ;
         {
-            float totalHeight = 0;
-            totalHeight += 40;
-
-            PdfPTable tableCheckTop = new PdfPTable(1);
-            tableCheckTop.setWidths(new int[]{100});
-            tableCheckTop.setTotalWidth(545);
-            tableCheckTop.setLockedWidth(true);
-
-            Image wintecLogo = getImageFromAsset("logo_border.png");
-            PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
-            cellLogo.setBorder(Rectangle.NO_BORDER);
-            cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cellLogo.setFixedHeight(140);
-            tableCheckTop.addCell(cellLogo);
-
-            PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
-            tableCheckTop.addCell(cellSite);
-
-            PdfPCell cellCities = getParCell("Москва|Санкт-Петербург|Сочи|Самара", pt26, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
-            tableCheckTop.addCell(cellCities);
-
-            PdfPCell cellOoo = getParCell("ООО \"Лаборатория Уюта\"", pt36,borderMode,null,null,Element.ALIGN_CENTER,null);
-            cellOoo.setPaddingTop(16);
-            tableCheckTop.addCell(cellOoo);
-            tableCheckTop.addCell(getEmptyCell(1,1,false,8));
-
-
-            String codeText = "Заказ "+model_document.getCode();
-            String fromDate = "от "+GlobalHelper.getDateString(model_document.getDate(),GlobalHelper.FORMAT_FULL_MONTH);
-            tableCheckTop.addCell(getParCell(codeText, pt30,borderMode,null,null,Element.ALIGN_CENTER,null));
-            tableCheckTop.addCell(getParCell(fromDate, pt30,borderMode,null,null,Element.ALIGN_CENTER,null));
-
-
-            String starLine = StringManager.repeatingString(null,"x",40);
-            PdfPCell cellLine = getParCell(starLine, pt26,borderMode,null,null,null,null);
-            cellLine.setFixedHeight(32);
-            tableCheckTop.addCell(cellLine);
-
-
-            PdfPTable tableProducts = getCheckProductsTable();
-            PdfPTable tableCheckBottom = getCheckBottomTable();
-            PdfPTable tableBottomInfo = getTableBottomInfoTable();
-
-            totalHeight += tableCheckTop.getTotalHeight();
-            totalHeight += tableProducts.getTotalHeight();
-            totalHeight += tableCheckBottom.getTotalHeight();
-            totalHeight += tableBottomInfo.getTotalHeight();
-
-            File fileCheck = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_CHECKS);
-            document = new Document(new Rectangle(595, totalHeight), 20, 20, 20, 20);
-            FileOutputStream fos = new FileOutputStream(fileCheck);
-            writer = PdfWriter.getInstance(document, fos);
-            writer.setCompressionLevel(9);
-            document.open();
-
-            document.add(tableCheckTop);
-            document.add(tableProducts);
-            document.add(tableBottomInfo);
-            document.add(tableCheckBottom);
-
-            document.close();
-
-
-            String newChekFileName = getRenamedFile(true);
-            newChekFileName+=".pdf";
-            if(FileManager.rename(fileCheck,newChekFileName,null));
-            {
-                Log.e(TAG, "makeCheck: renamed ok" );
-                fileCheck = fileManager.getFileFromTemp(newChekFileName,Constants.FOLDER_CHECKS,null);
-            };
-
-            Log.e(TAG, "makeCheck: fileCheckName is "+fileCheck.getName() );
-
-            String check_file_name = FileManager.getFileName(fileCheck);
-            Log.e(TAG, "makeCheck: CheckFile NAme is "+check_file_name );
-            model_document.setCheck_file_name(check_file_name);
-
-        } catch (Exception e)
-        {
-            Log.e(TAG, "makeCheck: Exception on creating Check " + e.getMessage());
+            Log.e(TAG, "makeCheck: renamed ok");
+            fileCheck = fileManager.getFileFromTemp(newChekFileName, Constants.FOLDER_CHECKS, null);
         }
+        ;
+
+        Log.e(TAG, "makeCheck: fileCheckName is " + fileCheck.getName());
+
+        String check_file_name = FileManager.getFileName(fileCheck);
+        Log.e(TAG, "makeCheck: CheckFile NAme is " + check_file_name);
+        model_document.setCheck_file_name(check_file_name);
+
     }
 
 
-
-
-    private PdfPTable getCheckProductsTable()
+    private PdfPTable getCheckProductsTable() throws DocumentException
     {
         float padding = 4f;
-        try
+        PdfPTable tableProducts = new PdfPTable(4);
+        tableProducts.setTotalWidth(545);
+        tableProducts.setLockedWidth(true);
+        tableProducts.setWidths(new int[]{30, 25, 20, 25});
+
+        for (Model_Product product : model_document.getListOfProducts())
         {
-            PdfPTable tableProducts = new PdfPTable(4);
-            tableProducts.setTotalWidth(545);
-            tableProducts.setLockedWidth(true);
-            tableProducts.setWidths(new int[]{30, 25, 20, 25});
+            double sum = product.getPrice() * product.getCount();
+            String strPrice = StringManager.formatNum(product.getPrice(), false);
+            String strCount = "*" + product.getCount();
+            String strSum = "= " + StringManager.formatNum(sum, false);
 
-            for(Model_Product product : model_document.getListOfProducts())
+            PdfPCell cellFirstLine = getParCell(product.getMaterial().getName(), pt28, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
+            tableProducts.addCell(cellFirstLine);
+
+
+            String secondLine = "";
+            if (product.getColor() != null)
             {
-                double sum = product.getPrice()*product.getCount();
-                String strPrice = StringManager.formatNum(product.getPrice(),false);
-                String strCount = "*"+product.getCount();
-                String strSum = "= "+StringManager.formatNum(sum,false);
-
-                PdfPCell cellFirstLine = getParCell(product.getMaterial().getName(), pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
-                tableProducts.addCell(cellFirstLine);
-
-                String secondLine = product.getColor().getName()+" Ш-"+product.getWidth();
-                secondLine+=" В-"+product.getHeight();
-                PdfPCell cellSecondLine = getParCell(secondLine, pt24,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
-                tableProducts.addCell(cellSecondLine);
-
-                tableProducts.addCell(getEmptyCell(1,1,borderMode));
-                tableProducts.addCell(getParCell(strPrice, pt26,padding,borderMode,null,null,Element.ALIGN_LEFT,null));
-                tableProducts.addCell(getParCell(strCount, pt26,padding,borderMode,null,null));
-                tableProducts.addCell(getParCell(strSum, pt26,padding,borderMode,null,null,Element.ALIGN_RIGHT,null));
-
-                PdfPCell cellLine = getCellLine();
-                cellLine.setColspan(4);
-                tableProducts.addCell(cellLine);
+                secondLine += product.getColor().getName();
+            }
+            if (!TextUtils.isEmpty(product.getWidth()))
+            {
+                secondLine += " Ш-" + product.getWidth();
+            }
+            if (!TextUtils.isEmpty(product.getHeight()))
+            {
+                secondLine += " В-" + product.getHeight();
             }
 
+            PdfPCell cellSecondLine = getParCell(secondLine, pt24, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
+            tableProducts.addCell(cellSecondLine);
+
+            tableProducts.addCell(getEmptyCell(1, 1, borderMode));
+            tableProducts.addCell(getParCell(strPrice, pt26, padding, borderMode, null, null, Element.ALIGN_LEFT, null));
+            tableProducts.addCell(getParCell(strCount, pt26, padding, borderMode, null, null));
+            tableProducts.addCell(getParCell(strSum, pt26, padding, borderMode, null, null, Element.ALIGN_RIGHT, null));
+
+            PdfPCell cellLine = getCellLine();
+            cellLine.setColspan(4);
+            tableProducts.addCell(cellLine);
+        }
 
 
 //            String bottomLine = StringManager.repeatingString(null,"_",40);
@@ -329,363 +338,317 @@ public class PdfCreator
 //            tableProducts.addCell(cellLine);
 
 
+        String strMontage = StringManager.formatNum(model_document.getMontage(), false);
+        String strDelivery = StringManager.formatNum(model_document.getDelivery(), false);
+        String strSale = StringManager.formatNum(model_document.getSale(), false);
+
+        tableProducts.addCell(getParCell("Монтаж", pt28, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getEmptyCell(1, 1, borderMode));
+        tableProducts.addCell(getParCell(strMontage, pt26, borderMode, null, null, Element.ALIGN_LEFT, null));
+        tableProducts.addCell(getParCell("*1", pt26, borderMode, null, null));
+        tableProducts.addCell(getParCell("= " + strMontage, pt26, borderMode, null, null, Element.ALIGN_RIGHT, null));
 
 
-            String strMontage = StringManager.formatNum(model_document.getMontage(),false);
-            String strDelivery = StringManager.formatNum(model_document.getDelivery(),false);
-            String strSale = StringManager.formatNum(model_document.getSale(),false);
-
-            tableProducts.addCell(getParCell("Монтаж", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getEmptyCell(1,1,borderMode));
-            tableProducts.addCell(getParCell(strMontage, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
-            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
-            tableProducts.addCell(getParCell("= "+strMontage, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+        tableProducts.addCell(getParCell("Доставка", pt28, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getEmptyCell(1, 1, borderMode));
+        tableProducts.addCell(getParCell(strDelivery, pt26, borderMode, null, null, Element.ALIGN_LEFT, null));
+        tableProducts.addCell(getParCell("*1", pt26, borderMode, null, null));
+        tableProducts.addCell(getParCell("= " + strDelivery, pt26, borderMode, null, null, Element.ALIGN_RIGHT, null));
 
 
-            tableProducts.addCell(getParCell("Доставка", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getEmptyCell(1,1,borderMode));
-            tableProducts.addCell(getParCell(strDelivery, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
-            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
-            tableProducts.addCell(getParCell("= "+strDelivery, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+        tableProducts.addCell(getParCell("Скидка", pt28, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getEmptyCell(1, 1, borderMode));
+        tableProducts.addCell(getParCell(strSale, pt26, borderMode, null, null, Element.ALIGN_LEFT, null));
+        tableProducts.addCell(getParCell("*1", pt26, borderMode, null, null));
+        tableProducts.addCell(getParCell("= " + strSale, pt26, borderMode, null, null, Element.ALIGN_RIGHT, null));
 
 
-            tableProducts.addCell(getParCell("Скидка", pt28,padding,borderMode,4,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getEmptyCell(1,1,borderMode));
-            tableProducts.addCell(getParCell(strSale, pt26,borderMode,null,null,Element.ALIGN_LEFT,null));
-            tableProducts.addCell(getParCell("*1", pt26,borderMode,null,null));
-            tableProducts.addCell(getParCell("= "+strSale, pt26,borderMode,null,null,Element.ALIGN_RIGHT,null));
+        PdfPCell cellLine2 = getCellLine();
+        cellLine2.setColspan(4);
+        tableProducts.addCell(cellLine2);
+
+        String itogoSum = StringManager.formatNum(GlobalHelper.countItogoSum(model_document), false);
+        PdfPCell emptyCell18 = getEmptyCell(1, 4, borderMode);
+        emptyCell18.setFixedHeight(18);
+
+        tableProducts.addCell(emptyCell18);
+        tableProducts.addCell(getParCell("ИТОГ", pt46, borderMode, 2, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getParCell(itogoSum, pt36, borderMode, 2, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(emptyCell18);
 
 
-            PdfPCell cellLine2 = getCellLine();
-            cellLine2.setColspan(4);
-            tableProducts.addCell(cellLine2);
-
-            String itogoSum = StringManager.formatNum(GlobalHelper.countItogoSum(model_document),false);
-            PdfPCell emptyCell18 = getEmptyCell(1,4,borderMode);
-            emptyCell18.setFixedHeight(18);
-
-            tableProducts.addCell(emptyCell18);
-            tableProducts.addCell(getParCell("ИТОГ", pt46,borderMode,2,null,Element.ALIGN_CENTER,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getParCell(itogoSum, pt36,borderMode,2,null,Element.ALIGN_CENTER,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(emptyCell18);
+        tableProducts.addCell(cellLine2);
 
 
-            tableProducts.addCell(cellLine2);
+        double postPay = GlobalHelper.countItogoSum(model_document) - model_document.getPrepay();
+        String prePayStr = StringManager.formatNum(model_document.getPrepay(), false);
+        String postPayStr = StringManager.formatNum(postPay, false);
+
+        tableProducts.addCell(getParCell("Предоплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getParCell("= " + prePayStr, pt26, borderMode, 2, null, Element.ALIGN_RIGHT, null));
+
+        PdfPCell emptyCell6 = getEmptyCell(1, 4, borderMode);
+        emptyCell6.setFixedHeight(6);
+        tableProducts.addCell(emptyCell6);
+
+        tableProducts.addCell(getParCell("Доплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
+        tableProducts.addCell(getParCell("= " + postPayStr, pt26, borderMode, 2, null, Element.ALIGN_RIGHT, null));
 
 
-
-
-            double postPay = GlobalHelper.countItogoSum(model_document)-model_document.getPrepay();
-            String prePayStr = StringManager.formatNum(model_document.getPrepay(),false);
-            String postPayStr = StringManager.formatNum(postPay,false);
-
-            tableProducts.addCell(getParCell("Предоплата", pt28,borderMode,2,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getParCell("= "+prePayStr, pt26,borderMode,2,null,Element.ALIGN_RIGHT,null));
-
-            PdfPCell emptyCell6 = getEmptyCell(1,4,borderMode);
-            emptyCell6.setFixedHeight(6);
-            tableProducts.addCell(emptyCell6);
-
-            tableProducts.addCell(getParCell("Доплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
-            tableProducts.addCell(getParCell("= "+postPayStr  , pt26, borderMode, 2, null,Element.ALIGN_RIGHT,null));
-
-
-            return tableProducts;
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "getCheckProductsTable: Exception on creating CheckProductsTable "+e.getMessage());
-            return null;
-        }
+        return tableProducts;
     }
 
-    private PdfPTable getCheckBottomTable()
+    private PdfPTable getCheckBottomTable() throws DocumentException, IOException
     {
-        try
-        {
-            PdfPTable tableCheckBottom = new PdfPTable(1);
-            tableCheckBottom.setWidths(new int[]{100});
-            tableCheckBottom.setTotalWidth(545);
-            tableCheckBottom.setLockedWidth(true);
 
-            Image qr_wintec = getImageFromAsset("qr_wintec.png");
-            PdfPCell cellQr = new PdfPCell(qr_wintec, true);
-            cellQr.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cellQr.setBorder(Rectangle.NO_BORDER);
-            cellQr.setFixedHeight(180);
-            tableCheckBottom.addCell(cellQr);
+        PdfPTable tableCheckBottom = new PdfPTable(1);
+        tableCheckBottom.setWidths(new int[]{100});
+        tableCheckBottom.setTotalWidth(545);
+        tableCheckBottom.setLockedWidth(true);
 
-            tableCheckBottom.addCell(getParCell(Constants.WINTEC_DESC, pt24,borderMode,null,null,Element.ALIGN_CENTER,null));
+        Image qr_wintec = getImageFromAsset("qr_wintec.png");
+        PdfPCell cellQr = new PdfPCell(qr_wintec, true);
+        cellQr.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellQr.setBorder(Rectangle.NO_BORDER);
+        cellQr.setFixedHeight(180);
+        tableCheckBottom.addCell(cellQr);
 
-            PdfPCell cellEmptySpace = getEmptyCell(1,1,borderMode);
-            cellEmptySpace.setFixedHeight(14);
-            tableCheckBottom.addCell(cellEmptySpace);
+        tableCheckBottom.addCell(getParCell(Constants.WINTEC_DESC, pt24, borderMode, null, null, Element.ALIGN_CENTER, null));
 
-            PdfPCell cellSites =getParCell(Constants.WINTEC_SITES, pt24,borderMode,null,null,Element.ALIGN_CENTER,null);
-            tableCheckBottom.addCell(cellSites);
+        PdfPCell cellEmptySpace = getEmptyCell(1, 1, borderMode);
+        cellEmptySpace.setFixedHeight(14);
+        tableCheckBottom.addCell(cellEmptySpace);
 
-            String starLine = StringManager.repeatingString(null,"x",34);
-            tableCheckBottom.addCell(getParCell(starLine, pt24,borderMode,null,null));
+        PdfPCell cellSites = getParCell(Constants.WINTEC_SITES, pt24, borderMode, null, null, Element.ALIGN_CENTER, null);
+        tableCheckBottom.addCell(cellSites);
 
-            tableCheckBottom.addCell(getParCell("E-MAIL: INFO@WINTEC.RU", pt24,borderMode,null,null));
-            tableCheckBottom.addCell(getParCell("МОСКВА +7.495.369.11.29", pt24,borderMode,null,null));
-            tableCheckBottom.addCell(getParCell("САМАРА +7.846.244.00.10", pt24,borderMode,null,null));
-            tableCheckBottom.addCell(getParCell("РОССИЯ +7.903.250.22.09", pt24,borderMode,null,null));
+        String starLine = StringManager.repeatingString(null, "x", 34);
+        tableCheckBottom.addCell(getParCell(starLine, pt24, borderMode, null, null));
 
-            return tableCheckBottom;
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "getCheckBottomTable: Exception on crating CheckBottom table "+e.getMessage() );
-            return null;
-        }
+        tableCheckBottom.addCell(getParCell("E-MAIL: INFO@WINTEC.RU", pt24, borderMode, null, null));
+        tableCheckBottom.addCell(getParCell("МОСКВА +7.495.369.11.29", pt24, borderMode, null, null));
+        tableCheckBottom.addCell(getParCell("САМАРА +7.846.244.00.10", pt24, borderMode, null, null));
+        tableCheckBottom.addCell(getParCell("РОССИЯ +7.903.250.22.09", pt24, borderMode, null, null));
+
+        return tableCheckBottom;
     }
 
 
-    private PdfPTable getTableBottomInfoTable()
+    private PdfPTable getTableBottomInfoTable() throws DocumentException
     {
-        try
+
+        PdfPCell cellEmptySpace = getEmptyCell(1, 1, borderMode);
+        cellEmptySpace.setFixedHeight(14);
+
+
+        PdfPTable tableCheckBottomInfo = new PdfPTable(1);
+        tableCheckBottomInfo.setWidths(new int[]{100});
+        tableCheckBottomInfo.setTotalWidth(545);
+        tableCheckBottomInfo.setLockedWidth(true);
+
+        tableCheckBottomInfo.addCell(getCellLine());
+        tableCheckBottomInfo.addCell(cellEmptySpace);
+
+        tableCheckBottomInfo.addCell(getParCell("Адрес", pt24, borderMode, null, null, Element.ALIGN_LEFT, null));
+        String adress = "Не указан";
+        if (model_document.getAdress() != null && model_document.getAdress().trim().length() > 0)
         {
-            PdfPCell cellEmptySpace = getEmptyCell(1,1,borderMode);
-            cellEmptySpace.setFixedHeight(14);
-
-
-            PdfPTable tableCheckBottomInfo = new PdfPTable(1);
-            tableCheckBottomInfo.setWidths(new int[]{100});
-            tableCheckBottomInfo.setTotalWidth(545);
-            tableCheckBottomInfo.setLockedWidth(true);
-
-            tableCheckBottomInfo.addCell(getCellLine());
-            tableCheckBottomInfo.addCell(cellEmptySpace);
-
-            tableCheckBottomInfo.addCell(getParCell("Адрес", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
-            String adress = "Не указан";
-            if(model_document.getAdress() != null && model_document.getAdress().trim().length()>0)
-            {
-                adress = model_document.getAdress();
-            }
-            PdfPCell cellAdress = getParCell(adress,pt28,borderMode,null,null,Element.ALIGN_RIGHT,null);
-            tableCheckBottomInfo.addCell(cellAdress);
-            tableCheckBottomInfo.addCell(cellEmptySpace);
-
-            tableCheckBottomInfo.addCell(getParCell("Телефон", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
-            String phone = "Не указан";
-            if(model_document.getPhone() != null && model_document.getPhone().trim().length()>0)
-            {
-                phone = model_document.getPhone();
-            }
-            tableCheckBottomInfo.addCell(getParCell(phone,pt28,borderMode,null,null,Element.ALIGN_RIGHT,null));
-            tableCheckBottomInfo.addCell(cellEmptySpace);
-
-
-            tableCheckBottomInfo.addCell(getParCell("Заказчик", pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
-            String fio = "Не указан";
-            if(model_document.getFio() != null && model_document.getFio().trim().length()>0)
-            {
-                fio = model_document.getFio();
-            }
-            tableCheckBottomInfo.addCell(getParCell(fio, pt28,borderMode,null,null,Element.ALIGN_RIGHT,null));
-
-            PdfPCell cellEmpty8 = getEmptyCell(1,1,false);
-            cellEmpty8.setFixedHeight(8);
-            tableCheckBottomInfo.addCell(cellEmpty8);
-
-            PdfPCell cellEmpty = getEmptyCell(1,1,borderMode);
-            cellEmpty.setBorder(Rectangle.BOX);
-            cellEmpty.setFixedHeight(132);
-            cellEmpty.setBorderWidth(2);
-            tableCheckBottomInfo.addCell(cellEmpty);
-            tableCheckBottomInfo.addCell(getParCell("(Подпись)",pt24,borderMode,null,null,Element.ALIGN_LEFT,null));
-
-            tableCheckBottomInfo.addCell(cellEmptySpace);
-            tableCheckBottomInfo.addCell(getCellLine());
-            tableCheckBottomInfo.addCell(cellEmptySpace);
-
-            return tableCheckBottomInfo;
+            adress = model_document.getAdress();
         }
-        catch (Exception e)
+        PdfPCell cellAdress = getParCell(adress, pt28, borderMode, null, null, Element.ALIGN_RIGHT, null);
+        tableCheckBottomInfo.addCell(cellAdress);
+        tableCheckBottomInfo.addCell(cellEmptySpace);
+
+        tableCheckBottomInfo.addCell(getParCell("Телефон", pt24, borderMode, null, null, Element.ALIGN_LEFT, null));
+        String phone = "Не указан";
+        if (model_document.getPhone() != null && model_document.getPhone().trim().length() > 0)
         {
-            e.printStackTrace();
-            Log.e(TAG, "getTableBottomInfoTable: Error on creating bottom info table "+e.getMessage());
-            return null;
+            phone = model_document.getPhone();
         }
+        tableCheckBottomInfo.addCell(getParCell(phone, pt28, borderMode, null, null, Element.ALIGN_RIGHT, null));
+        tableCheckBottomInfo.addCell(cellEmptySpace);
+
+
+        tableCheckBottomInfo.addCell(getParCell("Заказчик", pt24, borderMode, null, null, Element.ALIGN_LEFT, null));
+        String fio = "Не указан";
+        if (model_document.getFio() != null && model_document.getFio().trim().length() > 0)
+        {
+            fio = model_document.getFio();
+        }
+        tableCheckBottomInfo.addCell(getParCell(fio, pt28, borderMode, null, null, Element.ALIGN_RIGHT, null));
+
+        PdfPCell cellEmpty8 = getEmptyCell(1, 1, false);
+        cellEmpty8.setFixedHeight(8);
+        tableCheckBottomInfo.addCell(cellEmpty8);
+
+        PdfPCell cellEmpty = getEmptyCell(1, 1, borderMode);
+        cellEmpty.setBorder(Rectangle.BOX);
+        cellEmpty.setFixedHeight(132);
+        cellEmpty.setBorderWidth(2);
+        tableCheckBottomInfo.addCell(cellEmpty);
+        tableCheckBottomInfo.addCell(getParCell("(Подпись)", pt24, borderMode, null, null, Element.ALIGN_LEFT, null));
+
+        tableCheckBottomInfo.addCell(cellEmptySpace);
+        tableCheckBottomInfo.addCell(getCellLine());
+        tableCheckBottomInfo.addCell(cellEmptySpace);
+
+        return tableCheckBottomInfo;
     }
 
 
-    private PdfPTable getTopTable()
+    private PdfPTable getTopTable() throws DocumentException
     {
-        try
+        PdfPTable tableLarge = new PdfPTable(3);
+        tableLarge.setWidthPercentage(100);
+        tableLarge.setWidths(new int[]{38, 21, 4});
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+
+
+        PdfPTable tableInfo = new PdfPTable(4);
+        tableInfo.setWidthPercentage(100);
+        tableInfo.setWidths(new int[]{81, 41, 36, 50});
+
+        PdfPCell topText = getParCell("Договор оказания услуг №77-777", bold10, true, 4, null);
+        tableInfo.addCell(topText);
+
+        PdfPCell cellMoscow = getParCell("Москва", reg10, true, null, null);
+        PdfPCell cellSpb = getParCell("СПБ", reg10, true, null, null);
+        PdfPCell cellSochi = getParCell("Сочи", reg10, true, null, null);
+        PdfPCell cellSamara = getParCell("Самара", reg10, true, null, null);
+
+        switch (model_document.getCity())
         {
-            PdfPTable tableLarge = new PdfPTable(3);
-            tableLarge.setWidthPercentage(100);
-            tableLarge.setWidths(new int[]{38, 21, 4});
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-
-
-            PdfPTable tableInfo = new PdfPTable(4);
-            tableInfo.setWidthPercentage(100);
-            tableInfo.setWidths(new int[]{81, 41, 36, 50});
-
-            PdfPCell topText = getParCell("Договор оказания услуг №77-777", bold10, true, 4, null);
-            tableInfo.addCell(topText);
-
-            PdfPCell cellMoscow = getParCell("Москва", reg10, true, null, null);
-            PdfPCell cellSpb = getParCell("СПБ", reg10, true, null, null);
-            PdfPCell cellSochi = getParCell("Сочи", reg10, true, null, null);
-            PdfPCell cellSamara = getParCell("Самара", reg10, true, null, null);
-
-            switch (model_document.getCity())
-            {
-                case 0:
-                    cellMoscow.setBackgroundColor(yellow);
-                    break;
-                case 1:
-                    cellSpb.setBackgroundColor(yellow);
-                    break;
-                case 2:
-                    cellSochi.setBackgroundColor(yellow);
-                    break;
-                case 3:
-                    cellSamara.setBackgroundColor(yellow);
-                    break;
-            }
-
-            tableInfo.addCell(cellMoscow);
-            tableInfo.addCell(cellSpb);
-            tableInfo.addCell(cellSochi);
-            tableInfo.addCell(cellSamara);
-
-            PdfPCell cellDate = getParCell("ДАТА:" + GlobalHelper.getCurrentTimeFullString(), bold10, true, 4, null);
-            tableInfo.addCell(cellDate);
-
-            tableLarge.addCell(new PdfPCell(tableInfo));
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-
-            return tableLarge;
-
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getTopTable: Exception on creating Top Table");
-            return null;
+            case 0:
+                cellMoscow.setBackgroundColor(yellow);
+                break;
+            case 1:
+                cellSpb.setBackgroundColor(yellow);
+                break;
+            case 2:
+                cellSochi.setBackgroundColor(yellow);
+                break;
+            case 3:
+                cellSamara.setBackgroundColor(yellow);
+                break;
         }
+
+        tableInfo.addCell(cellMoscow);
+        tableInfo.addCell(cellSpb);
+        tableInfo.addCell(cellSochi);
+        tableInfo.addCell(cellSamara);
+
+        PdfPCell cellDate = getParCell("ДАТА:" + GlobalHelper.getCurrentTimeFullString(), bold10, true, 4, null);
+        tableInfo.addCell(cellDate);
+
+        tableLarge.addCell(new PdfPCell(tableInfo));
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+
+        return tableLarge;
     }
 
 
-    private PdfPTable getAdressTable()
+    private PdfPTable getAdressTable() throws DocumentException, IOException
     {
-        try
+
+        PdfPTable tableLarge = new PdfPTable(3);
+        tableLarge.setWidthPercentage(100);
+        tableLarge.setWidths(new int[]{205, 189, 19});
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+
+        String fio = "";
+        if (model_document.getFio() != null)
         {
-            PdfPTable tableLarge = new PdfPTable(3);
-            tableLarge.setWidthPercentage(100);
-            tableLarge.setWidths(new int[]{205, 189, 19});
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-
-            String fio = "";
-            if (model_document.getFio() != null)
-            {
-                fio = model_document.getFio();
-            }
+            fio = model_document.getFio();
+        }
 
 
-            PdfPCell cellFio = getParCell(fio, reg10Underline, false, null, null, true, null);
-            cellFio.setFixedHeight(34);
-            cellFio.setVerticalAlignment(Element.ALIGN_BOTTOM);
-            cellFio.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tableLarge.addCell(cellFio);
-            tableLarge.addCell(getEmptyCell(1, 1, false));
+        PdfPCell cellFio = getParCell(fio, reg10Underline, false, null, null, true, null);
+        cellFio.setFixedHeight(34);
+        cellFio.setVerticalAlignment(Element.ALIGN_BOTTOM);
+        cellFio.setHorizontalAlignment(Element.ALIGN_LEFT);
+        tableLarge.addCell(cellFio);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
 
 
-            PdfPCell cellEmptySpace = getEmptyCell(1,3,false,6);
-            tableLarge.addCell(cellEmptySpace);
+        PdfPCell cellEmptySpace = getEmptyCell(1, 3, false, 6);
+        tableLarge.addCell(cellEmptySpace);
 
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-            Paragraph parAddress = new Paragraph("  " + model_document.getAdress());
-            parAddress.setLeading(18, 0);
-            parAddress.setFont(reg10);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+        Paragraph parAddress = new Paragraph("  " + model_document.getAdress());
+        parAddress.setLeading(18, 0);
+        parAddress.setFont(reg10);
 //            parAddress.setFont(reg10Underline);
 //            parAddress.add(lineChunk);
 
-            PdfPCell cellAdress = new PdfPCell();
-            cellAdress.addElement(parAddress);
-            cellAdress.setBorder(Rectangle.NO_BORDER);
-            cellAdress.setFixedHeight(60);
-            cellAdress.setPaddingLeft(34);
-            cellAdress.setVerticalAlignment(Element.ALIGN_TOP);
-            cellAdress.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tableLarge.addCell(cellAdress);
-            tableLarge.addCell(getEmptyCell(1, 1, false));
+        PdfPCell cellAdress = new PdfPCell();
+        cellAdress.addElement(parAddress);
+        cellAdress.setBorder(Rectangle.NO_BORDER);
+        cellAdress.setFixedHeight(60);
+        cellAdress.setPaddingLeft(34);
+        cellAdress.setVerticalAlignment(Element.ALIGN_TOP);
+        cellAdress.setHorizontalAlignment(Element.ALIGN_LEFT);
+        tableLarge.addCell(cellAdress);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
 
 
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-            PdfPCell cellPhone = getParCell("  " + model_document.getPhone(), reg10Underline, false, null, null, true, 44f);
-            cellPhone.setPaddingTop(17);
-            cellPhone.setVerticalAlignment(Element.ALIGN_TOP);
-            cellPhone.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tableLarge.addCell(cellPhone);
-            tableLarge.addCell(getEmptyCell(1, 1, false));
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+        PdfPCell cellPhone = getParCell("  " + model_document.getPhone(), reg10Underline, false, null, null, true, 44f);
+        cellPhone.setPaddingTop(17);
+        cellPhone.setVerticalAlignment(Element.ALIGN_TOP);
+        cellPhone.setHorizontalAlignment(Element.ALIGN_LEFT);
+        tableLarge.addCell(cellPhone);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
 
-            PdfPCell cellEmpty = getEmptyCell(1, 3, false);
-            cellEmpty.setFixedHeight(17);
-            tableLarge.addCell(cellEmpty);
+        PdfPCell cellEmpty = getEmptyCell(1, 3, false);
+        cellEmpty.setFixedHeight(17);
+        tableLarge.addCell(cellEmpty);
 
-            PdfPTable tableMiniSign = new PdfPTable(3);
-            tableMiniSign.setWidthPercentage(100);
-            tableMiniSign.setWidths(new int[]{35, 47, 11});
+        PdfPTable tableMiniSign = new PdfPTable(3);
+        tableMiniSign.setWidthPercentage(100);
+        tableMiniSign.setWidths(new int[]{35, 47, 11});
 
-            PdfPCell miniSignature = getSignupMiniCell(true);
-            miniSignature.setFixedHeight(40);
-            tableMiniSign.addCell(miniSignature);
-
-
-            String formatedFio = "/  " + StringManager.formatFioForOthcet(model_document.getFio());
-
-            PdfPCell cellSignFio = getParCell(formatedFio, reg10, false, null, null, true, 20f);
-            cellSignFio.setHorizontalAlignment(Element.ALIGN_LEFT);
-            cellSignFio.setVerticalAlignment(Element.ALIGN_BOTTOM);
-            cellFio.setPaddingBottom(2);
-            tableMiniSign.addCell(cellSignFio);
-            tableMiniSign.addCell(getEmptyCell(1, 1, false));
+        PdfPCell miniSignature = getSignupMiniCell(true);
+        miniSignature.setFixedHeight(40);
+        tableMiniSign.addCell(miniSignature);
 
 
-            PdfPCell cellForMiniTable = new PdfPCell(tableMiniSign);
-            cellForMiniTable.setPadding(0);
-            cellForMiniTable.setBorder(Rectangle.NO_BORDER);
-            tableLarge.addCell(getEmptyCell(1, 1, false));
-            tableLarge.addCell(cellForMiniTable);
-            tableLarge.addCell(getEmptyCell(1, 1, false));
+        String formatedFio = "/  " + StringManager.formatFioForOthcet(model_document.getFio());
+
+        PdfPCell cellSignFio = getParCell(formatedFio, reg10, false, null, null, true, 20f);
+        cellSignFio.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cellSignFio.setVerticalAlignment(Element.ALIGN_BOTTOM);
+        cellFio.setPaddingBottom(2);
+        tableMiniSign.addCell(cellSignFio);
+        tableMiniSign.addCell(getEmptyCell(1, 1, false));
 
 
-            return tableLarge;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getAdressTable: Exception on creating Client page " + e.getMessage());
-            return null;
-        }
+        PdfPCell cellForMiniTable = new PdfPCell(tableMiniSign);
+        cellForMiniTable.setPadding(0);
+        cellForMiniTable.setBorder(Rectangle.NO_BORDER);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+        tableLarge.addCell(cellForMiniTable);
+        tableLarge.addCell(getEmptyCell(1, 1, false));
+
+
+        return tableLarge;
     }
 
 
-    private PdfPTable getProductsTable()
+    private PdfPTable getProductsTable() throws DocumentException
     {
-        try
+
+        PdfPTable tableProducts = new PdfPTable(10);
+        tableProducts.setWidthPercentage(90);
+        tableProducts.setWidths(new int[]{182, 478, 188, 180, 210, 240, 210, 178, 202, 204});
+
+        fillTableHeader(tableProducts);
+
+        for (Model_Product product : model_document.getListOfProducts())
         {
-            PdfPTable tableProducts = new PdfPTable(10);
-            tableProducts.setWidthPercentage(90);
-            tableProducts.setWidths(new int[]{182, 478, 188, 180, 210, 240, 210, 178, 202, 204});
-
-            fillTableHeader(tableProducts);
-
-            for (Model_Product product : model_document.getListOfProducts())
-            {
-                fillProductWithElement(tableProducts, product);
-            }
-
-            return tableProducts;
-
-        } catch (Exception e)
-        {
-            Log.e(TAG, "Exception on cratingProducts Table " + e.getMessage());
-            return null;
+            fillProductWithElement(tableProducts, product);
         }
+
+        return tableProducts;
     }
 
     private void fillTableHeader(PdfPTable tableProducts)
@@ -773,117 +736,103 @@ public class PdfCreator
 
     }
 
-    private PdfPTable getBottomInfoText()
+    private PdfPTable getBottomInfoText() throws DocumentException
     {
-        try
-        {
-            float padding = 4;
-            double postPaySum = model_document.getItogo_sum() - model_document.getPrepay();
 
-            String sum = StringManager.formatNum(model_document.getSum(), true);
-            String montage = StringManager.formatNum(model_document.getMontage(), true);
-            String delivery = StringManager.formatNum(model_document.getDelivery(), true);
-            String sale = StringManager.formatNum(model_document.getSale(), true);
-            String itogoSum = StringManager.formatNum(model_document.getItogo_sum(), true);
-            String prepay = StringManager.formatNum(model_document.getPrepay(), true);
-            String postpay = StringManager.formatNum(postPaySum, true);
-            String dopInfo = model_document.getDop_info();
+        float padding = 4;
+        double postPaySum = model_document.getItogo_sum() - model_document.getPrepay();
 
-            PdfPTable bottomTable = new PdfPTable(3);
-            bottomTable.setKeepTogether(true);
-            bottomTable.setWidthPercentage(90);
-            bottomTable.setWidths(new int[]{1420, 360, 468});
+        String sum = StringManager.formatNum(model_document.getSum(), true);
+        String montage = StringManager.formatNum(model_document.getMontage(), true);
+        String delivery = StringManager.formatNum(model_document.getDelivery(), true);
+        String sale = StringManager.formatNum(model_document.getSale(), true);
+        String itogoSum = StringManager.formatNum(model_document.getItogo_sum(), true);
+        String prepay = StringManager.formatNum(model_document.getPrepay(), true);
+        String postpay = StringManager.formatNum(postPaySum, true);
+        String dopInfo = model_document.getDop_info();
 
-            PdfPCell cellDopInfoHeader = getParCell("Дополнительная информация:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null);
-            cellDopInfoHeader.setBorder(Rectangle.LEFT | Rectangle.TOP | Rectangle.RIGHT);
-            bottomTable.addCell(cellDopInfoHeader);
-            bottomTable.addCell(getParCell("Cумма", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(sum, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        PdfPTable bottomTable = new PdfPTable(3);
+        bottomTable.setKeepTogether(true);
+        bottomTable.setWidthPercentage(90);
+        bottomTable.setWidths(new int[]{1420, 360, 468});
 
-            PdfPCell cellDopInfo = getParCell(dopInfo, italic10, true, null, 6, Element.ALIGN_LEFT, Element.ALIGN_TOP);
-            cellDopInfo.setPadding(12);
-            cellDopInfo.setBorder(Rectangle.LEFT | Rectangle.BOTTOM | Rectangle.RIGHT);
-            bottomTable.addCell(cellDopInfo);
+        PdfPCell cellDopInfoHeader = getParCell("Дополнительная информация:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null);
+        cellDopInfoHeader.setBorder(Rectangle.LEFT | Rectangle.TOP | Rectangle.RIGHT);
+        bottomTable.addCell(cellDopInfoHeader);
+        bottomTable.addCell(getParCell("Cумма", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(sum, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            bottomTable.addCell(getParCell("Монтаж:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(montage, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        PdfPCell cellDopInfo = getParCell(dopInfo, italic10, true, null, 6, Element.ALIGN_LEFT, Element.ALIGN_TOP);
+        cellDopInfo.setPadding(12);
+        cellDopInfo.setBorder(Rectangle.LEFT | Rectangle.BOTTOM | Rectangle.RIGHT);
+        bottomTable.addCell(cellDopInfo);
 
-            bottomTable.addCell(getParCell("Доставка:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(delivery, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell("Монтаж:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(montage, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            bottomTable.addCell(getParCell("Сумма скидки:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(sale, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell("Доставка:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(delivery, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            bottomTable.addCell(getParCell("ИТОГО:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(itogoSum, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell("Сумма скидки:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(sale, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            bottomTable.addCell(getParCell("Предоплата:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(prepay, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell("ИТОГО:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(itogoSum, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            bottomTable.addCell(getParCell("Доплата:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
-            bottomTable.addCell(getParCell(postpay, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell("Предоплата:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(prepay, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
 
-            return bottomTable;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getBottomInfoText: Exception on BottomTable Creating " + e.getMessage());
-            return null;
-        }
+        bottomTable.addCell(getParCell("Доплата:", bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+        bottomTable.addCell(getParCell(postpay, bold10, padding, true, null, null, Element.ALIGN_LEFT, null));
+
+        return bottomTable;
     }
 
-    private Element getBottomSignature()
+    private Element getBottomSignature() throws DocumentException, IOException
     {
-        try
-        {
-            float padding = 4;
-            PdfPTable tableSign = new PdfPTable(2);
-            tableSign.setKeepTogether(true);
-            tableSign.setWidthPercentage(80);
-            tableSign.setWidths(new int[]{1080, 980});
-            tableSign.addCell(getEmptyCell(1, 1, false));
 
-            PdfPTable tableMini = new PdfPTable(2);
-            tableMini.setWidthPercentage(100);
-            tableMini.setWidths(new int[]{480, 500});
+        float padding = 4;
+        PdfPTable tableSign = new PdfPTable(2);
+        tableSign.setKeepTogether(true);
+        tableSign.setWidthPercentage(80);
+        tableSign.setWidths(new int[]{1080, 980});
+        tableSign.addCell(getEmptyCell(1, 1, false));
 
-            tableMini.addCell(getParCell("Заказ составлен верно", bold8, false, null, null, Element.ALIGN_LEFT, null));
-            PdfPCell cellSign = getSignupMiniCell(false);
-            cellSign.setRowspan(2);
-            cellSign.setBorder(Rectangle.NO_BORDER);
-            tableMini.addCell(cellSign);
+        PdfPTable tableMini = new PdfPTable(2);
+        tableMini.setWidthPercentage(100);
+        tableMini.setWidths(new int[]{480, 500});
 
-            PdfPCell cellSignText2 = getParCell("(Подпись заказчика)", reg8, false, null, null, Element.ALIGN_LEFT, Element.ALIGN_TOP);
-            cellSignText2.setPaddingTop(4);
-            tableMini.addCell(cellSignText2);
+        tableMini.addCell(getParCell("Заказ составлен верно", bold8, false, null, null, Element.ALIGN_LEFT, null));
+        PdfPCell cellSign = getSignupMiniCell(false);
+        cellSign.setRowspan(2);
+        cellSign.setBorder(Rectangle.NO_BORDER);
+        tableMini.addCell(cellSign);
+
+        PdfPCell cellSignText2 = getParCell("(Подпись заказчика)", reg8, false, null, null, Element.ALIGN_LEFT, Element.ALIGN_TOP);
+        cellSignText2.setPaddingTop(4);
+        tableMini.addCell(cellSignText2);
 
 
-            tableSign.addCell(tableMini);
+        tableSign.addCell(tableMini);
 
-            return tableSign;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getBottomSignature: Error on creating creating getBottomSignature");
-            return null;
-        }
+        return tableSign;
     }
 
-    private PdfPTable getBottomStamp()
+    private PdfPTable getBottomStamp() throws DocumentException, IOException
     {
-        try
-        {
+
             PdfPTable tableWide = new PdfPTable(3);
             tableWide.setKeepTogether(true);
             tableWide.setWidthPercentage(100);
-            tableWide.setWidths(new int[]{890,1064,540});
-            tableWide.addCell(getEmptyCell(1,1,borderMode));
-
+            tableWide.setWidths(new int[]{890, 1064, 540});
+            tableWide.addCell(getEmptyCell(1, 1, borderMode));
 
 
             PdfPTable tableStamp = new PdfPTable(2);
             tableStamp.setWidthPercentage(100);
-            tableStamp.setWidths(new int[]{475,590});
+            tableStamp.setWidths(new int[]{475, 590});
 
-            PdfPCell cellGenDir = getParCell("Генеральный директор",timesNewRoman10,borderMode,null,null,Element.ALIGN_LEFT,Element.ALIGN_MIDDLE);
+            PdfPCell cellGenDir = getParCell("Генеральный директор", timesNewRoman10, borderMode, null, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
             cellGenDir.setPaddingTop(11);
             tableStamp.addCell(cellGenDir);
 
@@ -893,35 +842,24 @@ public class PdfCreator
             cellStamp.setFixedHeight(112);
             tableStamp.addCell(cellStamp);
 
-            PdfPCell cellFio = getParCell("/Рыбакина Л.В./",timesNewRoman10,borderMode,null,null,Element.ALIGN_RIGHT,Element.ALIGN_TOP);
+            PdfPCell cellFio = getParCell("/Рыбакина Л.В./", timesNewRoman10, borderMode, null, null, Element.ALIGN_RIGHT, Element.ALIGN_TOP);
             cellFio.setPaddingTop(12);
             tableStamp.addCell(cellFio);
-
 
 
             PdfPCell cellMiddle = new PdfPCell(tableStamp);
             cellMiddle.setBorder(Rectangle.NO_BORDER);
 
             tableWide.addCell(cellMiddle);
-            tableWide.addCell(getEmptyCell(1,1,borderMode));
+            tableWide.addCell(getEmptyCell(1, 1, borderMode));
 
 
             return tableWide;
-
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "getBottomStamp: Exception on creating stamp TAble "+e.getMessage() );
-            return null;
-        }
     }
 
 
-
-    private void initAll()
+    private void initAll() throws IOException, DocumentException
     {
-        try
-        {
             globalReg = BaseFont.createFont("assets/segreg.ttf", "Cp1251", BaseFont.EMBEDDED);
             globalBold = BaseFont.createFont("assets/segbold.ttf", "Cp1251", BaseFont.EMBEDDED);
             globalItalic = BaseFont.createFont("assets/segitalic.ttf", "Cp1251", BaseFont.EMBEDDED);
@@ -934,7 +872,7 @@ public class PdfCreator
             bold10 = new Font(globalBold, 10);
             bold8 = new Font(globalBold, 8);
             italic10 = new Font(globalItalic, 10);
-            timesNewRoman10 = new Font(globalTimesNewRoman,10);
+            timesNewRoman10 = new Font(globalTimesNewRoman, 10);
 
             pt46 = new Font(globalPt, 46);
             pt36 = new Font(globalPt, 36);
@@ -948,10 +886,6 @@ public class PdfCreator
 
             LineSeparator line = new LineSeparator(0, 100, trans, Element.ALIGN_CENTER, -2.2f);
             lineChunk = new Chunk(line);
-        } catch (Exception e)
-        {
-            Log.e(TAG, "initAll: Exception on init ALL");
-        }
     }
 
     private PdfPCell getParCell(String text, Font font, float padding, boolean border, @Nullable Integer colSpawn, @Nullable Integer rowSpawn)
@@ -1052,10 +986,10 @@ public class PdfCreator
 
     private PdfPCell getEmptyCell(int rowSpawn, int colSpawn, boolean border)
     {
-        return getEmptyCell(rowSpawn,colSpawn,border,null);
+        return getEmptyCell(rowSpawn, colSpawn, border, null);
     }
 
-    private PdfPCell getEmptyCell(int rowSpawn, int colSpawn, boolean border,@Nullable Integer fixedHight)
+    private PdfPCell getEmptyCell(int rowSpawn, int colSpawn, boolean border, @Nullable Integer fixedHight)
     {
         PdfPCell emptyCell = new PdfPCell();
         emptyCell.setRowspan(rowSpawn);
@@ -1068,7 +1002,7 @@ public class PdfCreator
             emptyCell.setBorder(Rectangle.NO_BORDER);
         }
 
-        if(fixedHight != null)
+        if (fixedHight != null)
         {
             emptyCell.setFixedHeight(fixedHight);
         }
@@ -1076,7 +1010,7 @@ public class PdfCreator
         return emptyCell;
     }
 
-    private PdfPCell getSignupMiniCell(boolean borderBottom)
+    private PdfPCell getSignupMiniCell(boolean borderBottom) throws IOException, BadElementException
     {
         Image image = null;
 
@@ -1117,13 +1051,11 @@ public class PdfCreator
         PdfPCell cell = new PdfPCell(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);
 
-        return  cell;
+        return cell;
     }
 
-    private Image getImageFromFiles(File img)
+    private Image getImageFromFiles(File img) throws IOException, BadElementException
     {
-        try
-        {
             if (img == null || !img.exists())
             {
                 Log.e(TAG, "getImageFromFiles: file is null");
@@ -1142,25 +1074,19 @@ public class PdfCreator
             mediaStream = null;
             bitmap = null;
             return image;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getImageFromFiles: Exception on getting image file");
-            return null;
-        }
     }
 
 
-    private Image getImageFromFiles(String fileName)
+    private Image getImageFromFiles(String fileName) throws IOException, BadElementException
     {
         File file = fileManager.getFileFromTemp(fileName, null);
         return getImageFromFiles(file);
     }
 
 
-    private Image getImageFromAsset(String fileName)
+    private Image getImageFromAsset(String fileName) throws IOException, BadElementException
     {
-        try
-        {
+
             InputStream inputStream = context.getAssets().open(fileName);
             Bitmap bmp = BitmapFactory.decodeStream(inputStream);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -1177,17 +1103,11 @@ public class PdfCreator
             inputStream = null;
             stream = null;
             return image;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "initImageFromAsset: Exception on getting image from asset");
-            return null;
-        }
     }
 
-    private PdfPTable getFormOrderTable()
+    private PdfPTable getFormOrderTable() throws DocumentException
     {
-        try
-        {
+
             PdfPTable tableFormOrder = new PdfPTable(2);
             tableFormOrder.setWidths(new int[]{20, 40});
             tableFormOrder.setWidthPercentage(90);
@@ -1206,27 +1126,22 @@ public class PdfCreator
             tableFormOrder.addCell(cellOrderForm);
 
             return tableFormOrder;
-        } catch (Exception e)
-        {
-            Log.e(TAG, "getFormOrderTable: Exception on creatingOrder Table");
-            return null;
-        }
     }
 
     public String getRenamedFile(boolean isCheck)
     {
         String name = model_document.getCode();
-        if(model_document.getFio()!= null && model_document.getFio().trim().length()>0)
+        if (model_document.getFio() != null && model_document.getFio().trim().length() > 0)
         {
-            name = StringManager.transliterate(model_document.getFio())+"_"+name;
+            name = StringManager.transliterate(model_document.getFio()) + "_" + name;
         }
 
-        if(isCheck)
+        if (isCheck)
         {
-            name+="_check";
+            name += "_check";
         }
 
-        name = name.replaceAll("\\s+","_");
+        name = name.replaceAll("\\s+", "_");
 
         return name;
     }

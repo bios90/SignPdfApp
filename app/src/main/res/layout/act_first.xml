@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="@drawable/bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View
+        android:layout_marginTop="84dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <ImageView
+        android:id="@+id/img_logo"
+
+        android:layout_marginTop="48dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logonoborder"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp" />
+
+
+    <LinearLayout
+        android:id="@+id/la_center"
+
+        android:orientation="vertical"
+        android:background="@drawable/rounded_white"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/img_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            android:elevation="4dp"
+            android:background="@drawable/rounded_top_black"
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:padding="6dp"
+            android:text="Авторизация"
+            android:textColor="@color/white" />
+
+
+        <RelativeLayout
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp">
+
+            <EditText
+                android:id="@+id/et_email"
+
+                android:inputType="textEmailAddress"
+                android:hint="Email..."
+                style="@style/EditText"
+                android:paddingRight="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:text="@string/ic_user"
+                android:background="@drawable/sel_rounded_right_gray_stroke_normal"
+                android:layout_alignParentRight="true"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_width="280dp"
+            android:layout_height="36dp">
+
+            <EditText
+                android:id="@+id/et_password"
+
+                android:inputType="textPassword"
+                android:hint="Пароль..."
+                style="@style/EditText"
+                android:paddingRight="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:text="@string/ic_key"
+                android:background="@drawable/sel_rounded_right_gray_stroke_normal"
+                android:layout_alignParentRight="true"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_forgot_pass"
+
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/sel_blue"
+            android:text="Забыли пароль?"
+            style="@style/TVSemi.S"
+            android:padding="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/la_enter"
+
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/la_center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_grad_green_rounded"
+        android:layout_width="304dp"
+        android:layout_height="42dp">
+
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Войти"
+            style="@style/TVBold.M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_register"
+
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        style="@style/TVReg.M"
+        android:textColor="@color/sel_white"
+        android:text="Регистрация"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:padding="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</RelativeLayout>

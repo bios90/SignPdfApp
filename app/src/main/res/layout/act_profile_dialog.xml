@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_gray0"
+        android:elevation="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:padding="6dp"
+            android:text="Профиль"
+            android:textColor="@color/white" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp"
+            android:weightSum="100">
+
+            <TextView
+
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="Имя"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:text="@string/ic_user"
+                android:textColor="@color/orangeBase" />
+
+            <TextView
+                android:id="@+id/tv_name"
+
+                style="@style/TVBold.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:textColor="@color/black"
+                tools:text="-" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp"
+            android:weightSum="100">
+
+            <TextView
+
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="Email "
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:text="@string/ic_email"
+                android:textColor="@color/orangeBase" />
+
+            <TextView
+                android:id="@+id/tv_email"
+
+                style="@style/TVBold.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="-"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp"
+            android:weightSum="100">
+
+            <TextView
+
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="Должность"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:text="@string/ic_case"
+                android:textColor="@color/orangeBase" />
+
+            <TextView
+                android:id="@+id/tv_role"
+
+                style="@style/TVBold.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="-"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp"
+            android:weightSum="100">
+
+            <TextView
+
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="Всего договоров"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/IconTv.M"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:text="@string/ic_file_pdf"
+                android:textColor="@color/orangeBase" />
+
+            <TextView
+                android:id="@+id/tv_all_docs_count"
+
+                style="@style/TVBold.S"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="50"
+                android:text="-"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rounded_bottom_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+
+            <RelativeLayout
+                android:id="@+id/la_exit"
+
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_empty_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.S"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/ic_exit"
+                    android:textColor="@color/sel_orange" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Выйти"
+                    android:textColor="@color/sel_orange" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_sync"
+
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.S"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/ic_sync" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Синхронизировать" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

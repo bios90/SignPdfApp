@@ -14,7 +14,11 @@ import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.local_db.room.RoomCrudHelper;
+import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_User;
+import com.dimfcompany.signpdfapp.sync.SyncManager;
+import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
@@ -23,10 +27,11 @@ import com.dimfcompany.signpdfapp.utils.PdfCreator;
 import com.dimfcompany.signpdfapp.utils.StringManager;
 
 import java.io.File;
+import java.util.Date;
 
 import javax.inject.Inject;
 
-public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, PdfCreator.PdfCreationCallback
+public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, PdfCreator.PdfCreationCallback, SyncManager.CallbackInsertWithSync
 {
     private static final String TAG = "ActSign";
 
@@ -52,10 +57,15 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     MessagesManager messagesManager;
     @Inject
     LocalDatabase localDatabase;
+    @Inject
+    Synchronizer synchronizer;
+    @Inject
+    SharedPrefsHelper sharedPrefsHelper;
 
     ActSignMvp.MvpView mvpView;
 
     Model_Document model_document;
+    Model_User user;
 
     boolean editMode;
 
@@ -69,6 +79,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         setContentView(mvpView.getRootView());
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        user = sharedPrefsHelper.getUserFromSharedPrefs();
         mvpView.setSignatureSizes();
         checkForEditMode();
     }
@@ -96,7 +107,9 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public void clickedCreatePDf()
     {
+        messagesManager.showProgressDialog();
         model_document = collectDocumentData();
+        model_document.setUser_id(user.getId());
         pdfCreator.createPdfAsync(model_document, false, this);
     }
 
@@ -137,7 +150,6 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     public void clickedMaterials()
     {
         model_document = collectDocumentData();
-        Log.e(TAG, "clickedMaterials: " + model_document.toString());
         navigationManager.toActProducts(Constants.RQ_PRODUCTS_SCREEN, model_document);
     }
 
@@ -148,7 +160,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         model_document.setAdress(mvpView.getAdress());
         model_document.setPhone(mvpView.getPhone());
         model_document.setSignature_file_name(mvpView.getCurrentFileName());
-        model_document.setDate(System.currentTimeMillis());
+        model_document.setDate(new Date());
         model_document.setCode(StringManager.getCode(mvpView.getCity()));
 
         model_document.setSum(GlobalHelper.countSum(model_document));
@@ -196,13 +208,15 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public void onSuccessPdfCreation(Model_Document model_document)
     {
-        localDatabase.insertDocument(model_document);
-        messagesManager.showGreenAlerter("Успешно", "Новый договор успешно создан");
+//        localDatabase.insertDocument(model_document);
+        synchronizer.insertDocumentWithSync(model_document,this);
+//        messagesManager.showGreenAlerter("Успешно", "Новый договор успешно создан");
     }
 
     @Override
     public void onErrorPdfCreation()
     {
+        messagesManager.dismissProgressDialog();
         messagesManager.showRedAlerter("Ошибка", "Не удалось создать новый договор");
     }
 
@@ -245,5 +259,23 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         editMode = true;
         mvpView.bindModelDocument(model_document);
         mvpView.updateMaterialButton();
+    }
+
+    @Override
+    public void onSuccessInsert(boolean inserted_to_server)
+    {
+        messagesManager.dismissProgressDialog();
+        messagesManager.showGreenAlerter("Новый договор успешно создан");
+        if(!inserted_to_server)
+        {
+            synchronizer.putSynchronizeTask();
+        }
+    }
+
+    @Override
+    public void onErrorInsert()
+    {
+        messagesManager.dismissProgressDialog();
+        messagesManager.showRedAlerter("Ошибка при создании договора");
     }
 }

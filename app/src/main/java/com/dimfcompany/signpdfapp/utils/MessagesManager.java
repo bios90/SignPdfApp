@@ -1,18 +1,22 @@
 package com.dimfcompany.signpdfapp.utils;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dimfcompany.signpdfapp.R;
@@ -21,13 +25,23 @@ import com.tapadoo.alerter.Alerter;
 
 public class MessagesManager
 {
+    private static final String TAG = "MessagesManager";
+
     private final AppCompatActivity activity;
     private final LayoutInflater layoutInflater;
+
+    private AlertDialog progressDialog;
 
     public interface DialogButtonsListener
     {
         void onOkClicked(DialogInterface dialog);
         void onCancelClicked(DialogInterface dialog);
+    }
+
+    public interface DialogWithEtListener
+    {
+        void onOkDialogWithEt(Dialog dialog, String text);
+        void onCancelDialogWithEt(Dialog dialog);
     }
 
     public interface DialogFinishedListener
@@ -47,10 +61,24 @@ public class MessagesManager
         this.layoutInflater = LayoutInflater.from(activity);
     }
 
+    public void showNoInternetAlerter()
+    {
+        showRedAlerter("Ошибка", "Нет соединения с сетью");
+    }
+
+    public void showRedAlerter( String text)
+    {
+        showAlerter("Ошибка", text, R.color.redBase);
+    }
 
     public void showRedAlerter(String title, String text)
     {
         showAlerter(title, text, R.color.redBase);
+    }
+
+    public void showGreenAlerter( String text)
+    {
+        showAlerter("", text, R.color.green);
     }
 
     public void showGreenAlerter(String title, String text)
@@ -219,6 +247,102 @@ public class MessagesManager
 
             v.vibrate(miliseconds);
         }
+    }
+
+    public void showProgressDialog()
+    {
+        showProgressDialog(null);
+    }
+
+    public void showProgressDialog(@Nullable String message)
+    {
+        if (progressDialog != null && progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.progress_spinner_dialog, null);
+        TextView textView = dialogView.findViewById(R.id.tv_header_title);
+
+        if (message != null)
+        {
+            textView.setText(message);
+        }
+
+        progressDialog = new AlertDialog.Builder(activity).create();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setView(dialogView);
+
+        try
+        {
+            progressDialog.show();
+        } catch (Exception e)
+        {
+            Log.e(TAG, "showSpotsDialog: Error on show Green Dialog");
+        }
+    }
+
+    public void dismissProgressDialog()
+    {
+        if (progressDialog != null)
+        {
+            if (progressDialog.isShowing())
+            {
+                progressDialog.dismiss();
+            }
+
+            progressDialog = null;
+        }
+    }
+
+    public void showEtDialog(String title, String text, String btnOkText, String btnCancelText, final DialogWithEtListener listener)
+    {
+        showEtDialog(title, text, btnOkText, btnCancelText, "", listener);
+    }
+
+    public void showEtDialog(String title, String text, String btnOkText, String btnCancelText, String currentText, final DialogWithEtListener listener)
+    {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_with_et, null);
+
+        TextView tv_title = dialogView.findViewById(R.id.tv_title);
+        TextView tv_text = dialogView.findViewById(R.id.tv_text);
+        final EditText editText = dialogView.findViewById(R.id.et_et);
+        Button btnOk = dialogView.findViewById(R.id.btn_ok);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+        editText.setText(currentText);
+
+        tv_title.setText(title);
+        tv_text.setText(text);
+
+
+        btnOk.setText(btnOkText);
+        btnCancel.setText(btnCancelText);
+
+        final AlertDialog dialog = new AlertDialog.Builder(activity).create();
+        dialog.setView(dialogView);
+
+        btnOk.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String text = editText.getText().toString().trim();
+                listener.onOkDialogWithEt(dialog, text);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onCancelDialogWithEt(dialog);
+            }
+        });
+
+        dialog.show();
     }
 
 }

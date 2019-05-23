@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 
@@ -37,12 +39,19 @@ public class GlobalHelper
 
     public static final String FORMAT_FULL_MONTH = "d MMMM yyyy";
 
-
     private final Context context;
 
     public GlobalHelper(Context context)
     {
         this.context = context;
+    }
+
+    public boolean isNetworkAvailable()
+    {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static String getCurrentTimeFullString()

@@ -9,10 +9,18 @@ import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogM
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvp;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvpView;
+import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvp;
+import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvp;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvpView;
+import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvp;
+import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvpView;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProductsMvp;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProductsMvpView;
+import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialogMvpView;
+import com.dimfcompany.signpdfapp.ui.act_register.ActRegisterMvp;
+import com.dimfcompany.signpdfapp.ui.act_register.ActRegisterMvpView;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvp;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvpView;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvp;
@@ -68,5 +76,25 @@ public class ViewMvcFactory
     public ActAddProductDialogMvp.MvpView getActAddProductDialogMvpView(@Nullable ViewGroup parent)
     {
         return new ActAddProductDialogMvpView(layoutInflater,parent);
+    }
+
+    public ActFirstMvp.MvpView getActFirstMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActFirstMvpView(layoutInflater,parent);
+    }
+    
+    public ActRegisterMvp.MvpView getActRegisterMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActRegisterMvpView(layoutInflater,parent);
+    }    
+    
+    public ActMainNewMvp.MvpView getActMainNewMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActMainNewMvpView(layoutInflater,parent);
+    }
+    
+    public ActProfileDialogMvp.MvpView getActProfileDialogMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActProfileDialogMvpView(layoutInflater,parent);
     }
 }

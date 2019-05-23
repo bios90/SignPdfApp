@@ -146,12 +146,8 @@ public class Model_Product implements Serializable
     public String toString()
     {
         return "Model_Product{" +
-                "material=" + material.getName() +
                 ", width=" + width +
                 ", height=" + height +
-                ", color=" + color.getName() +
-                ", krep=" + krep.getName() +
-                ", control=" + control.getName() +
                 ", count=" + count +
                 ", price=" + price +
                 ", sum=" + sum +

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/square_grad_green"
+            android:paddingLeft="42dp"
+            android:paddingRight="42dp"
+            android:text="Договора" />
+
+        <TextView
+            android:id="@+id/tv_profile"
+
+            style="@style/IconTv.L"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="6dp"
+            android:text="@string/ic_user" />
+
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_finished"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/card_bottom"
+        android:layout_below="@id/header">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+
+            <RelativeLayout
+                android:id="@+id/la_create_new"
+
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.S"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="4dp"
+                    android:text="@string/ic_file_pdf" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Новый договор" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
