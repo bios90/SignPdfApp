@@ -27,36 +27,6 @@ public class FileManager
         this.context = context;
     }
 
-    public File createFileWithName(String fileName,String folder)
-    {
-        try
-        {
-            File file;
-
-            String root = context.getExternalFilesDir(null).toString();
-            File folderFile = new File(root +"/"+ folder);
-            if (!folderFile.exists())
-            {
-                folderFile.mkdirs();
-            }
-
-            file = new File(folderFile, fileName);
-            if(file.exists())
-            {
-                file.delete();
-            }
-            file.createNewFile();
-
-            return file;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            Log.e(TAG, "createFileWithName: Exception on creating file with name" );
-            return null;
-        }
-    }
-
     public File createRandomNameFile(String extansion)
     {
         return createRandomNameFile(extansion,Constants.FOLDER_TEMP_FILES);
@@ -64,50 +34,68 @@ public class FileManager
 
     public File createRandomNameFile(String extansion,String folder)
     {
+        return createFile(StringManager.randomStr(),extansion,folder);
+    }
+
+    public File createFile(String name,@Nullable String extension)
+    {
+        return createFile(name,extension,Constants.FOLDER_TEMP_FILES);
+    }
+
+    public File createFile(String name, @Nullable String extension, String folder)
+    {
         try
         {
             File file;
 
             String root = context.getExternalFilesDir(null).toString();
-            File dir_temp_files = new File(root +"/"+ folder);
-            if (!dir_temp_files.exists())
+            File folder_file = new File(root + "/" + folder);
+            if (!folder_file.exists())
             {
-                dir_temp_files.mkdirs();
+                folder_file.mkdirs();
             }
-            String randomName = StringManager.randomStr() +"."+extansion;
-            file = new File(dir_temp_files, randomName);
+
+            if (extension != null)
+            {
+                name = name + "." + extension;
+            }
+
+            file = new File(folder_file, name);
+            if (file.exists())
+            {
+                file.delete();
+            }
             file.createNewFile();
 
             return file;
         } catch (Exception e)
         {
-            Log.e(TAG, "createRandomNameFile: Excetpion on file create" + e.getMessage());
             return null;
         }
     }
 
+
     public File getFileFromTemp(String fileName, @Nullable String extansion)
     {
-        return getFileFromTemp(fileName,Constants.FOLDER_TEMP_FILES,extansion);
+        return getFileFromTemp(fileName, Constants.FOLDER_TEMP_FILES, extansion);
     }
 
 
-    public File getFileFromTemp(String fileName,String folder, @Nullable String extansion)
+    public File getFileFromTemp(String fileName, String folder, @Nullable String extansion)
     {
         try
         {
             File file;
             String root = context.getExternalFilesDir(null).toString();
-            File dir_temp_files = new File(root +"/"+folder);
+            File dir_temp_files = new File(root + "/" + folder);
             if (extansion != null)
             {
-                fileName += "."+extansion;
+                fileName += "." + extansion;
             }
             file = new File(dir_temp_files, fileName);
 
             return file;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             Log.e(TAG, "createRandomNameFile: Excetpion on getting file" + e.getMessage());
             return null;
@@ -121,7 +109,7 @@ public class FileManager
             File dir = from.getParentFile();
             if (extansion != null)
             {
-                newName = newName+"."+extansion;
+                newName = newName + "." + extansion;
             }
 
             File destinaition = new File(dir, newName);
@@ -156,7 +144,7 @@ public class FileManager
 
     public static String getFileName(File file)
     {
-        if(file == null)
+        if (file == null)
         {
             return null;
         }
@@ -169,8 +157,7 @@ public class FileManager
         {
             InputStream inputStream = context.getAssets().open("dogovor.pdf");
             return inputStream;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             Log.e(TAG, "getTemplateStream: Exception On opening dogovor.pdf");
             return null;
@@ -187,8 +174,8 @@ public class FileManager
     private void deleteSignatures()
     {
         String root = context.getExternalFilesDir(null).toString();
-        File folder = new File(root +"/"+Constants.FOLDER_TEMP_FILES);
-        if(folder != null && folder.exists())
+        File folder = new File(root + "/" + Constants.FOLDER_TEMP_FILES);
+        if (folder != null && folder.exists())
         {
             deleteRecursive(folder);
         }
@@ -197,8 +184,8 @@ public class FileManager
     private void deleteDocuments()
     {
         String root = context.getExternalFilesDir(null).toString();
-        File folder = new File(root +"/"+Constants.FOLDER_CONTRACTS);
-        if(folder != null && folder.exists())
+        File folder = new File(root + "/" + Constants.FOLDER_CONTRACTS);
+        if (folder != null && folder.exists())
         {
             deleteRecursive(folder);
         }
@@ -207,14 +194,15 @@ public class FileManager
     private void deleteChecks()
     {
         String root = context.getExternalFilesDir(null).toString();
-        File folder = new File(root +"/"+Constants.FOLDER_CHECKS);
-        if(folder != null && folder.exists())
+        File folder = new File(root + "/" + Constants.FOLDER_CHECKS);
+        if (folder != null && folder.exists())
         {
             deleteRecursive(folder);
         }
     }
 
-    void deleteRecursive(File fileOrDirectory) {
+    void deleteRecursive(File fileOrDirectory)
+    {
 
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())

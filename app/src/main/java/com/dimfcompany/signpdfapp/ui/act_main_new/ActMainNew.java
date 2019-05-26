@@ -1,12 +1,6 @@
 package com.dimfcompany.signpdfapp.ui.act_main_new;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,16 +9,15 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
-import com.dimfcompany.signpdfapp.base.adapters.Adapter_Finished;
+import com.dimfcompany.signpdfapp.base.adapters.AdapterFinished;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperUser;
-import com.dimfcompany.signpdfapp.sync.SyncJobService;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.sync.UpdateFinishedBroadcastReceiver;
-import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -34,7 +27,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListener, Adapter_Finished.CardFinishedCallback, UpdateFinishedBroadcastReceiver.CallbackUiUpdate, SyncManager.CallbackSyncFromServer
+public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListener, AdapterFinished.CardFinishedCallback, UpdateFinishedBroadcastReceiver.CallbackUiUpdate, SyncManager.CallbackSyncFromServer
 {
     private static final String TAG = "ActMainNew";
 
@@ -67,6 +60,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
         mvpView.registerListener(this);
         setContentView(mvpView.getRootView());
         updateFinishedBroadcastReceiver = new UpdateFinishedBroadcastReceiver(this);
+        checkForAdmin();
     }
 
     @Override
@@ -85,16 +79,13 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
     private void checkForServerSync()
     {
         int user_id = sharedPrefsHelper.getUserFromSharedPrefs().getId();
-        if(documents.size() != 0)
-        {
-            return;
-        }
+
         helperUser.getDocsCount(user_id, new HelperUser.CallbackGetDocsCount()
         {
             @Override
             public void onSuccessGetDocsCount(Integer count)
             {
-                if(count != null && count > 0)
+                if(count != null && count > documents.size())
                 {
                     messagesManager.showSimpleDialog("Синхронизация", "Найдены договора,сохранненые на сервере. Выполнить синхронизацию сейчас?", "Синхронизировать", "Отмена", new MessagesManager.DialogButtonsListener()
                     {
@@ -280,6 +271,24 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void clickedAdmin()
+    {
+        navigationManager.toActAdmin(null);
+        finish();
+    }
+
+    private void checkForAdmin()
+    {
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+        if(user == null)
+        {
+            return;
+        }
+
+        mvpView.toggleAdminBtn(user.getRole_id() == 7);
     }
 
 

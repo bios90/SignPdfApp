@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvpView;
+import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvp;
+import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvpView;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvp;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvpView;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvp;
@@ -96,5 +98,10 @@ public class ViewMvcFactory
     public ActProfileDialogMvp.MvpView getActProfileDialogMvpView(@Nullable ViewGroup parent)
     {
         return new ActProfileDialogMvpView(layoutInflater,parent);
+    }    
+    
+    public ActAdminMvp.MvpView getActAdminMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActAdminMvpView(layoutInflater,parent);
     }
 }

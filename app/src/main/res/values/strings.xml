@@ -28,4 +28,6 @@
     <string name="ic_email">&#xf0e0;</string>
     <string name="ic_exit">&#xf2f5;</string>
     <string name="ic_case">&#xf0b1;</string>
+    <string name="ic_users">&#xf0c0;</string>
+    <string name="ic_floppy">&#xf0c7;</string>
 </resources>

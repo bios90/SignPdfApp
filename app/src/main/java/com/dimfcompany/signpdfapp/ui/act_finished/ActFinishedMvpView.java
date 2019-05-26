@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dimfcompany.signpdfapp.R;
-import com.dimfcompany.signpdfapp.base.adapters.Adapter_Finished;
+import com.dimfcompany.signpdfapp.base.adapters.AdapterFinished;
 import com.dimfcompany.signpdfapp.base.mvpview.BaseObservableViewAbstr;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 
@@ -19,7 +19,7 @@ public class ActFinishedMvpView extends BaseObservableViewAbstr<ActFinishedMvp.V
     private static final String TAG = "ActFinishedMvpView";
 
     private RecyclerView rec_finished;
-    private Adapter_Finished adapter_finished;
+    private AdapterFinished adapter_finished;
 
     private final LayoutInflater layoutInflater;
 
@@ -34,12 +34,14 @@ public class ActFinishedMvpView extends BaseObservableViewAbstr<ActFinishedMvp.V
     {
         rec_finished = findViewById(R.id.rec_finished);
         rec_finished.setLayoutManager(new LinearLayoutManager(layoutInflater.getContext()));
-        adapter_finished = new Adapter_Finished();
+        adapter_finished = new AdapterFinished();
         rec_finished.setAdapter(adapter_finished);
     }
 
+
+
     @Override
-    public void bindDocuments(List<Model_Document> documents, Adapter_Finished.CardFinishedCallback callback)
+    public void bindDocuments(List<Model_Document> documents, AdapterFinished.CardFinishedCallback callback)
     {
         adapter_finished.setCallback(callback);
         adapter_finished.setItems(documents);

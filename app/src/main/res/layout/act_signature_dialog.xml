@@ -11,11 +11,8 @@
         android:layout_centerInParent="true"
         android:layout_width="420dp"
         android:layout_height="wrap_content"
-
         android:background="@drawable/rounded_gray0"
         android:elevation="12dp">
-
-
 
 
         <LinearLayout

@@ -11,6 +11,8 @@ public class Constants
     public static final String URL_USER_ROLE_NAME = "role_name";
     public static final String URL_USER_DOCS_COUNT= "docs_count";
     public static final String URL_GET_ALL_DOCS = "get_all_docs";
+    public static final String URL_GET_ALL_USERS_ALL_DOCS = "get_all_users_all_documents";
+    public static final String URL_GET_DOCUMETS_WITH_FULL_INFO = "get_document_with_full_info";
 
 
     public static final int RQ_TAKE_SIGNATURE = 9000;

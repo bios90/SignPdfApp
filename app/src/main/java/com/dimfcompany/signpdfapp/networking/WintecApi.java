@@ -54,4 +54,10 @@ public interface WintecApi
     @GET(Constants.URL_GET_ALL_DOCS)
     Call<List<Model_Document>> getAllDocuments(@Query("id") int user_id);
 
+    @GET(Constants.URL_GET_ALL_USERS_ALL_DOCS)
+    Call<List<Model_Document>> getAllUSersAllDocs();
+
+    @GET(Constants.URL_GET_DOCUMETS_WITH_FULL_INFO)
+    Call<Model_Document> getDocumentWithFullInfo(@Query("document_id") long document_id);
+
 }

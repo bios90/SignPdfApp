@@ -10,7 +10,7 @@ public class Model_User implements Serializable
     String email;
     String password;
     String fb_token;
-    int role;
+    int role_id;
 
     public int getId()
     {
@@ -72,13 +72,13 @@ public class Model_User implements Serializable
         this.fb_token = fb_token;
     }
 
-    public int getRole()
+    public int getRole_id()
     {
-        return role;
+        return role_id;
     }
 
-    public void setRole(int role)
+    public void setRole_id(int role_id)
     {
-        this.role = role;
+        this.role_id = role_id;
     }
 }

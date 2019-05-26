@@ -12,6 +12,7 @@ import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.networking.Downloader;
 import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperAuth;
+import com.dimfcompany.signpdfapp.networking.helpers.HelperDocuments;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperUser;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
@@ -123,6 +124,12 @@ public class ApplicationModule
     HelperUser getHelperUser(WintecApi wintecApi, Gson gson)
     {
         return new HelperUser(wintecApi, gson);
+    }
+
+    @Provides
+    HelperDocuments getHelperDocuments(WintecApi wintecApi,Downloader downloader)
+    {
+        return new HelperDocuments(wintecApi, downloader);
     }
 
     @Provides

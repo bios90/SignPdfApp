@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.utils.FileManager;
@@ -23,10 +25,25 @@ public class Downloader
 {
     private static final String TAG = "Downloader";
 
+    public enum DocumentFileType
+    {
+        TYPE_SIGNATURE,
+        TYPE_CHECK,
+        TYPE_DOCUMENT
+    }
+
     public interface CallbackDownloadDocumentFiles
     {
         void onSuccessDownloadFiles();
+
         void onErrorDownloadFiles();
+    }
+
+    public interface CallbackDownloadFile
+    {
+        void onSuccessDownload(File file);
+
+        void onErrorDownload();
     }
 
     private final FileManager fileManager;
@@ -44,29 +61,17 @@ public class Downloader
         {
             if (document.getSignature_file_name() != null)
             {
-                File file = fileManager.createFileWithName(document.getSignature_file_name(), Constants.FOLDER_TEMP_FILES);
-                String url = stringManager.getUserSignaturesUrl() + document.getSignature_file_name();
-                download(url, file);
-
-                Log.d(TAG, "downloadDocumentFilesAsync: downloading Signature file " + url + "  **** To file " + file.getName());
+                downloadDocumentFile(document, DocumentFileType.TYPE_SIGNATURE);
             }
 
             if (document.getPdf_file_name() != null)
             {
-                File file = fileManager.createFileWithName(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS);
-                String url = stringManager.getUserDocumentsUrl() + document.getPdf_file_name();
-                download(url, file);
-
-                Log.d(TAG, "downloadDocumentFilesAsync: downloading Document file " + url + "  **** To file " + file.getName());
+                downloadDocumentFile(document, DocumentFileType.TYPE_DOCUMENT);
             }
 
             if (document.getCheck_file_name() != null)
             {
-                File file = fileManager.createFileWithName(document.getCheck_file_name(), Constants.FOLDER_CHECKS);
-                String url = stringManager.getUserChecksUrl() + document.getCheck_file_name();
-                download(url, file);
-
-                Log.d(TAG, "downloadDocumentFilesAsync: downloading Check file " + url + "  **** To file " + file.getName());
+                downloadDocumentFile(document, DocumentFileType.TYPE_CHECK);
             }
         }
     }
@@ -107,12 +112,141 @@ public class Downloader
         }).start();
     }
 
+
+    public static void downloadFileAsync(final String urlString, final File file, final CallbackDownloadFile callback)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    download(urlString, file);
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onSuccessDownload(file);
+                        }
+                    });
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e(TAG, "Exception " + e.getMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onErrorDownload();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    public void downloadDocumentFileAsync(final Model_Document document, final DocumentFileType type, final CallbackDownloadFile callback)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    final File file = downloadDocumentFile(document, type);
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onSuccessDownload(file);
+                        }
+                    });
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e(TAG, "Exception " + e.getMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onErrorDownload();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+
+    @Nullable
+    public File downloadDocumentFile(Model_Document document, DocumentFileType type)
+    {
+        String url = null;
+        File file = null;
+
+        switch (type)
+        {
+            case TYPE_SIGNATURE:
+                if (document.getSignature_file_name() == null)
+                {
+                    Log.e(TAG, "downloadDocumentFile: error no signatureFileName");
+                    return null;
+                }
+                file = fileManager.createFile(document.getSignature_file_name(), null, Constants.FOLDER_TEMP_FILES);
+                url = stringManager.getUserSignaturesUrl() + document.getSignature_file_name();
+                break;
+
+            case TYPE_DOCUMENT:
+                if (document.getPdf_file_name() == null)
+                {
+                    Log.e(TAG, "downloadDocumentFile: error no documentPDfFile");
+                    return null;
+                }
+                file = fileManager.createFile(document.getPdf_file_name(), null, Constants.FOLDER_CONTRACTS);
+                url = stringManager.getUserDocumentsUrl() + document.getPdf_file_name();
+                break;
+
+            case TYPE_CHECK:
+                if (document.getCheck_file_name() == null)
+                {
+                    Log.e(TAG, "downloadDocumentFile: error no checkFileName");
+                    return null;
+                }
+                file = fileManager.createFile(document.getCheck_file_name(), null, Constants.FOLDER_CHECKS);
+                url = stringManager.getUserChecksUrl() + document.getCheck_file_name();
+                break;
+        }
+
+        if (file != null && file.exists() && url != null)
+        {
+            try
+            {
+                download(url, file);
+                Log.d(TAG, "downloadDocumentFile: Dwonloaded ok");
+                return file;
+            } catch (IOException e)
+            {
+                Log.e(TAG, "downloadDocumentFile: Exception on Downloading");
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+
     public static void download(String urlString, File file) throws IOException
     {
         int count;
         URL url = new URL(urlString);
-        URLConnection conection = url.openConnection();
-        conection.connect();
+        URLConnection connection = url.openConnection();
+        connection.connect();
 
         InputStream input = new BufferedInputStream(url.openStream(), 8192);
         OutputStream output = new FileOutputStream(file);
@@ -124,10 +258,8 @@ public class Downloader
             output.write(data, 0, count);
         }
 
-        // flushing output
         output.flush();
 
-        // closing streams
         output.close();
         input.close();
     }

@@ -9,6 +9,7 @@ import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialog;
+import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
@@ -71,5 +72,10 @@ public class NavigationManager
     public void toActFirst(@Nullable Integer requestCode)
     {
         BaseActivity.startScreen(activity, ActFirst.class, requestCode);
+    }
+
+    public void toActAdmin(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActAdmin.class, requestCode);
     }
 }

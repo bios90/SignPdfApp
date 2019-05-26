@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
-import com.dimfcompany.signpdfapp.base.adapters.Adapter_Finished;
+import com.dimfcompany.signpdfapp.base.adapters.AdapterFinished;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.utils.FileManager;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewListener, Adapter_Finished.CardFinishedCallback
+public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewListener, AdapterFinished.CardFinishedCallback
 {
     private static final String TAG = "ActFinished";
 
@@ -156,7 +156,6 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
             {
                 GlobalHelper.resetDocumentIds(document);
                 navigationManager.toSignActivity(null,document);
-                finish();
             }
 
             @Override

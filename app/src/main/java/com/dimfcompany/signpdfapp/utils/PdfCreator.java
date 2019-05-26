@@ -14,6 +14,7 @@ import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
+import com.dimfcompany.signpdfapp.utils.custom_classes.CustomDottedLineSeparator;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -210,14 +211,14 @@ public class PdfCreator
 
         PdfPTable tableCheckTop = new PdfPTable(1);
         tableCheckTop.setWidths(new int[]{100});
-        tableCheckTop.setTotalWidth(545);
+        tableCheckTop.setTotalWidth(272);
         tableCheckTop.setLockedWidth(true);
 
         Image wintecLogo = getImageFromAsset("logo_border.png");
         PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
         cellLogo.setBorder(Rectangle.NO_BORDER);
         cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cellLogo.setFixedHeight(140);
+        cellLogo.setFixedHeight(100);
         tableCheckTop.addCell(cellLogo);
 
         PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
@@ -254,7 +255,7 @@ public class PdfCreator
         totalHeight += tableBottomInfo.getTotalHeight();
 
         File fileCheck = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_CHECKS);
-        document = new Document(new Rectangle(595, totalHeight), 20, 20, 20, 20);
+        document = new Document(new Rectangle(298, totalHeight), 20, 20, 20, 20);
         FileOutputStream fos = new FileOutputStream(fileCheck);
         writer = PdfWriter.getInstance(document, fos);
         writer.setCompressionLevel(9);
@@ -290,7 +291,7 @@ public class PdfCreator
     {
         float padding = 4f;
         PdfPTable tableProducts = new PdfPTable(4);
-        tableProducts.setTotalWidth(545);
+        tableProducts.setTotalWidth(272);
         tableProducts.setLockedWidth(true);
         tableProducts.setWidths(new int[]{30, 25, 20, 25});
 
@@ -379,16 +380,18 @@ public class PdfCreator
 
         tableProducts.addCell(cellLine2);
 
+        PdfPCell emptyCell6 = getEmptyCell(1, 4, borderMode);
+        emptyCell6.setFixedHeight(6);
 
         double postPay = GlobalHelper.countItogoSum(model_document) - model_document.getPrepay();
         String prePayStr = StringManager.formatNum(model_document.getPrepay(), false);
         String postPayStr = StringManager.formatNum(postPay, false);
 
+        tableProducts.addCell(emptyCell6);
+
         tableProducts.addCell(getParCell("Предоплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
         tableProducts.addCell(getParCell("= " + prePayStr, pt26, borderMode, 2, null, Element.ALIGN_RIGHT, null));
 
-        PdfPCell emptyCell6 = getEmptyCell(1, 4, borderMode);
-        emptyCell6.setFixedHeight(6);
         tableProducts.addCell(emptyCell6);
 
         tableProducts.addCell(getParCell("Доплата", pt28, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE));
@@ -400,17 +403,16 @@ public class PdfCreator
 
     private PdfPTable getCheckBottomTable() throws DocumentException, IOException
     {
-
         PdfPTable tableCheckBottom = new PdfPTable(1);
         tableCheckBottom.setWidths(new int[]{100});
-        tableCheckBottom.setTotalWidth(545);
+        tableCheckBottom.setTotalWidth(272);
         tableCheckBottom.setLockedWidth(true);
 
         Image qr_wintec = getImageFromAsset("qr_wintec.png");
         PdfPCell cellQr = new PdfPCell(qr_wintec, true);
         cellQr.setHorizontalAlignment(Element.ALIGN_CENTER);
         cellQr.setBorder(Rectangle.NO_BORDER);
-        cellQr.setFixedHeight(180);
+        cellQr.setFixedHeight(100);
         tableCheckBottom.addCell(cellQr);
 
         tableCheckBottom.addCell(getParCell(Constants.WINTEC_DESC, pt24, borderMode, null, null, Element.ALIGN_CENTER, null));
@@ -443,7 +445,7 @@ public class PdfCreator
 
         PdfPTable tableCheckBottomInfo = new PdfPTable(1);
         tableCheckBottomInfo.setWidths(new int[]{100});
-        tableCheckBottomInfo.setTotalWidth(545);
+        tableCheckBottomInfo.setTotalWidth(272);
         tableCheckBottomInfo.setLockedWidth(true);
 
         tableCheckBottomInfo.addCell(getCellLine());
@@ -483,7 +485,7 @@ public class PdfCreator
 
         PdfPCell cellEmpty = getEmptyCell(1, 1, borderMode);
         cellEmpty.setBorder(Rectangle.BOX);
-        cellEmpty.setFixedHeight(132);
+        cellEmpty.setFixedHeight(100);
         cellEmpty.setBorderWidth(2);
         tableCheckBottomInfo.addCell(cellEmpty);
         tableCheckBottomInfo.addCell(getParCell("(Подпись)", pt24, borderMode, null, null, Element.ALIGN_LEFT, null));
@@ -874,12 +876,12 @@ public class PdfCreator
             italic10 = new Font(globalItalic, 10);
             timesNewRoman10 = new Font(globalTimesNewRoman, 10);
 
-            pt46 = new Font(globalPt, 46);
-            pt36 = new Font(globalPt, 36);
-            pt30 = new Font(globalPt, 30);
-            pt28 = new Font(globalPt, 28);
-            pt26 = new Font(globalPt, 26);
-            pt24 = new Font(globalPt, 24);
+            pt46 = new Font(globalPt, 26);
+            pt36 = new Font(globalPt, 18);
+            pt30 = new Font(globalPt, 16);
+            pt28 = new Font(globalPt, 14);
+            pt26 = new Font(globalPt, 13);
+            pt24 = new Font(globalPt, 11);
 
             yellow = new BaseColor(255, 192, 0);
             trans = new BaseColor(0, 0, 0, 0);
@@ -1044,9 +1046,11 @@ public class PdfCreator
     private PdfPCell getCellLine()
     {
         Paragraph paragraph = new Paragraph();
-
-        LineSeparator line = new LineSeparator(2, 100, BaseColor.BLACK, Element.ALIGN_CENTER, -2.2f);
-        paragraph.add(new Chunk(line));
+        CustomDottedLineSeparator separator = new CustomDottedLineSeparator();
+        paragraph.add(new Chunk(separator));
+        //Todo decide what  to do with Line
+//        LineSeparator line = new LineSeparator(2, 100, BaseColor.BLACK, Element.ALIGN_CENTER, -2.2f);
+//        paragraph.add(new Chunk(line));
 
         PdfPCell cell = new PdfPCell(paragraph);
         cell.setBorder(Rectangle.NO_BORDER);

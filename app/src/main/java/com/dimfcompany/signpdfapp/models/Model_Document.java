@@ -50,6 +50,9 @@ public class Model_Document implements Serializable
     @SerializedName("products")
     List<Model_Product> listOfProducts = new ArrayList<>();
 
+    @Ignore
+    Model_User user;
+
     public Model_Document()
     {
 
@@ -275,6 +278,16 @@ public class Model_Document implements Serializable
     public void setDeleted_at(Date deleted_at)
     {
         this.deleted_at = deleted_at;
+    }
+
+    public Model_User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(Model_User user)
+    {
+        this.user = user;
     }
 
     @Override

@@ -58,6 +58,7 @@
         <activity android:name=".ui.act_products.ActProducts" />
         <activity android:name=".ui.act_main_new.ActMainNew" />
         <activity android:name=".ui.act_profile_dialog.ActProfileDialog" android:theme="@style/Theme.Transparent"/>
+        <activity android:name=".ui.act_admin.ActAdmin" />
     </application>
 
 

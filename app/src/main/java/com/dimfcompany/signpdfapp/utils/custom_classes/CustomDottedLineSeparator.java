@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 
 public class CustomDottedLineSeparator extends DottedLineSeparator
 {
-    protected float dash = 0;
+    protected float dash = 5;
     protected float phase = 2.5f;
 
     public float getDash()

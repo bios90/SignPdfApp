@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -273,6 +274,17 @@ public class StringManager
         code+=DateFormat.format(FORMAT_FOR_CODE, new Date()).toString();
 
         return code;
+    }
+
+    public static String getFullName(Model_User user)
+    {
+        if (user == null)
+        {
+            Log.e(TAG, "getFullName: error director is null");
+            return null;
+        }
+
+        return user.getLast_name() + " " + user.getFirst_name();
     }
 
 }

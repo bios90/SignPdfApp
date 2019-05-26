@@ -1,6 +1,7 @@
 package com.dimfcompany.signpdfapp.di.presenter;
 
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialog;
+import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
@@ -26,4 +27,5 @@ public interface PresenterComponent
     void inject(ActRegister actRegister);
     void inject(ActMainNew actMainNew);
     void inject(ActProfileDialog actProfileDialog);
+    void inject(ActAdmin actAdmin);
 }
