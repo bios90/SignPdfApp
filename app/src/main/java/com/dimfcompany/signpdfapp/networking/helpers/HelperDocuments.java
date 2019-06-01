@@ -29,6 +29,13 @@ public class HelperDocuments
         void onErrorGetFullDocument();
     }
 
+    public interface CallbackDeleteDocumentOnServer
+    {
+        void onSuccessDeleteOnServer();
+
+        void onErrorDeleteOnServer();
+    }
+
 
     private final WintecApi wintecApi;
     private final Downloader downloader;
@@ -136,6 +143,58 @@ public class HelperDocuments
                         public void run()
                         {
                             callback.onErrorGetFullDocument();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+
+    public void deleteDocumentOnServer(final long document_id, final CallbackDeleteDocumentOnServer callback)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    String response = wintecApi.deleteDocumentOnServer(document_id).execute().body();
+
+                    if (response == null || !response.equals("success"))
+                    {
+                        new Handler(Looper.getMainLooper()).post(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                callback.onErrorDeleteOnServer();
+                            }
+                        });
+                        return;
+                    }
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onSuccessDeleteOnServer();
+                        }
+                    });
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e(TAG, "Exception " + e.getMessage());
+                    new Handler(Looper.getMainLooper()).post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            callback.onErrorDeleteOnServer();
                         }
                     });
                 }

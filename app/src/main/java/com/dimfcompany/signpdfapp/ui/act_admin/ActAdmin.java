@@ -1,6 +1,8 @@
 package com.dimfcompany.signpdfapp.ui.act_admin;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -144,9 +146,52 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             @Override
             public void clickedDelete()
             {
+                makeDeleteOnServer(document);
+            }
+        });
+    }
+
+    private void makeDeleteOnServer(final Model_Document document)
+    {
+        messagesManager.showSimpleDialog("Удаление", "Удалить с сервера документ " + document.getCode() + "?", "Удалить", "Отмена", new MessagesManager.DialogButtonsListener()
+        {
+            @Override
+            public void onOkClicked(DialogInterface dialog)
+            {
+                dialog.dismiss();
+                if (!globalHelper.isNetworkAvailable())
+                {
+                    messagesManager.showNoInternetAlerter();
+                }
+
+                messagesManager.showProgressDialog();
+
+                helperDocuments.deleteDocumentOnServer(document.getId(), new HelperDocuments.CallbackDeleteDocumentOnServer()
+                {
+                    @Override
+                    public void onSuccessDeleteOnServer()
+                    {
+                        messagesManager.dismissProgressDialog();
+                        loadAllDocuments();
+                    }
+
+                    @Override
+                    public void onErrorDeleteOnServer()
+                    {
+                        messagesManager.dismissProgressDialog();
+                        messagesManager.showRedAlerter("Не удалось удалить документ");
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelClicked(DialogInterface dialog)
+            {
 
             }
         });
+
+
     }
 
     private void makeEdit(Model_Document doc)

@@ -3,7 +3,8 @@ package com.dimfcompany.signpdfapp.base;
 public class Constants
 {
     //TODO make base url Here
-    public static final String URL_BASE = "http://192.168.1.66/wintec/";
+//    public static final String URL_BASE = "http://192.168.1.66/wintec/";
+    public static final String URL_BASE = "https://wintec-smart.ru/";
     public static final String URL_REGISTER = "register";
     public static final String URL_LOGIN = "login";
     public static final String URL_RESETPASS = "forgotpass";
@@ -13,6 +14,7 @@ public class Constants
     public static final String URL_GET_ALL_DOCS = "get_all_docs";
     public static final String URL_GET_ALL_USERS_ALL_DOCS = "get_all_users_all_documents";
     public static final String URL_GET_DOCUMETS_WITH_FULL_INFO = "get_document_with_full_info";
+    public static final String URL_DELETE_DOCUMENT_ON_SERVER = "delete_document";
 
 
     public static final int RQ_TAKE_SIGNATURE = 9000;

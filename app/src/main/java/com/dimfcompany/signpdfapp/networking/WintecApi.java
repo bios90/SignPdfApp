@@ -60,4 +60,7 @@ public interface WintecApi
     @GET(Constants.URL_GET_DOCUMETS_WITH_FULL_INFO)
     Call<Model_Document> getDocumentWithFullInfo(@Query("document_id") long document_id);
 
+    @POST(Constants.URL_DELETE_DOCUMENT_ON_SERVER)
+    Call<String> deleteDocumentOnServer(@Query("document_id") long document_id);
+
 }
