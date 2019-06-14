@@ -25,6 +25,7 @@ public interface ActSignMvp
         void bindModelDocument(Model_Document document);
         void bindSignatureFile(String filename);
         void updateMaterialButton();
+        void updateVaucherButton();
         void setSignatureSizes();
     }
 
@@ -33,6 +34,7 @@ public interface ActSignMvp
         void clickedCreatePDf();
         void clickedMaterials();
         void clickedPreShow();
+        void clickedVaucher();
         Model_Document getDocument();
         File getSignatureFile();
     }

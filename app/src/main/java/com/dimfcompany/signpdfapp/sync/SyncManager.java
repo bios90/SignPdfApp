@@ -123,73 +123,6 @@ public class SyncManager implements Synchronizer
         }).start();
     }
 
-//    @Override
-//    public void insertDocumentWithSync(final Model_Document document, final CallbackInsertWithSync callback)
-//    {
-//        new Thread(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                try
-//                {
-//
-//                    if (isNetworkAvailable())
-//                    {
-//                        boolean insertedRemote = false;
-//                        Model_Document insertedOnServer = insertOnServer(document);
-//                        if (insertedOnServer != null)
-//                        {
-//                            insertedOnServer.setSync_status(1);
-//                            localDatabase.insertDocument(insertedOnServer);
-//                            insertedRemote = true;
-//                        } else
-//                        {
-//                            document.setSync_status(0);
-//                            localDatabase.insertDocument(document);
-//                            insertedRemote = false;
-//                        }
-//
-//                        final boolean finalInsertedRemote = insertedRemote;
-//                        new Handler(Looper.getMainLooper()).post(new Runnable()
-//                        {
-//                            @Override
-//                            public void run()
-//                            {
-//                                callback.onSuccessInsert(finalInsertedRemote);
-//                            }
-//                        });
-//                    }
-//                    else
-//                    {
-//                        insertLocally(document);
-//                        new Handler(Looper.getMainLooper()).post(new Runnable()
-//                        {
-//                            @Override
-//                            public void run()
-//                            {
-//                                callback.onSuccessInsert(false);
-//                            }
-//                        });
-//                    }
-//
-//
-//                } catch (Exception e)
-//                {
-//                    e.printStackTrace();
-//                    Log.e(TAG, "Exception " + e.getMessage());
-//                    new Handler(Looper.getMainLooper()).post(new Runnable()
-//                    {
-//                        @Override
-//                        public void run()
-//                        {
-//                            callback.onErrorInsert();
-//                        }
-//                    });
-//                }
-//            }
-//        }).start();
-//    }
 
     @Override
     public void syncronizeNotSynced(final CallbackSyncronizeNoSynced callback)
@@ -300,6 +233,7 @@ public class SyncManager implements Synchronizer
         MultipartBody.Part part_pdf_file = null;
         MultipartBody.Part part_check_file = null;
         MultipartBody.Part part_signature_file = null;
+        MultipartBody.Part part_vaucher_file = null;
 
         File file_pdf = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
         if (file_pdf != null && file_pdf.exists())
@@ -319,7 +253,16 @@ public class SyncManager implements Synchronizer
             part_signature_file = fileToPartBody(file_signature, "signature_file");
         }
 
-        Model_Document insertedDocument = wintecApi.insertDocument(part_document, part_pdf_file, part_check_file, part_signature_file).execute().body();
+        if(document.getVaucher_file_name() != null)
+        {
+            File file_vaucher = fileManager.getFileFromTemp(document.getVaucher_file_name(),Constants.FOLDER_VAUCHERS,null);
+            if(file_vaucher != null && file_vaucher.exists())
+            {
+                part_vaucher_file = fileToPartBody(file_vaucher,"vaucher_file");
+            }
+        }
+
+        Model_Document insertedDocument = wintecApi.insertDocument(part_document, part_pdf_file, part_check_file, part_signature_file, part_vaucher_file).execute().body();
 
         if (insertedDocument == null)
         {

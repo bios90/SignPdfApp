@@ -30,4 +30,13 @@
     <string name="ic_case">&#xf0b1;</string>
     <string name="ic_users">&#xf0c0;</string>
     <string name="ic_floppy">&#xf0c7;</string>
+    <string name="ic_vaucher">&#xf15c;</string>
+    <string name="ic_zoom_plus">&#xf00e;</string>
+    <string name="ic_zoom_minus">&#xf010;</string>
+    <string name="pre_show_header"><b>ООО «Лаборатория Уюта»</b>, именуемое в дальнейшем <b>«Исполнитель»</b>, в лице <b>Рыбакиной Ларисы Витальевны</b>,
+        действующей на основании Устава, с одной стороны, и <b>«Заказчик»</b> (Данные заказчика указываются внизу страницы), с
+другой стороны, заключили настоящий договор о нижеследующем:</string>
+    <string name="garanty">20. Гарантия на установку и качество изделия при правильной его эксплуатации и монтаже составляет <b>12</b> месяцев.</string>
+    <string name="wintec_info"><b>«Исполнитель»</b>\n<b>ООО «Лаборатория Уюта»</b>\nАдрес: 443095, Самара, ул.Г.Димитрова, д.7\nИНН 6312154991\nКПП 631201001\nОКПО 43863361\nОГРН 1156313064588\nПриволжский филиал ПАО «Промсвязьбанк»\nБИК 042202803\nР/С 40702810603000015194\nК/С 30101810700000000803\n\nГенеральный директор</string>
+    <string name="wintec_sites">WINTEC.RU | WINKARNIZ.RU | PERGOTENTA.RU\nWINPLISSE.RU\nМОСКВА | САНКТ-ПЕТЕРБУРГ | САМАРА | СОЧИ\n+7.495.369.11.29\nE-MAIL: INFO@WINTEC.RU</string>
 </resources>

@@ -42,7 +42,8 @@ public interface WintecApi
                     @Part MultipartBody.Part document,
                     @Part MultipartBody.Part pdf_file,
                     @Part MultipartBody.Part check_file,
-                    @Part MultipartBody.Part signature_file
+                    @Part MultipartBody.Part signature_file,
+                    @Part MultipartBody.Part vaucher_file
             );
 
     @GET(Constants.URL_USER_ROLE_NAME)

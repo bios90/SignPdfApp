@@ -9,6 +9,8 @@ import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogM
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvp;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvpView;
+import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvp;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvpView;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvp;
@@ -17,6 +19,8 @@ import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvp;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvp;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvpView;
+import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShowMvp;
+import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShowMvpView;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProductsMvp;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProductsMvpView;
 import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialogMvp;
@@ -27,6 +31,8 @@ import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvp;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvpView;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvpView;
+import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvp;
+import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvpView;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -52,56 +58,71 @@ public class ViewMvcFactory
 
     public ActMainMvp.MvpView getActMainMvpView(@Nullable ViewGroup parent)
     {
-        return new ActMainMvpView(layoutInflater,parent);
+        return new ActMainMvpView(layoutInflater, parent);
     }
 
     public ActSignMvp.MvpView getActSignMvpView(@Nullable ViewGroup parent)
     {
-        return new ActSignMvpView(layoutInflater,parent,fileManager,globalHelper, messagesManager);
+        return new ActSignMvpView(layoutInflater, parent, fileManager, globalHelper, messagesManager);
     }
 
     public ActSignatureDialogMvp.MvpView getActSignatureDialogMvpView(@Nullable ViewGroup parent)
     {
-        return new ActSignatureDialogMvpView(layoutInflater,parent, fileManager);
+        return new ActSignatureDialogMvpView(layoutInflater, parent, fileManager);
     }
 
     public ActFinishedMvp.MvpView getActFinishedMvpView(@Nullable ViewGroup parent)
     {
-        return new ActFinishedMvpView(layoutInflater,parent);
+        return new ActFinishedMvpView(layoutInflater, parent);
     }
 
     public ActProductsMvp.MvpView getActProductsMvpView(@Nullable ViewGroup parent)
     {
-        return new ActProductsMvpView(layoutInflater,parent, stringManager);
+        return new ActProductsMvpView(layoutInflater, parent, stringManager);
     }
 
     public ActAddProductDialogMvp.MvpView getActAddProductDialogMvpView(@Nullable ViewGroup parent)
     {
-        return new ActAddProductDialogMvpView(layoutInflater,parent);
+        return new ActAddProductDialogMvpView(layoutInflater, parent);
     }
 
     public ActFirstMvp.MvpView getActFirstMvpView(@Nullable ViewGroup parent)
     {
-        return new ActFirstMvpView(layoutInflater,parent);
+        return new ActFirstMvpView(layoutInflater, parent);
     }
-    
+
     public ActRegisterMvp.MvpView getActRegisterMvpView(@Nullable ViewGroup parent)
     {
-        return new ActRegisterMvpView(layoutInflater,parent);
-    }    
-    
+        return new ActRegisterMvpView(layoutInflater, parent);
+    }
+
     public ActMainNewMvp.MvpView getActMainNewMvpView(@Nullable ViewGroup parent)
     {
-        return new ActMainNewMvpView(layoutInflater,parent);
+        return new ActMainNewMvpView(layoutInflater, parent);
     }
-    
+
     public ActProfileDialogMvp.MvpView getActProfileDialogMvpView(@Nullable ViewGroup parent)
     {
-        return new ActProfileDialogMvpView(layoutInflater,parent);
-    }    
-    
+        return new ActProfileDialogMvpView(layoutInflater, parent);
+    }
+
     public ActAdminMvp.MvpView getActAdminMvpView(@Nullable ViewGroup parent)
     {
-        return new ActAdminMvpView(layoutInflater,parent);
+        return new ActAdminMvpView(layoutInflater, parent);
+    }
+
+    public ActVaucherMvp.MvpView getActVaucherMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActVaucherMvpView(layoutInflater, parent);
+    }
+
+    public ActElementDialogMvp.MvpView getActElementDialogMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActElementDialogMvpView(layoutInflater, parent);
+    }
+    
+    public ActPreShowMvp.MvpView getActPreShowMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActPreShowMvpView(layoutInflater, parent);
     }
 }

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dimfcompany.signpdfapp.BuildConfig;
 import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.base.mvpview.BaseObservableViewAbstr;
 
@@ -18,7 +19,7 @@ public class ActFirstMvpView extends BaseObservableViewAbstr<ActFirstMvp.ViewLis
     EditText et_email,et_password;
     TextView tv_forgot_pass;
     RelativeLayout la_enter;
-    TextView tv_register;
+    TextView tv_register,tv_version;
 
     public ActFirstMvpView(LayoutInflater layoutInflater, ViewGroup viewGroup)
     {
@@ -34,6 +35,7 @@ public class ActFirstMvpView extends BaseObservableViewAbstr<ActFirstMvp.ViewLis
         tv_forgot_pass = findViewById(R.id.tv_forgot_pass);
         la_enter = findViewById(R.id.la_enter);
         tv_register = findViewById(R.id.tv_register);
+        tv_version = findViewById(R.id.tv_version);
     }
 
     @Override
@@ -78,4 +80,10 @@ public class ActFirstMvpView extends BaseObservableViewAbstr<ActFirstMvp.ViewLis
         });
     }
 
+    @Override
+    public void bindVersion()
+    {
+        String versionName = BuildConfig.VERSION_NAME;
+        tv_version.setText("Версия: "+versionName);
+    }
 }

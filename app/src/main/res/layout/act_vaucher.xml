@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray0">
+
+    <RelativeLayout
+        android:id="@+id/la_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="42dp"
+            android:paddingRight="42dp"
+            android:background="@color/gray4"
+            android:text="Ваучер" />
+
+
+        <TextView
+            android:id="@+id/tv_back_top"
+
+            android:layout_marginLeft="4dp"
+            android:text="@string/ic_left_arrow"
+            android:textColor="@color/sel_white"
+            style="@style/IconTv.M"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/card_bottom"
+        android:layout_below="@id/la_header">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:gravity="left"
+                android:text="Заглавие :"
+                android:textColor="@color/gray3" />
+
+            <RelativeLayout
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <Spinner
+                    android:id="@+id/spinner_headers"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@drawable/rounded_white_gray_stroke"
+                    android:dropDownWidth="match_parent"
+                    android:popupBackground="@drawable/rounded_white_gray_stroke">
+
+                </Spinner>
+
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/sel_rounded_right_grad_green_gray_stroke_normal"
+                    android:text="@string/ic_down_arrow"
+                    android:textColor="@color/sel_white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <EditText
+                    android:id="@+id/et_header"
+
+                    android:gravity="top|left"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:minLines="3"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/rounded_white_gray_stroke"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_clear"
+
+                    style="@style/IconTv.S"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/oval_red"
+                    android:text="@string/ic_times" />
+
+            </RelativeLayout>
+
+
+
+
+            <com.jmedeisis.draglinearlayout.DragLinearLayout
+                android:id="@+id/drag_la"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="20dp">
+
+            </com.jmedeisis.draglinearlayout.DragLinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp">
+
+                <TextView
+                    style="@style/TVReg.S"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="left"
+                    android:paddingLeft="8dp"
+                    android:text="Элементов :"
+                    android:textColor="@color/gray3" />
+
+                <TextView
+                    android:id="@+id/tv_elements_count"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="left"
+                    android:text=" - "
+                    android:textColor="@color/blue" />
+
+
+                <TextView
+                    style="@style/TVReg.S"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="left"
+                    android:paddingLeft="8dp"
+                    android:text="Сумма :"
+                    android:textColor="@color/gray3" />
+
+                <TextView
+                    android:id="@+id/tv_elements_sum"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="left"
+                    android:text=" - "
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <RelativeLayout
+                    android:id="@+id/la_back"
+
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/btn_empty_orange_rounded">
+
+                    <TextView
+                        android:textColor="@color/sel_orange"
+                        style="@style/IconTv.L"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/ic_left_arrow" />
+
+
+                    <TextView
+                        android:textColor="@color/sel_orange"
+                        style="@style/TVSemi.S"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:text="Назад" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/la_add_element"
+
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/btn_grad_orange_rounded">
+
+                    <TextView
+                        style="@style/IconTv.L"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/ic_plus_circle" />
+
+
+                    <TextView
+                        style="@style/TVSemi.S"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:text="Добавить элемент" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

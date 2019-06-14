@@ -17,6 +17,7 @@ import com.dimfcompany.signpdfapp.networking.helpers.HelperUser;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.utils.FileManager;
+import com.dimfcompany.signpdfapp.utils.NotificationManager;
 import com.dimfcompany.signpdfapp.utils.StringManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,6 +149,12 @@ public class ApplicationModule
     Synchronizer getSynchronizer(Application application, WintecApi wintecApi, FileManager fileManager, LocalDatabase localDatabase, Gson gson,SharedPrefsHelper sharedPrefsHelper, Downloader downloader)
     {
         return new SyncManager(application, wintecApi, fileManager, localDatabase, gson, sharedPrefsHelper, downloader);
+    }
+
+    @Provides
+    NotificationManager getNotificationManager(Gson gson)
+    {
+        return new NotificationManager(gson);
     }
 
 

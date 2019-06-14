@@ -5,6 +5,8 @@ import android.util.Log;
 import com.dimfcompany.signpdfapp.base.AppClass;
 import com.dimfcompany.signpdfapp.di.application.ApplicationComponent;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
+import com.dimfcompany.signpdfapp.models.Model_User;
+import com.dimfcompany.signpdfapp.utils.NotificationManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -16,6 +18,9 @@ public class FbMessagingService extends FirebaseMessagingService
 
     @Inject
     SharedPrefsHelper sharedPrefsHelper;
+    @Inject
+    NotificationManager notificationManager;
+
 
     @Override
     public void onCreate()
@@ -28,7 +33,14 @@ public class FbMessagingService extends FirebaseMessagingService
     public void onMessageReceived(RemoteMessage remoteMessage)
     {
         super.onMessageReceived(remoteMessage);
-        //TODO what todo on message recieved
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+        if(user == null)
+        {
+            Log.e(TAG, "onMessageReceived: User not logged will return" );
+            return;
+        }
+
+        notificationManager.notify(remoteMessage);
     }
 
     @Override

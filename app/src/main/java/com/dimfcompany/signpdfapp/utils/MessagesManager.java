@@ -35,23 +35,37 @@ public class MessagesManager
     public interface DialogButtonsListener
     {
         void onOkClicked(DialogInterface dialog);
+
         void onCancelClicked(DialogInterface dialog);
     }
 
     public interface DialogWithEtListener
     {
         void onOkDialogWithEt(Dialog dialog, String text);
+
         void onCancelDialogWithEt(Dialog dialog);
     }
 
     public interface DialogFinishedListener
     {
         void clickedOpenDogovor();
+
         void clickedOpenCheck();
+
+        void clickedOpenVaucher();
+
         void clickedSendDogovor();
+
         void clickedSendCheck();
+
+        void clickedSendVaucher();
+
         void clickedPrintCheck();
+
+        void clickedPrintVaucher();
+
         void clickedEdit();
+
         void clickedDelete();
     }
 
@@ -66,7 +80,7 @@ public class MessagesManager
         showRedAlerter("Ошибка", "Нет соединения с сетью");
     }
 
-    public void showRedAlerter( String text)
+    public void showRedAlerter(String text)
     {
         showAlerter("Ошибка", text, R.color.redBase);
     }
@@ -76,7 +90,7 @@ public class MessagesManager
         showAlerter(title, text, R.color.redBase);
     }
 
-    public void showGreenAlerter( String text)
+    public void showGreenAlerter(String text)
     {
         showAlerter("", text, R.color.green);
     }
@@ -144,17 +158,19 @@ public class MessagesManager
     }
 
 
-
-    public void showFinishedDocument(final DialogFinishedListener listener)
+    public void showFinishedDocument(boolean hasVaucher, final DialogFinishedListener listener)
     {
         View dialogView = layoutInflater.inflate(R.layout.dialog_document_card, null);
-        RelativeLayout la_open_dogovor,la_open_check,la_send_dogovor,la_send_check,la_print_check,la_edit,la_delete;
+        RelativeLayout la_open_dogovor, la_open_check, la_send_dogovor, la_send_check, la_print_check, la_edit, la_delete,la_open_vaucher,la_send_vaucher,la_print_vaucher;
 
         la_open_dogovor = dialogView.findViewById(R.id.la_open_dogovor);
         la_open_check = dialogView.findViewById(R.id.la_open_check);
+        la_open_vaucher = dialogView.findViewById(R.id.la_open_vaucher);
         la_send_dogovor = dialogView.findViewById(R.id.la_send_dogovor);
         la_send_check = dialogView.findViewById(R.id.la_send_check);
+        la_send_vaucher = dialogView.findViewById(R.id.la_send_vaucher);
         la_print_check = dialogView.findViewById(R.id.la_print_check);
+        la_print_vaucher = dialogView.findViewById(R.id.la_print_vaucher);
         la_edit = dialogView.findViewById(R.id.la_edit);
         la_delete = dialogView.findViewById(R.id.la_delete);
 
@@ -179,7 +195,7 @@ public class MessagesManager
                 listener.clickedOpenCheck();
             }
         });
-        
+
         la_send_dogovor.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -217,6 +233,40 @@ public class MessagesManager
             }
         });
 
+        la_open_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.clickedOpenVaucher();
+            }
+        });
+
+        la_send_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.clickedSendVaucher();
+            }
+        });
+
+        la_print_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.clickedPrintVaucher();
+            }
+        });
+
+        if(!hasVaucher)
+        {
+            la_open_vaucher.setVisibility(View.GONE);
+            la_send_vaucher.setVisibility(View.GONE);
+            la_print_vaucher.setVisibility(View.GONE);
+        }
+
         la_print_check.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -241,8 +291,7 @@ public class MessagesManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             v.vibrate(VibrationEffect.createOneShot(miliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
-        }
-        else
+        } else
         {
 
             v.vibrate(miliseconds);

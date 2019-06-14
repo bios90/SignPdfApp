@@ -2,15 +2,14 @@ package com.dimfcompany.signpdfapp.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
-import com.itextpdf.text.Image;
+import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.networking.Downloader;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,17 +28,17 @@ public class FileManager
 
     public File createRandomNameFile(String extansion)
     {
-        return createRandomNameFile(extansion,Constants.FOLDER_TEMP_FILES);
+        return createRandomNameFile(extansion, Constants.FOLDER_TEMP_FILES);
     }
 
-    public File createRandomNameFile(String extansion,String folder)
+    public File createRandomNameFile(String extansion, String folder)
     {
-        return createFile(StringManager.randomStr(),extansion,folder);
+        return createFile(StringManager.randomStr(), extansion, folder);
     }
 
-    public File createFile(String name,@Nullable String extension)
+    public File createFile(String name, @Nullable String extension)
     {
-        return createFile(name,extension,Constants.FOLDER_TEMP_FILES);
+        return createFile(name, extension, Constants.FOLDER_TEMP_FILES);
     }
 
     public File createFile(String name, @Nullable String extension, String folder)
@@ -142,6 +141,41 @@ public class FileManager
         }
     }
 
+    public File getDocumentFile(Model_Document document, Downloader.DocumentFileType type)
+    {
+        File file = null;
+        switch (type)
+        {
+            case TYPE_DOCUMENT:
+                file = getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
+                break;
+
+            case TYPE_CHECK:
+                file = getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
+                break;
+
+            case TYPE_VAUCHER:
+                if (document.getVaucher_file_name() != null)
+                {
+                    file = getFileFromTemp(document.getVaucher_file_name(), Constants.FOLDER_VAUCHERS, null);
+                }
+                break;
+
+            case TYPE_SIGNATURE:
+                file = getFileFromTemp(document.getSignature_file_name(), null);
+                break;
+        }
+
+
+
+        if(file!= null && !file.exists())
+        {
+            file = null;
+        }
+
+        return file;
+    }
+
     public static String getFileName(File file)
     {
         if (file == null)
@@ -203,7 +237,6 @@ public class FileManager
 
     void deleteRecursive(File fileOrDirectory)
     {
-
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())
                 deleteRecursive(child);

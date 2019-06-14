@@ -46,6 +46,7 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
         setContentView(mvpView.getRootView());
 
         checkForLogin();
+        mvpView.bindVersion();
     }
 
     @Override

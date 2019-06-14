@@ -26,6 +26,7 @@ public class Model_Document implements Serializable
     String signature_file_name;
     String pdf_file_name;
     String check_file_name;
+    String vaucher_file_name;
     String code;
 
     @TypeConverters({DateConverter.class})
@@ -49,6 +50,9 @@ public class Model_Document implements Serializable
     @Ignore
     @SerializedName("products")
     List<Model_Product> listOfProducts = new ArrayList<>();
+
+    @Ignore
+    Model_Vaucher vaucher;
 
     @Ignore
     Model_User user;
@@ -288,6 +292,26 @@ public class Model_Document implements Serializable
     public void setUser(Model_User user)
     {
         this.user = user;
+    }
+
+    public Model_Vaucher getVaucher()
+    {
+        return vaucher;
+    }
+
+    public void setVaucher(Model_Vaucher vaucher)
+    {
+        this.vaucher = vaucher;
+    }
+
+    public String getVaucher_file_name()
+    {
+        return vaucher_file_name;
+    }
+
+    public void setVaucher_file_name(String vaucher_file_name)
+    {
+        this.vaucher_file_name = vaucher_file_name;
     }
 
     @Override

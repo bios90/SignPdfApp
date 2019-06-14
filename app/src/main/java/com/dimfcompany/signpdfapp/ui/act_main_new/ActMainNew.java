@@ -14,10 +14,13 @@ import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
+import com.dimfcompany.signpdfapp.networking.Downloader;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperUser;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.sync.UpdateFinishedBroadcastReceiver;
+import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
+import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -26,6 +29,10 @@ import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin.OPEN;
+import static com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin.PRINT;
+import static com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin.SHARE;
 
 public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListener, AdapterFinished.CardFinishedCallback, UpdateFinishedBroadcastReceiver.CallbackUiUpdate, SyncManager.CallbackSyncFromServer
 {
@@ -70,7 +77,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
         loadLocalData();
         registerReceiver(updateFinishedBroadcastReceiver, new IntentFilter(Constants.BROADCAST_UPDATE_FINISHED_UI));
 
-        if(globalHelper.isNetworkAvailable())
+        if (globalHelper.isNetworkAvailable())
         {
             checkForServerSync();
         }
@@ -85,7 +92,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             @Override
             public void onSuccessGetDocsCount(Integer count)
             {
-                if(count != null && count > documents.size())
+                if (count != null && count > documents.size())
                 {
                     messagesManager.showSimpleDialog("Синхронизация", "Найдены договора,сохранненые на сервере. Выполнить синхронизацию сейчас?", "Синхронизировать", "Отмена", new MessagesManager.DialogButtonsListener()
                     {
@@ -93,7 +100,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
                         public void onOkClicked(DialogInterface dialog)
                         {
                             dialog.dismiss();
-                            if(!globalHelper.isNetworkAvailable())
+                            if (!globalHelper.isNetworkAvailable())
                             {
                                 messagesManager.showNoInternetAlerter();
                                 return;
@@ -135,93 +142,56 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
     @Override
     public void clickedCard(final Model_Document document)
     {
-        messagesManager.showFinishedDocument(new MessagesManager.DialogFinishedListener()
+        boolean hasVaucher = document.getVaucher() != null;
+
+        messagesManager.showFinishedDocument(hasVaucher,new MessagesManager.DialogFinishedListener()
         {
             @Override
             public void clickedOpenDogovor()
             {
-                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.openPdf(ActMainNew.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
-                }
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, OPEN);
             }
 
             @Override
             public void clickedOpenCheck()
             {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, OPEN);
+            }
 
-                try
-                {
-                    GlobalHelper.openPdf(ActMainNew.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
-                }
+            @Override
+            public void clickedOpenVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,OPEN);
             }
 
             @Override
             public void clickedSendDogovor()
             {
-                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.shareFile(ActMainNew.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
-                }
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, SHARE);
             }
 
             @Override
             public void clickedSendCheck()
             {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, SHARE);
+            }
 
-                try
-                {
-                    GlobalHelper.shareFile(ActMainNew.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
-                }
+            @Override
+            public void clickedSendVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,SHARE);
             }
 
             @Override
             public void clickedPrintCheck()
             {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                globalHelper.sendToPrint(file);
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, PRINT);
+            }
+
+            @Override
+            public void clickedPrintVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,PRINT);
             }
 
             @Override
@@ -229,7 +199,6 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             {
                 GlobalHelper.resetDocumentIds(document);
                 navigationManager.toSignActivity(null, document);
-                finish();
             }
 
             @Override
@@ -283,7 +252,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
     private void checkForAdmin()
     {
         Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
-        if(user == null)
+        if (user == null)
         {
             return;
         }
@@ -303,6 +272,30 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    private void manipulateDocument(Model_Document document, Downloader.DocumentFileType type, final int action)
+    {
+        File file = fileManager.getDocumentFile(document, type);
+
+        if (file == null || !file.exists())
+        {
+            messagesManager.showRedAlerter("Файл не найлен");
+            return;
+        }
+
+        switch (action)
+        {
+            case OPEN:
+                GlobalHelper.openPdf(ActMainNew.this, file);
+                break;
+            case SHARE:
+                GlobalHelper.shareFile(ActMainNew.this, file);
+                break;
+            case PRINT:
+                globalHelper.sendToPrint(file);
+                break;
+        }
     }
 
     @Override

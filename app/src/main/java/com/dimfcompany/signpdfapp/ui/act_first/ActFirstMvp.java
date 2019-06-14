@@ -8,6 +8,7 @@ public interface ActFirstMvp
     {
         String getEmail();
         String getPassword();
+        void bindVersion();
     }
 
     interface ViewListener

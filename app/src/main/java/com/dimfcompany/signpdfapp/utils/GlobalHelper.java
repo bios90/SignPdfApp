@@ -18,13 +18,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.models.Model_Color;
 import com.dimfcompany.signpdfapp.models.Model_Control;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Krep;
 import com.dimfcompany.signpdfapp.models.Model_Material;
+import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import java.io.File;
 import java.util.Date;
@@ -98,7 +102,7 @@ public class GlobalHelper
         return city;
     }
 
-    public static void openPdf(AppCompatActivity activity, File file) throws Exception
+    public static void openPdf(AppCompatActivity activity, File file)
     {
         Intent intent;
 
@@ -108,18 +112,32 @@ public class GlobalHelper
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             intent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
-            activity.startActivity(intent);
         } else
         {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(file), "application/pdf");
             intent = Intent.createChooser(intent, "Открыть отчет");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+
+        if (canDeviceOpenFile(intent, activity))
+        {
             activity.startActivity(intent);
         }
     }
 
-    public static void shareFile(AppCompatActivity activity, File file) throws Exception
+    public static boolean canDeviceOpenFile(Intent intent, AppCompatActivity activity)
+    {
+        if (intent.resolveActivity(activity.getPackageManager()) == null)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
+    }
+
+    public static void shareFile(AppCompatActivity activity, File file)
     {
         Intent intent;
 
@@ -130,7 +148,6 @@ public class GlobalHelper
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setType("application/pdf");
             intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
-            activity.startActivity(Intent.createChooser(intent, "Отправить отчет"));
 
         } else
         {
@@ -139,6 +156,10 @@ public class GlobalHelper
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setType("application/pdf");
             intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
+        if (canDeviceOpenFile(intent, activity))
+        {
             activity.startActivity(Intent.createChooser(intent, "Отправить отчет"));
         }
     }
@@ -147,8 +168,6 @@ public class GlobalHelper
     {
         return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
     }
-
-
 
 
     public void sendToPrint(File file)
@@ -163,7 +182,7 @@ public class GlobalHelper
         intent.setType("application/pdf");
         intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
 
-        
+
         final String appPackageName = "ru.a402d.rawbtprinter";
         PackageManager pm = context.getPackageManager();
 
@@ -302,6 +321,16 @@ public class GlobalHelper
             sum += product.getSum();
         }
 
+        return sum;
+    }
+
+    public static double countVaucherElementsSum(Model_Document document)
+    {
+        double sum = 0;
+        for (Model_Price_Element price_element : document.getVaucher().getPrice_elements())
+        {
+            sum += price_element.getPrice();
+        }
         return sum;
     }
 
@@ -445,7 +474,7 @@ public class GlobalHelper
 
     public static Model_Product copyProduct(Model_Product productOriginal)
     {
-        if(productOriginal == null)
+        if (productOriginal == null)
         {
             return null;
         }
@@ -468,9 +497,24 @@ public class GlobalHelper
         return productCopy;
     }
 
+    public static Model_Price_Element copyPriceElement(Model_Price_Element elementOriginal)
+    {
+        if (elementOriginal == null)
+        {
+            return null;
+        }
+
+        Model_Price_Element elementCopy = new Model_Price_Element();
+        elementCopy.setId(elementOriginal.getId());
+        elementCopy.setVaucher_id(elementCopy.getVaucher_id());
+        elementCopy.setText(elementOriginal.getText());
+        elementCopy.setPrice(elementOriginal.getPrice());
+        return elementCopy;
+    }
+
     public static Model_Color copyColor(Model_Color colorOriginal)
     {
-        if(colorOriginal == null)
+        if (colorOriginal == null)
         {
             return null;
         }
@@ -483,10 +527,10 @@ public class GlobalHelper
 
         return colorCopy;
     }
-    
+
     public static Model_Control copyControl(Model_Control controlOriginal)
     {
-        if(controlOriginal == null)
+        if (controlOriginal == null)
         {
             return null;
         }
@@ -498,11 +542,11 @@ public class GlobalHelper
         controlCopy.setName(controlOriginal.getName());
 
         return controlCopy;
-    }  
-    
+    }
+
     public static Model_Krep copyKrep(Model_Krep krepOriginal)
     {
-        if(krepOriginal == null)
+        if (krepOriginal == null)
         {
             return null;
         }
@@ -514,12 +558,12 @@ public class GlobalHelper
         krepCopy.setName(krepOriginal.getName());
 
         return krepCopy;
-    }    
-    
-    
+    }
+
+
     public static Model_Material copyMaterial(Model_Material materialOriginal)
     {
-        if(materialOriginal == null)
+        if (materialOriginal == null)
         {
             return null;
         }
@@ -536,30 +580,136 @@ public class GlobalHelper
     public static void resetDocumentIds(Model_Document document)
     {
         document.setId(0);
-        
-        for(Model_Product product : document.getListOfProducts())
+
+        for (Model_Product product : document.getListOfProducts())
         {
             product.setId(0);
-            
-            if(product.getColor() !=null)
+
+            if (product.getColor() != null)
             {
                 product.getColor().setId(0);
-            }            
-            
-            if(product.getControl() !=null)
+            }
+
+            if (product.getControl() != null)
             {
                 product.getControl().setId(0);
-            }            
-            
-            if(product.getKrep() !=null)
+            }
+
+            if (product.getKrep() != null)
             {
                 product.getKrep().setId(0);
             }
-            
+
             if (product.getMaterial() != null)
             {
                 product.getMaterial().setId(0);
             }
         }
+
+        if (document.getVaucher() != null)
+        {
+            document.getVaucher().setId(0);
+
+            if (document.getVaucher().getPrice_elements() != null)
+            {
+                for (Model_Price_Element price_element : document.getVaucher().getPrice_elements())
+                {
+                    price_element.setId(0);
+                }
+            }
+        }
+    }
+
+    public static Model_Document clearEmptyOrNullData(Model_Document document)
+    {
+        document.setFio(clearNullStrings(document.getFio()));
+        document.setAdress(clearNullStrings(document.getAdress()));
+        document.setPhone(clearNullStrings(document.getPhone()));
+        document.setCode(clearNullStrings(document.getCode()));
+        document.setOrder_form(clearNullStrings(document.getOrder_form()));
+        document.setDop_info(clearNullStrings(document.getDop_info()));
+
+        if (document.getListOfProducts() != null)
+        {
+            for (Model_Product product : document.getListOfProducts())
+            {
+                product.setWidth(clearNullStrings(product.getWidth()));
+                product.setHeight(clearNullStrings(product.getHeight()));
+
+                if (product.getMaterial() != null)
+                {
+                    product.getMaterial().setName(clearNullStrings(product.getMaterial().getName()));
+                }
+
+                if (product.getColor() != null)
+                {
+                    product.getColor().setName(clearNullStrings(product.getColor().getName()));
+                }
+
+                if (product.getKrep() != null)
+                {
+                    product.getKrep().setName(clearNullStrings(product.getKrep().getName()));
+                }
+
+                if (product.getControl() != null)
+                {
+                    product.getControl().setName(clearNullStrings(product.getControl().getName()));
+                }
+            }
+        }
+
+        if (document.getVaucher() != null)
+        {
+            document.getVaucher().setHeader(clearNullStrings(document.getVaucher().getHeader()));
+
+            for (Model_Price_Element price_element : document.getVaucher().getPrice_elements())
+            {
+                price_element.setText(clearNullStrings(price_element.getText()));
+            }
+        }
+
+        return document;
+    }
+
+    public static String clearNullStrings(String string)
+    {
+        if (string == null)
+        {
+            return null;
+        }
+
+        if (string.trim().equals("null"))
+        {
+            return null;
+        }
+
+        if (TextUtils.isEmpty(string.trim()))
+        {
+            return null;
+        }
+
+        return string;
+    }
+
+    public static void updatePositionNums(int firstPosition, int secondPosition, DragLinearLayout drag_la)
+    {
+        View view1 = drag_la.getChildAt(firstPosition);
+        TextView tv_position1 = view1.findViewById(R.id.tv_position);
+
+        View view2 = drag_la.getChildAt(secondPosition);
+        TextView tv_position2 = view2.findViewById(R.id.tv_position);
+
+        tv_position1.setText(String.valueOf(secondPosition + 1));
+        tv_position2.setText(String.valueOf(firstPosition + 1));
+    }
+
+    public static int getRandomInt()
+    {
+        return getRandomInt(0, 9999);
+    }
+
+    public static int getRandomInt(final int min, final int max)
+    {
+        return new Random().nextInt((max - min) + 1) + min;
     }
 }

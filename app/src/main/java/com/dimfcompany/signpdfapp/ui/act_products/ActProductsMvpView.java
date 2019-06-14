@@ -163,7 +163,7 @@ public class ActProductsMvpView extends BaseObservableViewAbstr<ActProductsMvp.V
     public void onSwap(View firstView, int firstPosition, View secondView, int secondPosition)
     {
         Collections.swap(getListener().getDocument().getListOfProducts(), firstPosition, secondPosition);
-        updatePositionNums(firstPosition, secondPosition);
+        GlobalHelper.updatePositionNums(firstPosition, secondPosition,drag_la);
     }
 
     private void updatePositionNums(int firstPosition, int secondPosition)

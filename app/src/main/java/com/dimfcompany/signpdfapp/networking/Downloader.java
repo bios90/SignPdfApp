@@ -29,7 +29,8 @@ public class Downloader
     {
         TYPE_SIGNATURE,
         TYPE_CHECK,
-        TYPE_DOCUMENT
+        TYPE_DOCUMENT,
+        TYPE_VAUCHER
     }
 
     public interface CallbackDownloadDocumentFiles
@@ -72,6 +73,11 @@ public class Downloader
             if (document.getCheck_file_name() != null)
             {
                 downloadDocumentFile(document, DocumentFileType.TYPE_CHECK);
+            }
+
+            if(document.getVaucher_file_name() != null)
+            {
+                downloadDocumentFile(document,DocumentFileType.TYPE_VAUCHER);
             }
         }
     }
@@ -199,7 +205,7 @@ public class Downloader
                     return null;
                 }
                 file = fileManager.createFile(document.getSignature_file_name(), null, Constants.FOLDER_TEMP_FILES);
-                url = stringManager.getUserSignaturesUrl() + document.getSignature_file_name();
+                url = stringManager.getAnyUserSignaturesUrl(document.getUser_id()) + document.getSignature_file_name();
                 break;
 
             case TYPE_DOCUMENT:
@@ -209,7 +215,7 @@ public class Downloader
                     return null;
                 }
                 file = fileManager.createFile(document.getPdf_file_name(), null, Constants.FOLDER_CONTRACTS);
-                url = stringManager.getUserDocumentsUrl() + document.getPdf_file_name();
+                url = stringManager.getAnyUserDocumentsUrl(document.getUser_id()) + document.getPdf_file_name();
                 break;
 
             case TYPE_CHECK:
@@ -219,7 +225,18 @@ public class Downloader
                     return null;
                 }
                 file = fileManager.createFile(document.getCheck_file_name(), null, Constants.FOLDER_CHECKS);
-                url = stringManager.getUserChecksUrl() + document.getCheck_file_name();
+                url = stringManager.getAnyUserCheckUrl(document.getUser_id()) + document.getCheck_file_name();
+                break;
+
+            case TYPE_VAUCHER:
+                if (document.getVaucher_file_name() == null)
+                {
+                    Log.e(TAG, "downloadDocumentFile: error no vaucherFileName");
+                    return null;
+                }
+                file = fileManager.createFile(document.getVaucher_file_name(),null,Constants.FOLDER_VAUCHERS);
+                url = stringManager.getAnyUserVauchersUrl(document.getUser_id())+document.getVaucher_file_name();
+
                 break;
         }
 

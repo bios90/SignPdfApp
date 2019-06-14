@@ -9,16 +9,22 @@ import com.dimfcompany.signpdfapp.di.application.DaggerApplicationComponent;
 public class AppClass extends Application
 {
     ApplicationComponent applicationComponent;
+    private static AppClass app;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
+        app = this;
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
     }
 
+    public static AppClass getApp()
+    {
+        return app;
+    }
 
     public ApplicationComponent getApplicationComponent()
     {

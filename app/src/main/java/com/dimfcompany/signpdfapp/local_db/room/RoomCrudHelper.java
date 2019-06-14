@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
+import com.dimfcompany.signpdfapp.models.Model_Vaucher;
 
 import java.util.List;
 
@@ -55,6 +57,20 @@ public class RoomCrudHelper implements LocalDatabase
             }
         }
 
+        if(document.getVaucher() != null)
+        {
+            Model_Vaucher vaucher = document.getVaucher();
+            vaucher.setDocument_id(id_document);
+
+            long vaucher_id =  appDatabase.getDaoVaucher().insert(vaucher);
+
+            for(Model_Price_Element price_element : vaucher.getPrice_elements())
+            {
+                price_element.setVaucher_id(vaucher_id);
+                appDatabase.getDaoPriceElements().insert(price_element);
+            }
+        }
+
         Log.e(TAG, "insertDocument: Inserted document all okey");
     }
 
@@ -66,6 +82,7 @@ public class RoomCrudHelper implements LocalDatabase
         for (Model_Document document : documents)
         {
             document.setListOfProducts(getDocumentProducts(document));
+            document.setVaucher(getDocumentVaucher(document));
         }
 
         return documents;
@@ -79,10 +96,23 @@ public class RoomCrudHelper implements LocalDatabase
         for (Model_Document document : documents)
         {
             document.setListOfProducts(getDocumentProducts(document));
+            document.setVaucher(getDocumentVaucher(document));
         }
 
         return documents;
     }
+
+    private Model_Vaucher getDocumentVaucher(Model_Document document)
+    {
+        Model_Vaucher vaucher = appDatabase.getDaoVaucher().getVaucherOfDocument(document.getId());
+        if(vaucher != null)
+        {
+            vaucher.setPrice_elements(appDatabase.getDaoPriceElements().getPriceElementsOfVaucher(vaucher.getId()));
+        }
+
+        return vaucher;
+    }
+
 
     private List<Model_Product> getDocumentProducts(Model_Document document)
     {
@@ -139,6 +169,16 @@ public class RoomCrudHelper implements LocalDatabase
             }
 
             appDatabase.getDaoProduct().deleteFull(product);
+        }
+
+        if(document.getVaucher() != null && document.getVaucher().getPrice_elements() != null)
+        {
+            for (Model_Price_Element price_element : document.getVaucher().getPrice_elements())
+            {
+                appDatabase.getDaoPriceElements().deleteFull(price_element);
+            }
+
+            appDatabase.getDaoVaucher().deleteFull(document.getVaucher());
         }
 
         appDatabase.getDaoDocument().deleteFull(document);

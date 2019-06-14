@@ -22,8 +22,6 @@ import com.dimfcompany.signpdfapp.models.Model_Material;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.ImageManager;
-import com.dimfcompany.signpdfapp.utils.custom_classes.DecimalTextWatcher;
-import com.dimfcompany.signpdfapp.utils.custom_classes.IntegerTextWatcher;
 
 public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddProductDialogMvp.ViewListener>
         implements ActAddProductDialogMvp.MvpView
@@ -48,7 +46,7 @@ public class ActAddProductDialogMvpView extends BaseObservableViewAbstr<ActAddPr
 
     public ActAddProductDialogMvpView(LayoutInflater layoutInflater, ViewGroup parent)
     {
-        setRootView(layoutInflater.inflate(R.layout.act_add_proudct_dialog, parent, false));
+        setRootView(layoutInflater.inflate(R.layout.act_add_product_dialog, parent, false));
         initViews();
         setListeners();
     }

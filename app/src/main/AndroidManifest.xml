@@ -59,6 +59,9 @@
         <activity android:name=".ui.act_main_new.ActMainNew" />
         <activity android:name=".ui.act_profile_dialog.ActProfileDialog" android:theme="@style/Theme.Transparent"/>
         <activity android:name=".ui.act_admin.ActAdmin" />
+        <activity android:name=".ui.act_vaucher.ActVaucher" />
+        <activity android:name=".ui.act_element_dialog.ActElementDialog" android:theme="@style/Theme.Transparent"/>
+        <activity android:name=".ui.act_pre_show.ActPreShow" />
     </application>
 
 

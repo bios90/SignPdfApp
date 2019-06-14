@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray0"
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/la_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray4"
+            android:paddingLeft="42dp"
+            android:paddingTop="8dp"
+            android:paddingRight="42dp"
+            android:paddingBottom="8dp"
+            android:text="Просмотр" />
+
+
+        <TextView
+            android:id="@+id/tv_back_top"
+
+            style="@style/IconTv.M"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="4dp"
+            android:text="@string/ic_left_arrow"
+            android:textColor="@color/sel_white" />
+
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/card_bottom"
+        android:layout_below="@id/la_header"
+        android:clipToPadding="false"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/la_for_items"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white"
+            android:clipToPadding="false"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="160dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_border" />
+
+            <TextView
+                style="@style/TVReg.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/pre_show_header"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="1.    Согласно настоящему договору Исполнитель обязуется по заданию
+Заказчика оказать услуги в соответствии с перечнем в бланке заказа
+на обратной стороне данного договора, а Заказчик обязуется
+оплатить эти услуги. Общая стоимость товаров и услуг по данному
+договору указана в форме на обратной стороне данного договора."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="2.    Право собственности на товар, переданный Заказчику, сохраняется
+за Исполнителем до полной оплаты товара Заказчиком."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="3.    Заказ принимается в работу на основании формы заказа и договора
+с подписями клиента."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="4.    Изменения по заказу принимаются в течении суток с момента
+оформления и подписания заявки."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="5.    Подписанный клиентом договор, автоматический означает, что
+клиент полностью проинформирован о товаре, принимает и
+выражает согласие с его цветом, фактурой, формой, размером,
+иными конструктивными особенностями, и техническими
+характеристиками изделий, методами и технологиями монтажа."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="6.    Изделия, выполненные по индивидуальным размерам, не могут быть
+возвращены продавцу."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="7.    Услуги оплачиваются в следующем порядке: 70% предоплата после
+заключения настоящего Договора и 30% окончательная оплата при
+получении (в день доставки) или по б/н в течение 2-х дней. (Точные
+суммы предоплаты и доплаты указаны на оборотной стороне
+данного договора в форме заказа). Если стоимость товара указана в
+иностранной валюте, то оплата производится в рублях по курсу ЦБ
+на день заключения договора + 1%. При 100% предоплате
+наличными скидка -3%."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="8.    Заказчик обязуется в полном объёме оплатить заказ не позднее дня
+монтажа заказа."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="9.    Заказчик обязуется информировать мастера по замеру и установке о
+скрытых коммуникациях, нюансах отделки или иных особенностях в
+местах проведения работ. Неся всю полноту ответственности за
+отсутствие данной информации."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="10.    В случае несоблюдения сроков изготовления и монтажа более чем
+на 3 рабочих дня, Исполнитель уплачивает Заказчику штраф в
+размере 0,01% от стоимости заказа за каждый день просрочки, но не
+более суммы, составляющей половину стоимости заказа."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="11.    При несвоевременной оплате выполненного заказа Заказчик
+уплачивает неустойку Исполнителю в размере 0,01% от стоимости
+Заказа за каждый день просрочки, но не более суммы, составляющей
+половину стоимости заказа."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="12.    Приемка работ осуществляется Заказчиком в момент окончания
+Исполнителем выполненных работ."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="13.    Сдача работ Исполнителем, и приемка ее Заказчиком оформляется
+и фиксируются подписями на обратной стороне данного договора, в
+форме заказа, установщиком от имени Исполнителя и Заказчиком.
+При отказе одной из сторон от подписания делается отметка об этом,
+и подписывается другой стороной."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="14.    Перед подписанием акта Заказчик должен осмотреть результат
+работ. При обнаружении им явных недостатков в результате работ
+он должен немедленно заявить об этом Исполнителю для того,
+чтобы эти недостатки были оговорены в указанном выше акте."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="15.    Дата начала работ для Исполнителя определяется Заказчиком, после
+выполнения последним всех необходимых подготовительных работ.
+Но не может превышать 10 календарных дней с момента
+уведомления «Заказчика» «Исполнителем» о готовности заказа.
+Изготовленная, но не установленная в срок по вине Заказчика
+продукция переходит на ответственное хранение «Исполнителя». За
+каждый день хранения уплачивается штраф в размере 0.5% за день
+хранения продукции."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="16.    До начала работ по монтажу, Заказчик обязуется провести
+следующие необходимые подготовительные работы: мытье окон,
+рам, освободить пространство вокруг места проведения работ по
+установке изделий, провести демонтаж при наличии старых
+солнцезащитных конструкций, в случае установки электроприводов,
+обеспечить вывод электропитания необходимой мощности в точки,
+согласно техническому заданию Исполнителя. Заказчик уведомляет
+Исполнителя о дате начала работ в устной, письменной форме или
+SMS."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="17.    Стандартный срок исполнения заказа, если не указано иного 7-14
+рабочих дней, начиная со следующего рабочего дня следующего за
+днем внесения полной суммы предоплаты. Срок исполнения заказов
+повышенной сложности или при использовании нестандартных
+изделий может быть продлен по согласованию сторон."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="18.    Заказчик подтверждает, что согласен с условиями доставки/монтажа
+опубликованными на сайте ООО Лаборатория Уюта."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="19.    Договор составлен в 2-х экземплярах, по одному для каждой из
+сторон, или отснят на камеру, что не лишает его юридической силы."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="@string/garanty"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="21.    Дополнительные условия по данному договору на обороте."
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="22.    Адреса и банковские реквизиты сторон:"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                style="@style/TVReg.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="left"
+                android:justificationMode="inter_word"
+                android:text="@string/wintec_info"
+                android:textColor="@color/gray4" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="10"
+                    android:orientation="vertical">
+
+                    <ImageView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:src="@drawable/ribakina" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray4" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="0dp"
+                    android:layout_weight="10"
+                    android:gravity="left|bottom"
+                    android:justificationMode="inter_word"
+                    android:padding="0dp"
+                    android:text="    /Рыбакина Л.В./"
+                    android:textColor="@color/gray4" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="42dp"
+                android:maxWidth="400dp"
+                android:src="@drawable/stamp" />
+
+            <TextView
+                style="@style/TVSemi.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/wintec_sites"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+
+            <RelativeLayout
+                android:id="@+id/la_minus"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_grad_orange_rounded_left">
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="12dp"
+                    android:text="@string/ic_zoom_minus" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Уменьшить" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="34dp"
+                android:background="@color/white" />
+
+            <RelativeLayout
+                android:id="@+id/la_plus"
+
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_grad_orange_rounded_right">
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="12dp"
+                    android:text="@string/ic_zoom_plus" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Увеличить" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -185,6 +185,42 @@
                 </RelativeLayout>
 
 
+                <RelativeLayout
+                    android:id="@+id/la_vaucher"
+
+                    android:elevation="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/btn_grad_blue_rounded">
+
+                    <TextView
+                        android:textColor="@color/sel_white"
+                        style="@style/IconTv.L"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/ic_vaucher" />
+
+
+                    <TextView
+                        android:id="@+id/tv_vaucher_btn"
+
+                        style="@style/TVSemi.S"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:text="Ваучер (0)" />
+
+                </RelativeLayout>
+
+
                 <TextView
                     style="@style/TVSemi.M"
                     android:layout_width="match_parent"
@@ -777,7 +813,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
-                    android:text="Создать договор" />
+                    android:text="Создать" />
 
             </RelativeLayout>
 

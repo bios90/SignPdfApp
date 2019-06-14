@@ -62,108 +62,108 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
     @Override
     public void clickedCard(final Model_Document document)
     {
-        messagesManager.showFinishedDocument(new MessagesManager.DialogFinishedListener()
-        {
-            @Override
-            public void clickedOpenDogovor()
-            {
-                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.openPdf(ActFinished.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
-                }
-            }
-
-            @Override
-            public void clickedOpenCheck()
-            {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.openPdf(ActFinished.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
-                }
-            }
-
-            @Override
-            public void clickedSendDogovor()
-            {
-                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.shareFile(ActFinished.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
-                }
-            }
-
-            @Override
-            public void clickedSendCheck()
-            {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                if (!file.exists())
-                {
-                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
-                    return;
-                }
-
-                try
-                {
-                    GlobalHelper.shareFile(ActFinished.this, file);
-                } catch (Exception e)
-                {
-                    Log.e(TAG, "Error on pf intent " + e.getMessage());
-                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
-                }
-            }
-
-            @Override
-            public void clickedPrintCheck()
-            {
-                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
-                globalHelper.sendToPrint(file);
-            }
-
-            @Override
-            public void clickedEdit()
-            {
-                GlobalHelper.resetDocumentIds(document);
-                navigationManager.toSignActivity(null,document);
-            }
-
-            @Override
-            public void clickedDelete()
-            {
-                showDeleteDialog(document);
-            }
-        });
+//        messagesManager.showFinishedDocument(new MessagesManager.DialogFinishedListener()
+//        {
+//            @Override
+//            public void clickedOpenDogovor()
+//            {
+//                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
+//                if (!file.exists())
+//                {
+//                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
+//                    return;
+//                }
+//
+//                try
+//                {
+//                    GlobalHelper.openPdf(ActFinished.this, file);
+//                } catch (Exception e)
+//                {
+//                    Log.e(TAG, "Error on pf intent " + e.getMessage());
+//                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
+//                }
+//            }
+//
+//            @Override
+//            public void clickedOpenCheck()
+//            {
+//                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
+//                if (!file.exists())
+//                {
+//                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
+//                    return;
+//                }
+//
+//                try
+//                {
+//                    GlobalHelper.openPdf(ActFinished.this, file);
+//                } catch (Exception e)
+//                {
+//                    Log.e(TAG, "Error on pf intent " + e.getMessage());
+//                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
+//                }
+//            }
+//
+//            @Override
+//            public void clickedSendDogovor()
+//            {
+//                File file = fileManager.getFileFromTemp(document.getPdf_file_name(), Constants.FOLDER_CONTRACTS, null);
+//                if (!file.exists())
+//                {
+//                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
+//                    return;
+//                }
+//
+//                try
+//                {
+//                    GlobalHelper.shareFile(ActFinished.this, file);
+//                } catch (Exception e)
+//                {
+//                    Log.e(TAG, "Error on pf intent " + e.getMessage());
+//                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
+//                }
+//            }
+//
+//            @Override
+//            public void clickedSendCheck()
+//            {
+//                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
+//                if (!file.exists())
+//                {
+//                    messagesManager.showRedAlerter("Ошибка", "Файл не найден");
+//                    return;
+//                }
+//
+//                try
+//                {
+//                    GlobalHelper.shareFile(ActFinished.this, file);
+//                } catch (Exception e)
+//                {
+//                    Log.e(TAG, "Error on pf intent " + e.getMessage());
+//                    messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для отправки файлов");
+//                }
+//            }
+//
+//            @Override
+//            public void clickedPrintCheck()
+//            {
+//                File file = fileManager.getFileFromTemp(document.getCheck_file_name(), Constants.FOLDER_CHECKS, null);
+//                globalHelper.sendToPrint(file);
+//            }
+//
+//            @Override
+//            public void clickedEdit()
+//            {
+//                GlobalHelper.resetDocumentIds(document);
+//                navigationManager.toSignActivity(null,document);
+//            }
+//
+//            @Override
+//            public void clickedDelete()
+//            {
+//                showDeleteDialog(document);
+//            }
+//        });
     }
 
 

@@ -54,6 +54,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
     String lastBitmapFileName;
     RelativeLayout la_create_pdf;
     RelativeLayout la_materials;
+    RelativeLayout la_vaucher;
     RelativeLayout la_pre_show;
     LinearLayout la_for_signature;
 
@@ -97,6 +98,7 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         la_materials = findViewById(R.id.la_materials);
         la_pre_show = findViewById(R.id.la_pre_show);
         la_for_signature = findViewById(R.id.la_for_signature);
+        la_vaucher = findViewById(R.id.la_vaucher);
 
         et_sum = findViewById(R.id.et_sum);
         et_montage = findViewById(R.id.et_montage);
@@ -175,6 +177,15 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
             public void onClick(View v)
             {
                 getListener().clickedPreShow();
+            }
+        });
+
+        la_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getListener().clickedVaucher();
             }
         });
     }
@@ -323,6 +334,9 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
         removeTextWatchers();
         countNormal();
         addTextWatchers();
+
+        updateMaterialButton();
+        updateVaucherButton();
     }
 
     private void addTextWatchers()
@@ -456,6 +470,22 @@ public class ActSignMvpView extends BaseObservableViewAbstr<ActSignMvp.ViewListe
 
         tv_materials_btn.setText("Товары (" + count + ")");
     }
+
+    @Override
+    public void updateVaucherButton()
+    {
+        int count = 0;
+
+        TextView tv_vaucher_btn = getRootView().findViewById(R.id.tv_vaucher_btn);
+        if(getListener().getDocument().getVaucher() != null)
+        {
+            count = getListener().getDocument().getVaucher().getPrice_elements().size();
+        }
+
+        tv_vaucher_btn.setText("Ваучер (" + count + ")");
+    }
+
+
 
     @Override
     public String getFio()

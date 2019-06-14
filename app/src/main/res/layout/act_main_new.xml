@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
-                    android:text="Новый договор" />
+                    android:text="Новый документ" />
 
             </RelativeLayout>
 

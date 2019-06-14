@@ -105,7 +105,9 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
     @Override
     public void clickedCard(final Model_Document document)
     {
-        messagesManager.showFinishedDocument(new MessagesManager.DialogFinishedListener()
+        boolean hasVaucher = document.getVaucher_file_name() != null;
+
+        messagesManager.showFinishedDocument(hasVaucher, new MessagesManager.DialogFinishedListener()
         {
             @Override
             public void clickedOpenDogovor()
@@ -117,6 +119,12 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             public void clickedOpenCheck()
             {
                 manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, OPEN);
+            }
+
+            @Override
+            public void clickedOpenVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, OPEN);
             }
 
             @Override
@@ -132,9 +140,21 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             }
 
             @Override
+            public void clickedSendVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, SHARE);
+            }
+
+            @Override
             public void clickedPrintCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK,PRINT);
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, PRINT);
+            }
+
+            @Override
+            public void clickedPrintVaucher()
+            {
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, PRINT);
             }
 
             @Override
@@ -209,7 +229,7 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             {
                 messagesManager.dismissProgressDialog();
                 GlobalHelper.resetDocumentIds(document);
-                navigationManager.toSignActivity(null,document);
+                navigationManager.toSignActivity(null, document);
             }
 
             @Override
@@ -228,6 +248,7 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
         if (!globalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
+            return;
         }
 
         messagesManager.showProgressDialog();

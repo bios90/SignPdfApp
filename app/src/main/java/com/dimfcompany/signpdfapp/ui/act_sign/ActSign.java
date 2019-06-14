@@ -17,6 +17,7 @@ import com.dimfcompany.signpdfapp.local_db.room.RoomCrudHelper;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
+import com.dimfcompany.signpdfapp.models.Model_Vaucher;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
@@ -116,8 +117,16 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public void clickedPreShow()
     {
+        navigationManager.toActPreShow(null);
+//        model_document = collectDocumentData();
+//        pdfCreator.createPdfAsync(model_document, true, this);
+    }
+
+    @Override
+    public void clickedVaucher()
+    {
         model_document = collectDocumentData();
-        pdfCreator.createPdfAsync(model_document, true, this);
+        navigationManager.toActVaucher(Constants.RQ_VAUCHER_SCREEN, model_document);
     }
 
     @Override
@@ -137,12 +146,12 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public File getSignatureFile()
     {
-        if(model_document == null || model_document.getSignature_file_name() == null)
+        if (model_document == null || model_document.getSignature_file_name() == null)
         {
             return null;
         }
 
-        File file = fileManager.getFileFromTemp(model_document.getSignature_file_name(),null);
+        File file = fileManager.getFileFromTemp(model_document.getSignature_file_name(), null);
         return file;
     }
 
@@ -173,6 +182,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         model_document.setOrder_form(mvpView.getOrderForm());
         model_document.setDop_info(mvpView.getDopInfo());
 
+        model_document = GlobalHelper.clearEmptyOrNullData(model_document);
+
         return model_document;
     }
 
@@ -193,6 +204,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
                     break;
 
                 case Constants.RQ_PRODUCTS_SCREEN:
+                case Constants.RQ_VAUCHER_SCREEN:
                     model_document = (Model_Document) data.getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
                     if (model_document != null)
                     {
@@ -201,15 +213,13 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
                     break;
             }
         }
-
-        mvpView.updateMaterialButton();
     }
 
     @Override
     public void onSuccessPdfCreation(Model_Document model_document)
     {
 //        localDatabase.insertDocument(model_document);
-        synchronizer.insertDocumentWithSync(model_document,this);
+        synchronizer.insertDocumentWithSync(model_document, this);
 //        messagesManager.showGreenAlerter("Успешно", "Новый договор успешно создан");
     }
 
@@ -248,7 +258,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
 
     private void checkForEditMode()
     {
-        model_document = (Model_Document)getIntent().getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
+        model_document = (Model_Document) getIntent().getSerializableExtra(Constants.EXTRA_MODEL_DOCUMENT);
         if (model_document == null)
         {
             Log.e(TAG, "checkForEditMode: Document is Null");
@@ -266,7 +276,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     {
         messagesManager.dismissProgressDialog();
         messagesManager.showGreenAlerter("Новый договор успешно создан");
-        if(!inserted_to_server)
+        if (!inserted_to_server)
         {
             synchronizer.putSynchronizeTask();
         }

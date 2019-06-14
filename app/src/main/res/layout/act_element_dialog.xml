@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_gray0"
+        android:elevation="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.M"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:padding="6dp"
+            android:text="Добавление Элемента"
+            android:textColor="@color/white" />
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Наименование и описание элемента"
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_element_text"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp" />
+
+
+        <TextView
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:text="Цена элемента"
+            android:textColor="@color/gray3" />
+
+        <EditText
+            android:id="@+id/et_element_price"
+
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:inputType="numberDecimal" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_bottom_white"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/btn_cancel"
+
+                style="@style/Btn.Sm"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_empty_orange_rounded"
+                android:text="Отмена"
+                android:textColor="@color/sel_orange" />
+
+
+            <Button
+                android:id="@+id/btn_ok"
+
+                style="@style/Btn.Sm"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_grad_orange_rounded"
+                android:text="Добавить"
+                android:textColor="@color/sel_white" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

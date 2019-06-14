@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
 import com.dimfcompany.signpdfapp.utils.custom_classes.CustomDottedLineSeparator;
@@ -38,7 +39,6 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +52,6 @@ public class PdfCreator
         void onSuccessPdfCreation(Model_Document model_document);
 
         void onShowCallSuccess(String fileName);
-
         void onErrorPdfCreation();
     }
 
@@ -163,8 +162,13 @@ public class PdfCreator
 
             makeCheck(model_document);
 
+            if (model_document.getVaucher() != null)
+            {
+                makeVaucher();
+            }
 
-            String newMainFileName = getRenamedFile(false);
+
+            String newMainFileName = getRenamedFile(false,false);
             newMainFileName += ".pdf";
             if (FileManager.rename(file, newMainFileName, null)) ;
             {
@@ -204,55 +208,58 @@ public class PdfCreator
         }
     }
 
+    private void makeVaucher() throws IOException, DocumentException
+    {
+        float totalHeight = 0;
+        totalHeight += 40;
+
+        PdfPTable tableVaucherTop = getCheckAndVaucherTopTable();
+        PdfPTable tableVaucherMiddle = getVaucherTable();
+        PdfPTable tableVaycherBottom = getCheckBottomTable();
+
+        totalHeight += tableVaucherTop.getTotalHeight();
+        totalHeight += tableVaucherMiddle.getTotalHeight();
+        totalHeight += tableVaycherBottom.getTotalHeight();
+
+        File fileVaucher = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_VAUCHERS);
+        document = new Document(new Rectangle(298, totalHeight), 20, 20, 20, 20);
+        FileOutputStream fos = new FileOutputStream(fileVaucher);
+        writer = PdfWriter.getInstance(document, fos);
+        writer.setCompressionLevel(9);
+        document.open();
+
+        document.add(tableVaucherTop);
+        document.add(tableVaucherMiddle);
+        document.add(tableVaycherBottom);
+
+        document.close();
+
+        String newVaucherFileName = getRenamedFile(false,true);
+        newVaucherFileName += ".pdf";
+        if (FileManager.rename(fileVaucher, newVaucherFileName, null)) ;
+        {
+            Log.e(TAG, "makeCheck: renamed ok");
+            fileVaucher = fileManager.getFileFromTemp(newVaucherFileName, Constants.FOLDER_VAUCHERS, null);
+        }
+
+        String vaucher_file_name = FileManager.getFileName(fileVaucher);
+        model_document.setVaucher_file_name(vaucher_file_name);
+    }
+
     private void makeCheck(Model_Document model_document) throws DocumentException, IOException
     {
         float totalHeight = 0;
         totalHeight += 40;
 
-        PdfPTable tableCheckTop = new PdfPTable(1);
-        tableCheckTop.setWidths(new int[]{100});
-        tableCheckTop.setTotalWidth(272);
-        tableCheckTop.setLockedWidth(true);
-
-        Image wintecLogo = getImageFromAsset("logo_border.png");
-        PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
-        cellLogo.setBorder(Rectangle.NO_BORDER);
-        cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cellLogo.setFixedHeight(100);
-        tableCheckTop.addCell(cellLogo);
-
-        PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
-        tableCheckTop.addCell(cellSite);
-
-        PdfPCell cellCities = getParCell("Москва|Санкт-Петербург|Сочи|Самара", pt26, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
-        tableCheckTop.addCell(cellCities);
-
-        PdfPCell cellOoo = getParCell("ООО \"Лаборатория Уюта\"", pt36, borderMode, null, null, Element.ALIGN_CENTER, null);
-        cellOoo.setPaddingTop(16);
-        tableCheckTop.addCell(cellOoo);
-        tableCheckTop.addCell(getEmptyCell(1, 1, false, 8));
-
-
-        String codeText = "Заказ " + model_document.getCode();
-        String fromDate = "от " + GlobalHelper.getDateString(model_document.getDate(), GlobalHelper.FORMAT_FULL_MONTH);
-        tableCheckTop.addCell(getParCell(codeText, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
-        tableCheckTop.addCell(getParCell(fromDate, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
-
-
-        String starLine = StringManager.repeatingString(null, "x", 40);
-        PdfPCell cellLine = getParCell(starLine, pt26, borderMode, null, null, null, null);
-        cellLine.setFixedHeight(32);
-        tableCheckTop.addCell(cellLine);
-
-
+        PdfPTable tableCheckTop = getCheckAndVaucherTopTable();
         PdfPTable tableProducts = getCheckProductsTable();
-        PdfPTable tableCheckBottom = getCheckBottomTable();
         PdfPTable tableBottomInfo = getTableBottomInfoTable();
+        PdfPTable tableCheckBottom = getCheckBottomTable();
 
         totalHeight += tableCheckTop.getTotalHeight();
         totalHeight += tableProducts.getTotalHeight();
-        totalHeight += tableCheckBottom.getTotalHeight();
         totalHeight += tableBottomInfo.getTotalHeight();
+        totalHeight += tableCheckBottom.getTotalHeight();
 
         File fileCheck = fileManager.createRandomNameFile(Constants.EXTANSION_PDF, Constants.FOLDER_CHECKS);
         document = new Document(new Rectangle(298, totalHeight), 20, 20, 20, 20);
@@ -268,8 +275,7 @@ public class PdfCreator
 
         document.close();
 
-
-        String newChekFileName = getRenamedFile(true);
+        String newChekFileName = getRenamedFile(true,false);
         newChekFileName += ".pdf";
         if (FileManager.rename(fileCheck, newChekFileName, null)) ;
         {
@@ -278,12 +284,59 @@ public class PdfCreator
         }
         ;
 
-        Log.e(TAG, "makeCheck: fileCheckName is " + fileCheck.getName());
 
         String check_file_name = FileManager.getFileName(fileCheck);
         Log.e(TAG, "makeCheck: CheckFile NAme is " + check_file_name);
         model_document.setCheck_file_name(check_file_name);
+    }
 
+    private PdfPTable getVaucherTable() throws DocumentException
+    {
+        float padding = 4f;
+        PdfPTable tableVaucher = new PdfPTable(4);
+        tableVaucher.setTotalWidth(272);
+        tableVaucher.setLockedWidth(true);
+        tableVaucher.setWidths(new int[]{30, 25, 20, 25});
+
+        PdfPCell cellLine = getCellLine();
+        cellLine.setColspan(4);
+
+        if (model_document.getVaucher().getHeader() != null)
+        {
+            PdfPCell cellFirstLine = getParCell(model_document.getVaucher().getHeader(), pt30, padding, borderMode, 4, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
+            tableVaucher.addCell(cellFirstLine);
+            tableVaucher.addCell(cellLine);
+        }
+
+        for (Model_Price_Element price_element : model_document.getVaucher().getPrice_elements())
+        {
+            String text = price_element.getText();
+            String price = "= " + StringManager.formatNum(price_element.getPrice(),false);
+
+            PdfPCell cellLeft = getParCell(text, pt28, padding, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
+            tableVaucher.addCell(cellLeft);
+
+            PdfPCell cellRight = getParCell(price, pt26, padding, borderMode, 2, null, Element.ALIGN_RIGHT, Element.ALIGN_MIDDLE);
+            tableVaucher.addCell(cellRight);
+        }
+
+        if (model_document.getVaucher().getPrice_elements().size() > 0)
+        {
+            tableVaucher.addCell(cellLine);
+
+            String itogoSum = StringManager.formatNum(GlobalHelper.countVaucherElementsSum(model_document), false);
+            PdfPCell emptyCell18 = getEmptyCell(1, 4, borderMode);
+            emptyCell18.setFixedHeight(18);
+
+            tableVaucher.addCell(emptyCell18);
+            tableVaucher.addCell(getParCell("ИТОГ", pt46, borderMode, 2, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE));
+            tableVaucher.addCell(getParCell(itogoSum, pt36, borderMode, 2, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE));
+            tableVaucher.addCell(emptyCell18);
+
+            tableVaucher.addCell(cellLine);
+        }
+
+        return tableVaucher;
     }
 
 
@@ -424,7 +477,7 @@ public class PdfCreator
         PdfPCell cellSites = getParCell(Constants.WINTEC_SITES, pt24, borderMode, null, null, Element.ALIGN_CENTER, null);
         tableCheckBottom.addCell(cellSites);
 
-        String starLine = StringManager.repeatingString(null, "x", 34);
+        String starLine = StringManager.repeatingString(null, "x", 36);
         tableCheckBottom.addCell(getParCell(starLine, pt24, borderMode, null, null));
 
         tableCheckBottom.addCell(getParCell("E-MAIL: INFO@WINTEC.RU", pt24, borderMode, null, null));
@@ -576,7 +629,12 @@ public class PdfCreator
         tableLarge.addCell(cellEmptySpace);
 
         tableLarge.addCell(getEmptyCell(1, 1, false));
-        Paragraph parAddress = new Paragraph("  " + model_document.getAdress());
+        String address = "  ";
+        if(model_document.getAdress() != null)
+        {
+            address+=model_document.getAdress();
+        }
+        Paragraph parAddress = new Paragraph(address);
         parAddress.setLeading(18, 0);
         parAddress.setFont(reg10);
 //            parAddress.setFont(reg10Underline);
@@ -594,7 +652,12 @@ public class PdfCreator
 
 
         tableLarge.addCell(getEmptyCell(1, 1, false));
-        PdfPCell cellPhone = getParCell("  " + model_document.getPhone(), reg10Underline, false, null, null, true, 44f);
+        String phone = "  ";
+        if(model_document.getPhone() != null)
+        {
+            phone+=model_document.getPhone();
+        }
+        PdfPCell cellPhone = getParCell(phone, reg10Underline, false, null, null, true, 44f);
         cellPhone.setPaddingTop(17);
         cellPhone.setVerticalAlignment(Element.ALIGN_TOP);
         cellPhone.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -823,71 +886,71 @@ public class PdfCreator
     private PdfPTable getBottomStamp() throws DocumentException, IOException
     {
 
-            PdfPTable tableWide = new PdfPTable(3);
-            tableWide.setKeepTogether(true);
-            tableWide.setWidthPercentage(100);
-            tableWide.setWidths(new int[]{890, 1064, 540});
-            tableWide.addCell(getEmptyCell(1, 1, borderMode));
+        PdfPTable tableWide = new PdfPTable(3);
+        tableWide.setKeepTogether(true);
+        tableWide.setWidthPercentage(100);
+        tableWide.setWidths(new int[]{890, 1064, 540});
+        tableWide.addCell(getEmptyCell(1, 1, borderMode));
 
 
-            PdfPTable tableStamp = new PdfPTable(2);
-            tableStamp.setWidthPercentage(100);
-            tableStamp.setWidths(new int[]{475, 590});
+        PdfPTable tableStamp = new PdfPTable(2);
+        tableStamp.setWidthPercentage(100);
+        tableStamp.setWidths(new int[]{475, 590});
 
-            PdfPCell cellGenDir = getParCell("Генеральный директор", timesNewRoman10, borderMode, null, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
-            cellGenDir.setPaddingTop(11);
-            tableStamp.addCell(cellGenDir);
+        PdfPCell cellGenDir = getParCell("Генеральный директор", timesNewRoman10, borderMode, null, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
+        cellGenDir.setPaddingTop(11);
+        tableStamp.addCell(cellGenDir);
 
-            PdfPCell cellStamp = new PdfPCell(getImageFromAsset("sign_stamp.png"));
-            cellStamp.setRowspan(2);
-            cellStamp.setBorder(Rectangle.NO_BORDER);
-            cellStamp.setFixedHeight(112);
-            tableStamp.addCell(cellStamp);
+        PdfPCell cellStamp = new PdfPCell(getImageFromAsset("sign_stamp.png"));
+        cellStamp.setRowspan(2);
+        cellStamp.setBorder(Rectangle.NO_BORDER);
+        cellStamp.setFixedHeight(112);
+        tableStamp.addCell(cellStamp);
 
-            PdfPCell cellFio = getParCell("/Рыбакина Л.В./", timesNewRoman10, borderMode, null, null, Element.ALIGN_RIGHT, Element.ALIGN_TOP);
-            cellFio.setPaddingTop(12);
-            tableStamp.addCell(cellFio);
-
-
-            PdfPCell cellMiddle = new PdfPCell(tableStamp);
-            cellMiddle.setBorder(Rectangle.NO_BORDER);
-
-            tableWide.addCell(cellMiddle);
-            tableWide.addCell(getEmptyCell(1, 1, borderMode));
+        PdfPCell cellFio = getParCell("/Рыбакина Л.В./", timesNewRoman10, borderMode, null, null, Element.ALIGN_RIGHT, Element.ALIGN_TOP);
+        cellFio.setPaddingTop(12);
+        tableStamp.addCell(cellFio);
 
 
-            return tableWide;
+        PdfPCell cellMiddle = new PdfPCell(tableStamp);
+        cellMiddle.setBorder(Rectangle.NO_BORDER);
+
+        tableWide.addCell(cellMiddle);
+        tableWide.addCell(getEmptyCell(1, 1, borderMode));
+
+
+        return tableWide;
     }
 
 
     private void initAll() throws IOException, DocumentException
     {
-            globalReg = BaseFont.createFont("assets/segreg.ttf", "Cp1251", BaseFont.EMBEDDED);
-            globalBold = BaseFont.createFont("assets/segbold.ttf", "Cp1251", BaseFont.EMBEDDED);
-            globalItalic = BaseFont.createFont("assets/segitalic.ttf", "Cp1251", BaseFont.EMBEDDED);
-            globalPt = BaseFont.createFont("assets/pt_mono.ttf", "Cp1251", BaseFont.EMBEDDED);
-            globalTimesNewRoman = BaseFont.createFont("assets/tnr.ttf", "Cp1251", BaseFont.EMBEDDED);
+        globalReg = BaseFont.createFont("assets/segreg.ttf", "Cp1251", BaseFont.EMBEDDED);
+        globalBold = BaseFont.createFont("assets/segbold.ttf", "Cp1251", BaseFont.EMBEDDED);
+        globalItalic = BaseFont.createFont("assets/segitalic.ttf", "Cp1251", BaseFont.EMBEDDED);
+        globalPt = BaseFont.createFont("assets/pt_mono.ttf", "Cp1251", BaseFont.EMBEDDED);
+        globalTimesNewRoman = BaseFont.createFont("assets/tnr.ttf", "Cp1251", BaseFont.EMBEDDED);
 
-            reg10 = new Font(globalReg, 10);
-            reg10Underline = new Font(globalReg, 10, Font.UNDERLINE);
-            reg8 = new Font(globalReg, 8);
-            bold10 = new Font(globalBold, 10);
-            bold8 = new Font(globalBold, 8);
-            italic10 = new Font(globalItalic, 10);
-            timesNewRoman10 = new Font(globalTimesNewRoman, 10);
+        reg10 = new Font(globalReg, 10);
+        reg10Underline = new Font(globalReg, 10, Font.UNDERLINE);
+        reg8 = new Font(globalReg, 8);
+        bold10 = new Font(globalBold, 10);
+        bold8 = new Font(globalBold, 8);
+        italic10 = new Font(globalItalic, 10);
+        timesNewRoman10 = new Font(globalTimesNewRoman, 10);
 
-            pt46 = new Font(globalPt, 26);
-            pt36 = new Font(globalPt, 18);
-            pt30 = new Font(globalPt, 16);
-            pt28 = new Font(globalPt, 14);
-            pt26 = new Font(globalPt, 13);
-            pt24 = new Font(globalPt, 11);
+        pt46 = new Font(globalPt, 26);
+        pt36 = new Font(globalPt, 18);
+        pt30 = new Font(globalPt, 16);
+        pt28 = new Font(globalPt, 14);
+        pt26 = new Font(globalPt, 13);
+        pt24 = new Font(globalPt, 11);
 
-            yellow = new BaseColor(255, 192, 0);
-            trans = new BaseColor(0, 0, 0, 0);
+        yellow = new BaseColor(255, 192, 0);
+        trans = new BaseColor(0, 0, 0, 0);
 
-            LineSeparator line = new LineSeparator(0, 100, trans, Element.ALIGN_CENTER, -2.2f);
-            lineChunk = new Chunk(line);
+        LineSeparator line = new LineSeparator(0, 100, trans, Element.ALIGN_CENTER, -2.2f);
+        lineChunk = new Chunk(line);
     }
 
     private PdfPCell getParCell(String text, Font font, float padding, boolean border, @Nullable Integer colSpawn, @Nullable Integer rowSpawn)
@@ -1060,24 +1123,24 @@ public class PdfCreator
 
     private Image getImageFromFiles(File img) throws IOException, BadElementException
     {
-            if (img == null || !img.exists())
-            {
-                Log.e(TAG, "getImageFromFiles: file is null");
-                return null;
-            }
+        if (img == null || !img.exists())
+        {
+            Log.e(TAG, "getImageFromFiles: file is null");
+            return null;
+        }
 
-            Bitmap bitmap = ImageManager.newResizedBitmap(img, 400);
-            ByteArrayOutputStream mediaStream = new ByteArrayOutputStream();
+        Bitmap bitmap = ImageManager.newResizedBitmap(img, 400);
+        ByteArrayOutputStream mediaStream = new ByteArrayOutputStream();
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, mediaStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, mediaStream);
 
-            Image image = Image.getInstance(mediaStream.toByteArray());
+        Image image = Image.getInstance(mediaStream.toByteArray());
 
-            mediaStream.flush();
-            mediaStream.close();
-            mediaStream = null;
-            bitmap = null;
-            return image;
+        mediaStream.flush();
+        mediaStream.close();
+        mediaStream = null;
+        bitmap = null;
+        return image;
     }
 
 
@@ -1091,48 +1154,48 @@ public class PdfCreator
     private Image getImageFromAsset(String fileName) throws IOException, BadElementException
     {
 
-            InputStream inputStream = context.getAssets().open(fileName);
-            Bitmap bmp = BitmapFactory.decodeStream(inputStream);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        InputStream inputStream = context.getAssets().open(fileName);
+        Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-            bmp.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 90, stream);
 
-            Image image = Image.getInstance(stream.toByteArray());
+        Image image = Image.getInstance(stream.toByteArray());
 
-            inputStream.close();
-            stream.flush();
-            stream.close();
+        inputStream.close();
+        stream.flush();
+        stream.close();
 
-            bmp = null;
-            inputStream = null;
-            stream = null;
-            return image;
+        bmp = null;
+        inputStream = null;
+        stream = null;
+        return image;
     }
 
     private PdfPTable getFormOrderTable() throws DocumentException
     {
 
-            PdfPTable tableFormOrder = new PdfPTable(2);
-            tableFormOrder.setWidths(new int[]{20, 40});
-            tableFormOrder.setWidthPercentage(90);
+        PdfPTable tableFormOrder = new PdfPTable(2);
+        tableFormOrder.setWidths(new int[]{20, 40});
+        tableFormOrder.setWidthPercentage(90);
 
-            tableFormOrder.addCell(getEmptyCell(1, 1, false));
+        tableFormOrder.addCell(getEmptyCell(1, 1, false));
 
-            String strOrderForm = "";
-            if (model_document.getOrder_form() != null)
-            {
-                strOrderForm = model_document.getOrder_form();
-            }
+        String strOrderForm = "";
+        if (model_document.getOrder_form() != null)
+        {
+            strOrderForm = model_document.getOrder_form();
+        }
 
-            PdfPCell cellOrderForm = getParCell(strOrderForm, reg10, false, null, null);
-            cellOrderForm.setHorizontalAlignment(Element.ALIGN_LEFT);
-            cellOrderForm.setFixedHeight(14);
-            tableFormOrder.addCell(cellOrderForm);
+        PdfPCell cellOrderForm = getParCell(strOrderForm, reg10, false, null, null);
+        cellOrderForm.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cellOrderForm.setFixedHeight(14);
+        tableFormOrder.addCell(cellOrderForm);
 
-            return tableFormOrder;
+        return tableFormOrder;
     }
 
-    public String getRenamedFile(boolean isCheck)
+    public String getRenamedFile(boolean isCheck, boolean isVaucher)
     {
         String name = model_document.getCode();
         if (model_document.getFio() != null && model_document.getFio().trim().length() > 0)
@@ -1145,9 +1208,54 @@ public class PdfCreator
             name += "_check";
         }
 
+        if (isVaucher)
+        {
+            name += "_vaucher";
+        }
+
         name = name.replaceAll("\\s+", "_");
 
         return name;
+    }
+
+    private PdfPTable getCheckAndVaucherTopTable() throws DocumentException, IOException
+    {
+        PdfPTable tableCheckTop = new PdfPTable(1);
+        tableCheckTop.setWidths(new int[]{100});
+        tableCheckTop.setTotalWidth(272);
+        tableCheckTop.setLockedWidth(true);
+
+        Image wintecLogo = getImageFromAsset("logo_border.png");
+        PdfPCell cellLogo = new PdfPCell(wintecLogo, true);
+        cellLogo.setBorder(Rectangle.NO_BORDER);
+        cellLogo.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cellLogo.setFixedHeight(100);
+        tableCheckTop.addCell(cellLogo);
+
+        PdfPCell cellSite = getParCell("www.wintec.ru", pt36, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+        tableCheckTop.addCell(cellSite);
+
+        PdfPCell cellCities = getParCell("Москва|Санкт-Петербург|Сочи|Самара", pt26, borderMode, null, null, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE);
+        tableCheckTop.addCell(cellCities);
+
+        PdfPCell cellOoo = getParCell("ООО \"Лаборатория Уюта\"", pt36, borderMode, null, null, Element.ALIGN_CENTER, null);
+        cellOoo.setPaddingTop(16);
+        tableCheckTop.addCell(cellOoo);
+        tableCheckTop.addCell(getEmptyCell(1, 1, false, 8));
+
+
+        String codeText = "Заказ " + model_document.getCode();
+        String fromDate = "от " + GlobalHelper.getDateString(model_document.getDate(), GlobalHelper.FORMAT_FULL_MONTH);
+        tableCheckTop.addCell(getParCell(codeText, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
+        tableCheckTop.addCell(getParCell(fromDate, pt30, borderMode, null, null, Element.ALIGN_CENTER, null));
+
+
+        String starLine = StringManager.repeatingString(null, "x", 34);
+        PdfPCell cellLine = getParCell(starLine, pt26, borderMode, null, null, null, null);
+        cellLine.setFixedHeight(32);
+        tableCheckTop.addCell(cellLine);
+
+        return tableCheckTop;
     }
 
     class PageBgHelper extends PdfPageEventHelper

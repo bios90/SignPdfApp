@@ -12,7 +12,6 @@ import android.text.style.TypefaceSpan;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
@@ -228,20 +227,49 @@ public class StringManager
         return Constants.URL_BASE+"storage/"+user.getId()+"/";
     }
 
-    public String getUserDocumentsUrl()
-    {
-        return getUserPrivateFolderUrl()+"documents/";
-    }
-
     public String getUserSignaturesUrl()
     {
         return getUserPrivateFolderUrl()+"signatures/";
     }
-
+    public String getUserDocumentsUrl()
+    {
+        return getUserPrivateFolderUrl()+"documents/";
+    }
     public String getUserChecksUrl()
     {
         return getUserPrivateFolderUrl()+"checks/";
     }
+    public String getUserVauchersUrl()
+    {
+        return getUserPrivateFolderUrl()+"vauchers/";
+    }
+
+    public String getAnyUserPrivateUrl(long user_id)
+    {
+        return Constants.URL_BASE+"storage/"+user_id+"/";
+    }
+
+    public String getAnyUserSignaturesUrl(long user_id)
+    {
+        return getAnyUserPrivateUrl(user_id)+"signatures/";
+    }
+    
+    public String getAnyUserDocumentsUrl(long user_id)
+    {
+        return getAnyUserPrivateUrl(user_id)+"documents/";
+    }
+
+    public String getAnyUserCheckUrl(long user_id)
+    {
+        return getAnyUserPrivateUrl(user_id)+"checks/";
+    }
+    
+    public String getAnyUserVauchersUrl(long user_id)
+    {
+        return getAnyUserPrivateUrl(user_id)+"vauchers/";
+    }
+
+
 
     public static String getCode(int city)
     {
@@ -285,6 +313,21 @@ public class StringManager
         }
 
         return user.getLast_name() + " " + user.getFirst_name();
+    }
+
+    public static String castToNullIfEmpty(String text)
+    {
+        if(text == null)
+        {
+            return null;
+        }
+
+        if(TextUtils.isEmpty(text))
+        {
+            return null;
+        }
+
+        return text;
     }
 
 }
