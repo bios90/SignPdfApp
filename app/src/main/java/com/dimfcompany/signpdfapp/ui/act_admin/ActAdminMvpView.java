@@ -19,7 +19,7 @@ import java.util.List;
 public class ActAdminMvpView extends BaseObservableViewAbstr<ActAdminMvp.ViewListener>
     implements ActAdminMvp.MvpView
 {
-    private static final String TAG = "ActAdminMvpView";
+    private static final String TAG = "ActAdminMenuMvpView";
 
     private final LayoutInflater layoutInflater;
 

@@ -1,7 +1,10 @@
 package com.dimfcompany.signpdfapp.di.presenter;
 
+import com.dimfcompany.signpdfapp.ui.act_access.ActAccess;
+import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialog;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialog;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
+import com.dimfcompany.signpdfapp.ui.act_admin_menu.ActAdminMenu;
 import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialog;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
@@ -11,8 +14,10 @@ import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShow;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProducts;
 import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialog;
 import com.dimfcompany.signpdfapp.ui.act_register.ActRegister;
+import com.dimfcompany.signpdfapp.ui.act_search_dialog.ActSearchDialog;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialog;
+import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialog;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucher;
 
 import dagger.Subcomponent;
@@ -34,4 +39,9 @@ public interface PresenterComponent
     void inject(ActVaucher actVaucher);
     void inject(ActElementDialog actElementDialog);
     void inject(ActPreShow actPreShow);
+    void inject(ActAdminMenu actAdminMenu);
+    void inject(ActAccess actAccess);
+    void inject(ActSearchDialog actSearchDialog);
+    void inject(ActAccessDialog actAccessDialog);
+    void inject(ActUserDocsDialog actUserDocsDialog);
 }

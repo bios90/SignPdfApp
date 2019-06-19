@@ -9,8 +9,12 @@ import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
+import com.dimfcompany.signpdfapp.models.Model_User;
+import com.dimfcompany.signpdfapp.ui.act_access.ActAccess;
+import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialog;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialog;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
+import com.dimfcompany.signpdfapp.ui.act_admin_menu.ActAdminMenu;
 import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialog;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
@@ -20,8 +24,10 @@ import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShow;
 import com.dimfcompany.signpdfapp.ui.act_products.ActProducts;
 import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialog;
 import com.dimfcompany.signpdfapp.ui.act_register.ActRegister;
+import com.dimfcompany.signpdfapp.ui.act_search_dialog.ActSearchDialog;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialog;
+import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialog;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucher;
 
 public class NavigationManager
@@ -95,6 +101,31 @@ public class NavigationManager
 
     public void toActPreShow(@Nullable Integer requestCode)
     {
-        BaseActivity.startScreen(activity, ActPreShow.class,requestCode);
+        BaseActivity.startScreen(activity, ActPreShow.class, requestCode);
+    }
+
+    public void toActAdminMenu(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActAdminMenu.class, requestCode);
+    }
+
+    public void toActAccess(@Nullable Integer requestCode)
+    {
+        BaseActivity.startScreen(activity, ActAccess.class, requestCode);
+    }
+
+    public void toActSearchDialog(@Nullable Integer requestCode, String search, int sort)
+    {
+        ActSearchDialog.startScreenOver(activity, requestCode, search, sort);
+    }
+
+    public void toActAccessDialog(@Nullable Integer requestCode, Model_User user)
+    {
+        ActAccessDialog.startScreenOver(activity, requestCode, user);
+    }
+
+    public void toActUserDocsDialog(@Nullable Integer requestCode, int user_id)
+    {
+        ActUserDocsDialog.startScreenOver(activity, requestCode, user_id);
     }
 }

@@ -64,7 +64,7 @@ public class MessagesManager
 
         void clickedPrintVaucher();
 
-        void clickedEdit();
+        void clickedEdit(Dialog dialog);
 
         void clickedDelete();
     }
@@ -219,7 +219,7 @@ public class MessagesManager
             @Override
             public void onClick(View v)
             {
-                listener.clickedEdit();
+                listener.clickedEdit(dialog);
             }
         });
 

@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.google.gson.Gson;
 
@@ -27,7 +28,28 @@ public class HelperUser
     public interface CallbackGetAllDocuments
     {
         void onSuccessGetAllDocuments(List<Model_Document> documents);
+
         void onErrorGetAllDocuments();
+    }
+
+    public interface CallbackGetUsers
+    {
+        void onSuccessGetUsers(List<Model_User> users);
+
+        void onErrorGetUsers();
+    }
+
+    public interface CallbackChangeRole
+    {
+        void onSuccessChangeRole();
+
+        void onErrorChangeRole();
+    }
+
+    public interface CallbackGetUserFull
+    {
+        void onSuccessGetUserFull(Model_User user);
+        void onErrorGetUSerFull();
     }
 
     private final WintecApi wintecApi;
@@ -63,7 +85,8 @@ public class HelperUser
                             callback.onSuccessGetUserRole(role_name);
                         }
                     });
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -96,7 +119,8 @@ public class HelperUser
                             callback.onSuccessGetDocsCount(docsCount);
                         }
                     });
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -115,7 +139,7 @@ public class HelperUser
                 try
                 {
                     final List<Model_Document> documents = wintecApi.getAllDocuments(user_id).execute().body();
-                    if(documents == null)
+                    if (documents == null)
                     {
                         new Handler(Looper.getMainLooper()).post(new Runnable()
                         {
@@ -137,7 +161,8 @@ public class HelperUser
                         }
                     });
 
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -153,4 +178,80 @@ public class HelperUser
             }
         }).start();
     }
+
+    public void getUsers(final String search, final String sort, CallbackGetUsers callback)
+    {
+        new Thread(() ->
+        {
+            try
+            {
+                List<Model_User> users = wintecApi.getUsers(search, sort).execute().body();
+
+                if (users == null)
+                {
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onErrorGetUsers());
+                    return;
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccessGetUsers(users));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e(TAG, "Exception " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(() -> callback.onErrorGetUsers());
+            }
+        }).start();
+    }
+
+
+    public void changeRole(int user_id, int role_id, CallbackChangeRole callback)
+    {
+        new Thread(() ->
+        {
+            try
+            {
+                String response = wintecApi.changeRole(user_id, role_id).execute().body();
+                if (!response.equals("success"))
+                {
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onErrorChangeRole());
+                    return;
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccessChangeRole());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e(TAG, "Exception " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(() -> callback.onErrorChangeRole());
+            }
+        }).start();
+    }
+
+
+    public void getUserFull(int user_id,CallbackGetUserFull callback)
+    {
+        new Thread(() ->
+        {
+            try
+            {
+                Model_User user = wintecApi.getUserFull(user_id).execute().body();
+                if(user == null)
+                {
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onErrorGetUSerFull());
+                    return;
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccessGetUserFull(user));
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e(TAG, "Exception " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(() -> callback.onErrorGetUSerFull());
+            }
+        }).start();
+    }
+
+
 }

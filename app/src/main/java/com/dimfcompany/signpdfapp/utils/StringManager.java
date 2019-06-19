@@ -10,6 +10,7 @@ import android.text.format.DateFormat;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
@@ -46,17 +47,18 @@ public class StringManager
     {
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < times; i++) {
+        for (int i = 0; i < times; i++)
+        {
             stringBuilder.append(element);
         }
         String resultString = stringBuilder.toString();
 
-        if(str == null)
+        if (str == null)
         {
             return resultString;
         }
 
-        return str+resultString;
+        return str + resultString;
     }
 
     public static String randomStr()
@@ -126,7 +128,8 @@ public class StringManager
         if (withTwo)
         {
             pattern = "#,###,###.##";
-        } else
+        }
+        else
         {
             pattern = "#,###,##0";
         }
@@ -142,7 +145,8 @@ public class StringManager
         if (withTwo)
         {
             pattern = "#,###,###.##";
-        } else
+        }
+        else
         {
             pattern = "#,###,##0";
         }
@@ -219,56 +223,58 @@ public class StringManager
     public String getUserPrivateFolderUrl()
     {
         Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
-        if(user == null)
+        if (user == null)
         {
             return null;
         }
 
-        return Constants.URL_BASE+"storage/"+user.getId()+"/";
+        return Constants.URL_BASE + "storage/" + user.getId() + "/";
     }
 
     public String getUserSignaturesUrl()
     {
-        return getUserPrivateFolderUrl()+"signatures/";
+        return getUserPrivateFolderUrl() + "signatures/";
     }
+
     public String getUserDocumentsUrl()
     {
-        return getUserPrivateFolderUrl()+"documents/";
+        return getUserPrivateFolderUrl() + "documents/";
     }
+
     public String getUserChecksUrl()
     {
-        return getUserPrivateFolderUrl()+"checks/";
+        return getUserPrivateFolderUrl() + "checks/";
     }
+
     public String getUserVauchersUrl()
     {
-        return getUserPrivateFolderUrl()+"vauchers/";
+        return getUserPrivateFolderUrl() + "vauchers/";
     }
 
     public String getAnyUserPrivateUrl(long user_id)
     {
-        return Constants.URL_BASE+"storage/"+user_id+"/";
+        return Constants.URL_BASE + "storage/" + user_id + "/";
     }
 
     public String getAnyUserSignaturesUrl(long user_id)
     {
-        return getAnyUserPrivateUrl(user_id)+"signatures/";
+        return getAnyUserPrivateUrl(user_id) + "signatures/";
     }
-    
+
     public String getAnyUserDocumentsUrl(long user_id)
     {
-        return getAnyUserPrivateUrl(user_id)+"documents/";
+        return getAnyUserPrivateUrl(user_id) + "documents/";
     }
 
     public String getAnyUserCheckUrl(long user_id)
     {
-        return getAnyUserPrivateUrl(user_id)+"checks/";
-    }
-    
-    public String getAnyUserVauchersUrl(long user_id)
-    {
-        return getAnyUserPrivateUrl(user_id)+"vauchers/";
+        return getAnyUserPrivateUrl(user_id) + "checks/";
     }
 
+    public String getAnyUserVauchersUrl(long user_id)
+    {
+        return getAnyUserPrivateUrl(user_id) + "vauchers/";
+    }
 
 
     public static String getCode(int city)
@@ -299,7 +305,7 @@ public class StringManager
                 code = "77";
         }
         code += "-";
-        code+=DateFormat.format(FORMAT_FOR_CODE, new Date()).toString();
+        code += DateFormat.format(FORMAT_FOR_CODE, new Date()).toString();
 
         return code;
     }
@@ -317,17 +323,27 @@ public class StringManager
 
     public static String castToNullIfEmpty(String text)
     {
-        if(text == null)
+        if (text == null)
         {
             return null;
         }
 
-        if(TextUtils.isEmpty(text))
+        if (TextUtils.isEmpty(text))
         {
             return null;
         }
 
         return text;
+    }
+
+    public static String getEtText(EditText editText)
+    {
+        String str = editText.getText().toString().trim();
+        if (TextUtils.isEmpty(str))
+        {
+            return null;
+        }
+        return str;
     }
 
 }

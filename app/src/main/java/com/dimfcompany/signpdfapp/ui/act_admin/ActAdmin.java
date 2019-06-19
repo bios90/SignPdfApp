@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.ui.act_admin;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -158,8 +159,9 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             }
 
             @Override
-            public void clickedEdit()
+            public void clickedEdit(Dialog dialog)
             {
+                dialog.dismiss();
                 makeEdit(document);
             }
 
@@ -210,8 +212,6 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
 
             }
         });
-
-
     }
 
     private void makeEdit(Model_Document doc)

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_gray0"
+        android:elevation="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:padding="6dp"
+            android:text="Поиск и Сортировка"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_header"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TVSemi.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:text="Поиск"
+                android:textColor="@color/gray3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp">
+
+                <EditText
+                    android:id="@+id/et_search"
+
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tv_name"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    android:id="@+id/tv_search_icon"
+
+                    style="@style/IconTv.M"
+                    android:layout_width="54dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="false"
+                    android:background="@drawable/sel_rounded_right_grad_green_gray_stroke_normal"
+                    android:text="@string/ic_search" />
+
+            </RelativeLayout>
+
+            <TextView
+                style="@style/TVSemi.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="2dp"
+                android:gravity="left"
+                android:text="Сортировка"
+                android:textColor="@color/gray3" />
+
+            <RadioGroup
+                android:id="@+id/rg_sort"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@id/rb_default"
+                android:orientation="vertical"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <RadioButton
+                    android:id="@+id/rb_default"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По умолчанию"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По имени"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По фамилии"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По email"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По доступу"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/la_bottom"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_bottom_white"
+                android:elevation="8dp"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+
+                <Button
+                    android:id="@+id/btn_cancel"
+
+                    style="@style/Btn.Md"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="10"
+                    android:background="@drawable/btn_empty_orange_rounded"
+                    android:text="Отмена"
+                    android:textColor="@color/sel_orange" />
+
+
+                <Button
+                    android:id="@+id/btn_ok"
+
+                    style="@style/Btn.Md"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="10"
+                    android:background="@drawable/btn_grad_orange_rounded"
+                    android:text="Поиск"
+                    android:textColor="@color/sel_white" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

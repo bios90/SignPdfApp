@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.ui.act_main_new;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -68,6 +69,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
         setContentView(mvpView.getRootView());
         updateFinishedBroadcastReceiver = new UpdateFinishedBroadcastReceiver(this);
         checkForAdmin();
+        checkForBlocked();
     }
 
     @Override
@@ -144,7 +146,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
     {
         boolean hasVaucher = document.getVaucher() != null;
 
-        messagesManager.showFinishedDocument(hasVaucher,new MessagesManager.DialogFinishedListener()
+        messagesManager.showFinishedDocument(hasVaucher, new MessagesManager.DialogFinishedListener()
         {
             @Override
             public void clickedOpenDogovor()
@@ -161,7 +163,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             @Override
             public void clickedOpenVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,OPEN);
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, OPEN);
             }
 
             @Override
@@ -179,7 +181,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             @Override
             public void clickedSendVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,SHARE);
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, SHARE);
             }
 
             @Override
@@ -191,11 +193,11 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             @Override
             public void clickedPrintVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER,PRINT);
+                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, PRINT);
             }
 
             @Override
-            public void clickedEdit()
+            public void clickedEdit(Dialog dialog)
             {
                 GlobalHelper.resetDocumentIds(document);
                 navigationManager.toSignActivity(null, document);
@@ -257,7 +259,8 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             return;
         }
 
-        mvpView.toggleAdminBtn(user.getRole_id() == 7);
+//        mvpView.toggleAdminBtn(user.getRole_id() == 7);
+        mvpView.toggleAdminBtn(false);
     }
 
 
@@ -267,7 +270,8 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
         try
         {
             unregisterReceiver(updateFinishedBroadcastReceiver);
-        } catch (IllegalArgumentException e)
+        }
+        catch (IllegalArgumentException e)
         {
             e.printStackTrace();
         }

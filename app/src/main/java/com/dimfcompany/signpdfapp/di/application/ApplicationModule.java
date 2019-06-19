@@ -152,9 +152,9 @@ public class ApplicationModule
     }
 
     @Provides
-    NotificationManager getNotificationManager(Gson gson)
+    NotificationManager getNotificationManager(Gson gson,SharedPrefsHelper sharedPrefsHelper)
     {
-        return new NotificationManager(gson);
+        return new NotificationManager(gson, sharedPrefsHelper);
     }
 
 

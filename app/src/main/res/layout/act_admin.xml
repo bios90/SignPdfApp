@@ -34,12 +34,12 @@
         <TextView
             android:id="@+id/tv_local"
 
+            android:visibility="gone"
             style="@style/IconTv.L"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="6dp"
             android:text="@string/ic_floppy" />
-
 
     </RelativeLayout>
 

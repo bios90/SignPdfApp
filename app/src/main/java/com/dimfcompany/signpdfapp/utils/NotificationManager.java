@@ -22,7 +22,9 @@ import androidx.core.app.NotificationManagerCompat;
 import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.base.AppClass;
 import com.dimfcompany.signpdfapp.base.Constants;
+import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -33,41 +35,76 @@ public class NotificationManager
 {
     private static final String TAG = "NotificationManager";
     private final Gson gson;
+    private final SharedPrefsHelper sharedPrefsHelper;
 
-    public NotificationManager(Gson gson)
+    public NotificationManager(Gson gson, SharedPrefsHelper sharedPrefsHelper)
     {
         this.gson = gson;
+        this.sharedPrefsHelper = sharedPrefsHelper;
     }
 
     public void notify(final RemoteMessage remoteMessage)
     {
-        new Thread(new Runnable()
+        new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
-                {
-                    Log.e(TAG, "notify: Called Notify");
-                    Map<String, String> data = remoteMessage.getData();
+                Log.e(TAG, "notify: Called Notify");
+                Map<String, String> data = remoteMessage.getData();
 
-                    String type = data.get("type");
-                    if (type == null)
-                    {
-                        Log.e(TAG, "notify: Exception type is NULL");
-                        return;
-                    }
-
-                    if (type.equals("new_doc"))
-                    {
-                        showNewDocNotify(remoteMessage);
-                    }
-                } catch (Exception e)
+                String type = data.get("type");
+                if (type == null)
                 {
-                    e.printStackTrace();
+                    Log.e(TAG, "notify: Exception type is NULL");
+                    return;
                 }
+
+                if (type.equals("new_doc"))
+                {
+                    showNewDocNotify(remoteMessage);
+                }
+
+                if (type.equals("role_change"))
+                {
+                    makeRoleChange(remoteMessage);
+                }
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
         }).start();
+    }
+
+    private void makeRoleChange(RemoteMessage remoteMessage)
+    {
+        Log.e(TAG, "makeRoleChange: success got response and will changeRole");
+
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+        if (user == null)
+        {
+            Log.e(TAG, "makeRoleChange: User null not logged in");
+            return;
+        }
+
+        int role_id = Integer.valueOf(remoteMessage.getData().get("role_id"));
+
+        if(role_id == user.getRole_id())
+        {
+            Log.e(TAG, "makeRoleChange: User role id is "+user.getRole_id()+" nad getted id is "+role_id );
+            return;
+        }
+
+        user.setRole_id(role_id);
+
+        sharedPrefsHelper.saveUserToShared(user);
+
+        if (role_id == 999)
+        {
+            sharedPrefsHelper.clearUserLocalData();
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 
     private void showNewDocNotify(RemoteMessage remoteMessage)
@@ -91,7 +128,8 @@ public class NotificationManager
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 {
                     showHighNotification(notification);
-                } else
+                }
+                else
                 {
                     showLowNotification(notification);
                 }
@@ -101,7 +139,7 @@ public class NotificationManager
 
     private Notification getNewDocNotification(Model_Document document)
     {
-        String title = "Добавлен новый документ | Сумма "+StringManager.formatNum(document.getSum(),false);
+        String title = "Добавлен новый документ | Сумма " + StringManager.formatNum(document.getSum(), false);
 
 
         String message = "";
@@ -120,7 +158,7 @@ public class NotificationManager
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(AppClass.getApp(), Constants.NOTIFICATION_CHANEL1)
                 .setSmallIcon(R.drawable.ic_cloud)
-                .setLargeIcon(BitmapFactory.decodeResource(AppClass.getApp().getResources(),R.drawable.logo_new))
+                .setLargeIcon(BitmapFactory.decodeResource(AppClass.getApp().getResources(), R.drawable.logo_new))
                 .setContentTitle(title)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)

@@ -46,10 +46,4 @@ public class ActFinishedMvpView extends BaseObservableViewAbstr<ActFinishedMvp.V
         adapter_finished.setCallback(callback);
         adapter_finished.setItems(documents);
     }
-
-    @Override
-    public void clearRecycler()
-    {
-        adapter_finished.setItems(null);
-    }
 }

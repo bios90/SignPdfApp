@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/rounded_gray0"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.L"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:padding="6dp"
+            android:text="Доступ пользователя"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            style="@style/TVReg.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="left"
+            android:textColor="@color/gray4"
+            tools:text="Выбериет уровень доступа для пользователя" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <Spinner
+                android:id="@+id/spinner_access"
+
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@drawable/rounded_white_gray_stroke"
+                android:dropDownWidth="match_parent"
+                android:popupBackground="@drawable/rounded_white_gray_stroke">
+
+            </Spinner>
+
+            <TextView
+                style="@style/IconTv.M"
+                android:layout_width="52dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/sel_rounded_right_grad_green_gray_stroke_normal"
+                android:text="@string/ic_down_arrow"
+                android:textColor="@color/sel_white" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/la_bottom"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_bottom_white"
+            android:elevation="8dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+
+            <Button
+                android:id="@+id/btn_cancel"
+
+                style="@style/Btn.Md"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_empty_orange_rounded"
+                android:text="Отмена"
+                android:textColor="@color/sel_orange" />
+
+
+            <Button
+                android:id="@+id/btn_ok"
+
+                style="@style/Btn.Md"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="10"
+                android:background="@drawable/btn_grad_orange_rounded"
+                android:text="Сохранить"
+                android:textColor="@color/sel_white" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

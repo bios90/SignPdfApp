@@ -4,15 +4,15 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
         android:name=".base.AppClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo"
-        android:roundIcon="@mipmap/ic_logo_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
@@ -23,9 +23,10 @@
             </intent-filter>
         </service>
 
-        <service android:name=".sync.SyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <service
+            android:name=".sync.SyncJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".local_db.raw.WintecProvider"
@@ -42,7 +43,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ui.act_first.ActFirst" >
+        <activity android:name=".ui.act_first.ActFirst">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -50,20 +51,38 @@
         </activity>
 
         <activity android:name=".ui.act_register.ActRegister" />
-        <activity android:name=".ui.act_main.ActMain"/>
+        <activity android:name=".ui.act_main.ActMain" />
         <activity android:name=".ui.act_sign.ActSign" />
-        <activity android:name=".ui.act_signature_dialog.ActSignatureDialog" android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".ui.act_signature_dialog.ActSignatureDialog"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".ui.act_finished.ActFinished" />
-        <activity android:name=".ui.act_add_product_dialog.ActAddProductDialog" android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".ui.act_add_product_dialog.ActAddProductDialog"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".ui.act_products.ActProducts" />
         <activity android:name=".ui.act_main_new.ActMainNew" />
-        <activity android:name=".ui.act_profile_dialog.ActProfileDialog" android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".ui.act_profile_dialog.ActProfileDialog"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".ui.act_admin.ActAdmin" />
         <activity android:name=".ui.act_vaucher.ActVaucher" />
-        <activity android:name=".ui.act_element_dialog.ActElementDialog" android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".ui.act_element_dialog.ActElementDialog"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".ui.act_pre_show.ActPreShow" />
+        <activity android:name=".ui.act_admin_menu.ActAdminMenu" />
+        <activity android:name=".ui.act_access.ActAccess" />
+        <activity
+            android:name=".ui.act_search_dialog.ActSearchDialog"
+            android:theme="@style/Theme.Transparent"></activity>
+        <activity
+            android:name=".ui.act_access_dialog.ActAccessDialog"
+            android:theme="@style/Theme.Transparent"></activity>
+        <activity
+            android:name=".ui.act_user_docs_dialog.ActUserDocsDialog"
+            android:theme="@style/Theme.Transparent" />
     </application>
-
 
 
 </manifest>

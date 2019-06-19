@@ -1,6 +1,8 @@
 package com.dimfcompany.signpdfapp.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model_User implements Serializable
 {
@@ -11,6 +13,10 @@ public class Model_User implements Serializable
     String password;
     String fb_token;
     int role_id;
+
+    Model_Role role;
+
+    List<Model_Document> documents = new ArrayList<>();
 
     public int getId()
     {
@@ -80,5 +86,25 @@ public class Model_User implements Serializable
     public void setRole_id(int role_id)
     {
         this.role_id = role_id;
+    }
+
+    public List<Model_Document> getDocuments()
+    {
+        return documents;
+    }
+
+    public void setDocuments(List<Model_Document> documents)
+    {
+        this.documents = documents;
+    }
+
+    public Model_Role getRole()
+    {
+        return role;
+    }
+
+    public void setRole(Model_Role role)
+    {
+        this.role = role;
     }
 }

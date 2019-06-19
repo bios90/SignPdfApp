@@ -63,9 +63,7 @@ public class ActPreShow extends BaseActivity implements ActPreShowMvp.ViewListen
             {
                 TextView textView = (TextView) view;
                 float textSize = textView.getTextSize();
-                Log.e(TAG, "resizeTextViews: Getted text size is " + textSize);
                 textSize = plus ? (textSize + 2) : (textSize - 2);
-                Log.e(TAG, "resizeTextViews: Text size to set is " + textSize);
                 if (textSize < 20 || textSize > 75)
                 {
                     continue;

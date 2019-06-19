@@ -64,4 +64,13 @@ public interface WintecApi
     @POST(Constants.URL_DELETE_DOCUMENT_ON_SERVER)
     Call<String> deleteDocumentOnServer(@Query("document_id") long document_id);
 
+    @GET(Constants.URL_GET_ALL_USERS)
+    Call<List<Model_User>> getUsers(@Query("search") String search, @Query("sort") String sort);
+
+    @POST(Constants.URL_CHANGE_ROLE)
+    Call<String> changeRole(@Query("user_id") int user_id, @Query("role_id") int role_id);
+
+    @GET(Constants.URL_GET_USER_WITH_DOCS)
+    Call<Model_User> getUserFull(@Query("user_id") int user_id);
+
 }

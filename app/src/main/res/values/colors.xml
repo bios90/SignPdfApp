@@ -43,4 +43,42 @@
     <color name="green">#009B72</color>
     <color name="blue">#009DDC</color>
     <color name="prenColor">#4169e1</color>
+    
+    
+    <color name="el_red">#FF0E18</color>
+    <color name="el_red_dark">#D9040D</color>
+    <color name="el_red_light">#FF4950</color>
+
+    <color name="el_orange">#FF9000</color>
+    <color name="el_orange_dark">#EA8401</color>
+    <color name="el_orange_light">#FFAA3D</color>
+
+    <color name="el_yellow">#FFCB00</color>
+    <color name="el_yellow_dark">#E9B900</color>
+    <color name="el_yellow_light">#FFD83F</color>
+
+    <color name="el_green">#00DE51</color>
+    <color name="el_green_dark">#00B843</color>
+    <color name="el_green_light">#03F75C</color>
+
+
+    <color name="el_teal">#19CAFF</color>
+    <color name="el_teal_dark">#00A8DA</color>
+    <color name="el_teal_light">#37D1FF</color>
+
+    <color name="el_blue">#0078FF</color>
+    <color name="el_blue_dark">#0066D8</color>
+    <color name="el_blue_light">#429BFF</color>
+
+    <color name="el_purple">#5B51DE</color>
+    <color name="el_purple_dark">#352BB6</color>
+    <color name="el_purple_light">#7B72F6</color>
+
+    <color name="el_pink">#FF004F</color>
+    <color name="el_pink_dark">#DB0044</color>
+    <color name="el_pink_light">#FC3975</color>
+    
+
+
+
 </resources>

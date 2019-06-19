@@ -77,20 +77,20 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
 
     private void makePassReset(String text)
     {
-        if(!globalHelper.isNetworkAvailable())
+        if (!globalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
             return;
         }
 
         messagesManager.showProgressDialog();
-        helperAuth.passReset(text,this);
+        helperAuth.passReset(text, this);
     }
 
     @Override
     public void clickedLogin()
     {
-        if(!globalHelper.isNetworkAvailable())
+        if (!globalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
             return;
@@ -100,17 +100,17 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
         String password = mvpView.getPassword();
         String fb_token = sharedPrefsHelper.getUserToken();
 
-        if(!ValidationManager.validateForLogin(email,password,fb_token))
+        if (!ValidationManager.validateForLogin(email, password, fb_token))
         {
-            List<String> errors = ValidationManager.getLoginListOfErrors(email,password,fb_token);
-            String message = StringManager.listOfStringToSingle(errors,"\n");
+            List<String> errors = ValidationManager.getLoginListOfErrors(email, password, fb_token);
+            String message = StringManager.listOfStringToSingle(errors, "\n");
             messagesManager.showRedAlerter(message);
             return;
         }
 
 
         messagesManager.showProgressDialog();
-        helperAuth.login(email,password,fb_token,this);
+        helperAuth.login(email, password, fb_token, this);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
     public void onSuccessPassReset()
     {
         messagesManager.dismissProgressDialog();
-        messagesManager.showGreenAlerter("Успешно","На ваш email отправлена инструкция по восстановлению");
+        messagesManager.showGreenAlerter("Успешно", "На ваш email отправлена инструкция по восстановлению");
     }
 
     @Override
@@ -139,6 +139,13 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
     {
         messagesManager.dismissProgressDialog();
         sharedPrefsHelper.saveUserToShared(user);
+
+        if (user.getRole_id() == 999)
+        {
+            messagesManager.showRedAlerter("Доступ заблокирован");
+            return;
+        }
+
         toMainScreen();
     }
 
@@ -151,14 +158,22 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
 
     private void toMainScreen()
     {
-        navigationManager.toActMainNew(null);
+        if (sharedPrefsHelper.getUserFromSharedPrefs() != null && sharedPrefsHelper.getUserFromSharedPrefs().getRole_id() == 7)
+        {
+            navigationManager.toActAdminMenu(null);
+        }
+        else
+        {
+            navigationManager.toActMainNew(null);
+        }
+
         finish();
     }
 
     private void checkForLogin()
     {
         Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
-        if(user != null)
+        if (user != null && user.getRole_id() != 999)
         {
             toMainScreen();
         }

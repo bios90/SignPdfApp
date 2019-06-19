@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.base.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import com.dimfcompany.signpdfapp.base.viewmvcfactory.ViewMvcFactory;
 import com.dimfcompany.signpdfapp.di.application.ApplicationComponent;
 import com.dimfcompany.signpdfapp.di.presenter.PresenterComponent;
 import com.dimfcompany.signpdfapp.di.presenter.PresenterModule;
+import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.utils.NavigationManager;
 
@@ -27,6 +30,8 @@ public abstract class BaseActivity extends AppCompatActivity
     protected ViewMvcFactory viewMvcFactory;
     @Inject
     protected NavigationManager navigationManager;
+    @Inject
+    SharedPrefsHelper sharedPrefsHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -37,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     protected PresenterComponent getPresenterComponent()
     {
-        if(injectorUsed)
+        if (injectorUsed)
         {
             throw new RuntimeException("Injector already used, it cant be used twice");
         }
@@ -48,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
     ApplicationComponent getApplicationComponent()
     {
-        return ((AppClass)getApplicationContext()).getApplicationComponent();
+        return ((AppClass) getApplicationContext()).getApplicationComponent();
     }
 
     public static void startScreen(AppCompatActivity activity, Class actClass, @Nullable Integer request_code)
@@ -58,7 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity
         if (request_code == null)
         {
             activity.startActivity(intent);
-        } else
+        }
+        else
         {
             activity.startActivityForResult(intent, request_code);
         }
@@ -89,9 +95,36 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
+    protected void finishWithResultCancel()
+    {
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
+
+    protected void finishWithResultOk()
+    {
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    protected void finishWithResultOk(Intent return_intent)
+    {
+        setResult(Activity.RESULT_OK, return_intent);
+        finish();
+    }
+
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
+    }
+
+    protected void checkForBlocked()
+    {
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+        if (user == null || user.getRole_id() == 999)
+        {
+            finish();
+        }
     }
 }

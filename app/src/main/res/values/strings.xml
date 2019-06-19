@@ -33,6 +33,10 @@
     <string name="ic_vaucher">&#xf15c;</string>
     <string name="ic_zoom_plus">&#xf00e;</string>
     <string name="ic_zoom_minus">&#xf010;</string>
+    <string name="ic_location">&#xf124;</string>
+    <string name="ic_search">&#xf002;</string>
+    <string name="ic_sort">&#xf160;</string>
+
     <string name="pre_show_header"><b>ООО «Лаборатория Уюта»</b>, именуемое в дальнейшем <b>«Исполнитель»</b>, в лице <b>Рыбакиной Ларисы Витальевны</b>,
         действующей на основании Устава, с одной стороны, и <b>«Заказчик»</b> (Данные заказчика указываются внизу страницы), с
 другой стороны, заключили настоящий договор о нижеследующем:</string>

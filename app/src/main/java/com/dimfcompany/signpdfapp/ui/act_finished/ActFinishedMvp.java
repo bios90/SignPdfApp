@@ -11,7 +11,6 @@ public interface ActFinishedMvp
     interface MvpView extends BaseObservableView<ViewListener>
     {
         void bindDocuments(List<Model_Document> documents, AdapterFinished.CardFinishedCallback callback);
-        void clearRecycler();
     }
 
     interface ViewListener

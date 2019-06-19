@@ -23,11 +23,14 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
     public interface CardFinishedCallback
     {
         void clickedCard(Model_Document document);
+
         void clickedPhone(Model_Document document);
     }
 
     List<Model_Document> listOfDocuments = new ArrayList<>();
     private CardFinishedCallback callback;
+
+    private boolean showSync = true;
 
     @NonNull
     @Override
@@ -47,7 +50,7 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         String header = document.getCode() + " | " + date;
 
         String address = city;
-        if(document.getAdress() != null)
+        if (document.getAdress() != null)
         {
             address += " " + document.getAdress();
         }
@@ -55,17 +58,24 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         cardFinished.tv_header.setText(header);
         cardFinished.tv_fio.setText(document.getFio());
         cardFinished.tv_phone.setText(document.getPhone());
-        cardFinished.tv_adress.setText(address );
+        cardFinished.tv_adress.setText(address);
         cardFinished.tv_date.setText(date);
 
         if (document.getSync_status() == 0)
         {
             cardFinished.tv_status_0.setVisibility(View.VISIBLE);
             cardFinished.tv_status_1.setVisibility(View.GONE);
-        } else if (document.getSync_status() == 1)
+        }
+        else if (document.getSync_status() == 1)
         {
             cardFinished.tv_status_1.setVisibility(View.VISIBLE);
             cardFinished.tv_status_0.setVisibility(View.GONE);
+        }
+
+        if (!showSync)
+        {
+            cardFinished.tv_status_0.setVisibility(View.GONE);
+            cardFinished.tv_status_1.setVisibility(View.GONE);
         }
 
         cardFinished.root_view.setOnClickListener(new View.OnClickListener()
@@ -112,6 +122,10 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         notifyDataSetChanged();
     }
 
+    public void setShowSync(boolean showSync)
+    {
+        this.showSync = showSync;
+    }
 
     class CardFinished extends RecyclerView.ViewHolder
     {

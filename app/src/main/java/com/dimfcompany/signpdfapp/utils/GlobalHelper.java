@@ -1,5 +1,6 @@
 package com.dimfcompany.signpdfapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -18,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dimfcompany.signpdfapp.R;
@@ -28,6 +31,7 @@ import com.dimfcompany.signpdfapp.models.Model_Krep;
 import com.dimfcompany.signpdfapp.models.Model_Material;
 import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
+import com.dimfcompany.signpdfapp.models.Model_User;
 import com.jmedeisis.draglinearlayout.DragLinearLayout;
 
 import java.io.File;
@@ -112,7 +116,8 @@ public class GlobalHelper
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             intent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
-        } else
+        }
+        else
         {
             intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(file), "application/pdf");
@@ -131,7 +136,8 @@ public class GlobalHelper
         if (intent.resolveActivity(activity.getPackageManager()) == null)
         {
             return false;
-        } else
+        }
+        else
         {
             return true;
         }
@@ -149,7 +155,8 @@ public class GlobalHelper
             intent.setType("application/pdf");
             intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
 
-        } else
+        }
+        else
         {
             Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
             intent = new Intent(Intent.ACTION_SEND);
@@ -192,7 +199,8 @@ public class GlobalHelper
             try
             {
                 pi = pm.getPackageInfo(appPackageName, 0);
-            } catch (PackageManager.NameNotFoundException e)
+            }
+            catch (PackageManager.NameNotFoundException e)
             {
                 e.printStackTrace();
             }
@@ -202,11 +210,13 @@ public class GlobalHelper
             try
             {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-            } catch (android.content.ActivityNotFoundException anfe)
+            }
+            catch (android.content.ActivityNotFoundException anfe)
             {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
-        } else
+        }
+        else
         {
             intent.setPackage(appPackageName);
             context.startActivity(intent);
@@ -383,9 +393,13 @@ public class GlobalHelper
         {
             child = layout.getChildAt(i);
             if (child instanceof ViewGroup)
+            {
                 invalidateRecursive((ViewGroup) child);
+            }
             else
+            {
                 child.invalidate();
+            }
         }
     }
 
@@ -406,7 +420,8 @@ public class GlobalHelper
             String str = editText.getText().toString().trim();
             str = str.replaceAll("[^\\d.]", "");
             return Integer.valueOf(str);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return 0;
         }
@@ -424,7 +439,8 @@ public class GlobalHelper
                 percent = 100;
             }
             return percent;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return 0;
         }
@@ -437,7 +453,8 @@ public class GlobalHelper
             String str = editText.getText().toString().trim();
             str = str.replaceAll("[^\\d.]", "");
             return Float.valueOf(str);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return 0f;
         }
@@ -450,7 +467,8 @@ public class GlobalHelper
             String str = editText.getText().toString().trim();
             str = str.replaceAll("[^\\d.]", "");
             return Double.valueOf(str);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return 0d;
         }
@@ -711,5 +729,87 @@ public class GlobalHelper
     public static int getRandomInt(final int min, final int max)
     {
         return new Random().nextInt((max - min) + 1) + min;
+    }
+
+    public static String getFullName(Model_User user)
+    {
+        return user.getLast_name() + " " + user.getFirst_name();
+    }
+
+    public static int getRadioGroupValue(RadioGroup radioGroup) throws Exception
+    {
+        Integer value = null;
+        for (int a = 0; a < radioGroup.getChildCount(); a++)
+        {
+            RadioButton radioButton = (RadioButton) radioGroup.getChildAt(a);
+            if (radioButton.isChecked())
+            {
+                value = a;
+            }
+        }
+
+        if (value == null)
+        {
+            throw new Exception("**** ERROR ON GETTING RADIO BUTTON VALUE - NO VALUE ****");
+        }
+
+        return value;
+    }
+
+    public static String getSortStringFromInt(Integer sortInt)
+    {
+        String sort = null;
+
+        if (sortInt != null && sortInt != 999999)
+        {
+            switch (sortInt)
+            {
+                case 0:
+                    sort = "id";
+                    break;
+                case 1:
+                    sort = "first_name";
+                    break;
+                case 2:
+                    sort = "last_name";
+                    break;
+                case 3:
+                    sort = "email";
+                    break;
+                case 4:
+                    sort = "role_id";
+                    break;
+            }
+        }
+
+        return sort;
+    }
+    public static String getSortStringFromIntRus(Integer sortInt)
+    {
+        String sort = null;
+
+        if (sortInt != null && sortInt != 999999)
+        {
+            switch (sortInt)
+            {
+                case 0:
+                    sort = "По умолчанию";
+                    break;
+                case 1:
+                    sort = "По имени";
+                    break;
+                case 2:
+                    sort = "По фамилии";
+                    break;
+                case 3:
+                    sort = "По email";
+                    break;
+                case 4:
+                    sort = "По доступу";
+                    break;
+            }
+        }
+
+        return sort;
     }
 }

@@ -5,10 +5,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.dimfcompany.signpdfapp.ui.act_access.ActAccessMvp;
+import com.dimfcompany.signpdfapp.ui.act_access.ActAccessMvpView;
+import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_add_product_dialog.ActAddProductDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvp;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdminMvpView;
+import com.dimfcompany.signpdfapp.ui.act_admin_menu.ActAdminMenuMvp;
+import com.dimfcompany.signpdfapp.ui.act_admin_menu.ActAdminMenuMvpView;
 import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvp;
@@ -27,10 +33,15 @@ import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_profile_dialog.ActProfileDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_register.ActRegisterMvp;
 import com.dimfcompany.signpdfapp.ui.act_register.ActRegisterMvpView;
+import com.dimfcompany.signpdfapp.ui.act_search_dialog.ActSearchDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_search_dialog.ActSearchDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvp;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvpView;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvpView;
+import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialog;
+import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialogMvpView;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvp;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvpView;
 import com.dimfcompany.signpdfapp.utils.FileManager;
@@ -120,9 +131,34 @@ public class ViewMvcFactory
     {
         return new ActElementDialogMvpView(layoutInflater, parent);
     }
-    
+
     public ActPreShowMvp.MvpView getActPreShowMvpView(@Nullable ViewGroup parent)
     {
         return new ActPreShowMvpView(layoutInflater, parent);
+    }
+
+    public ActAdminMenuMvp.MvpView getActAdminMenuMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActAdminMenuMvpView(layoutInflater, parent);
+    }
+
+    public ActAccessMvp.MvpView getActAccessMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActAccessMvpView(layoutInflater, parent);
+    }
+
+    public ActSearchDialogMvp.MvpView getActSearchMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActSearchDialogMvpView(layoutInflater, parent);
+    }
+
+    public ActAccessDialogMvp.MvpView getActAccessDialogMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActAccessDialogMvpView(layoutInflater, parent);
+    }
+
+    public ActUserDocsDialogMvp.MvpView getActUserDialogMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActUserDocsDialogMvpView(layoutInflater, parent);
     }
 }
