@@ -1,7 +1,10 @@
 package com.dimfcompany.signpdfapp.base.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dimfcompany.signpdfapp.base.AppClass;
+import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.viewmvcfactory.ViewMvcFactory;
 import com.dimfcompany.signpdfapp.di.application.ApplicationComponent;
 import com.dimfcompany.signpdfapp.di.presenter.PresenterComponent;
@@ -20,6 +24,8 @@ import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.utils.NavigationManager;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseActivity extends AppCompatActivity
 {
@@ -33,11 +39,16 @@ public abstract class BaseActivity extends AppCompatActivity
     @Inject
     SharedPrefsHelper sharedPrefsHelper;
 
+    protected CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    BroadcastReceiver recieverKillApp = getRecieverKillApp();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         makePortrait();
+        registerReceiver(recieverKillApp, new IntentFilter(Constants.BROADCAST_KILL_APPLICATION));
     }
 
     protected PresenterComponent getPresenterComponent()
@@ -117,6 +128,8 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
+        unregisterReceiver(recieverKillApp);
+        compositeDisposable.clear();
     }
 
     protected void checkForBlocked()
@@ -126,5 +139,21 @@ public abstract class BaseActivity extends AppCompatActivity
         {
             finish();
         }
+    }
+
+    private static BroadcastReceiver getRecieverKillApp()
+    {
+        return new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                if (intent.getAction().equals(Constants.BROADCAST_KILL_APPLICATION))
+                {
+                    Log.e(TAG, "onReceive: got broadcast to kill activity");
+                    ((BaseActivity) context).finish();
+                }
+            }
+        };
     }
 }

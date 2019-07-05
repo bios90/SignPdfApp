@@ -1,6 +1,7 @@
 package com.dimfcompany.signpdfapp.ui.act_admin_menu;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -16,6 +17,9 @@ public class ActAdminMenu extends BaseActivity implements ActAdminMenuMvp.ViewLi
 
     ActAdminMenuMvp.MvpView mvpView;
 
+    @Inject
+    SharedPrefsHelper sharedPrefsHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -24,8 +28,14 @@ public class ActAdminMenu extends BaseActivity implements ActAdminMenuMvp.ViewLi
         mvpView = viewMvcFactory.getActAdminMenuMvpView(null);
         mvpView.registerListener(this);
         setContentView(mvpView.getRootView());
+    }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
         checkForBlocked();
+        checkForNotAdmin();
     }
 
     @Override
@@ -43,7 +53,7 @@ public class ActAdminMenu extends BaseActivity implements ActAdminMenuMvp.ViewLi
     @Override
     public void clickedLocation()
     {
-
+        navigationManager.toActGeo(null);
     }
 
     @Override
@@ -62,6 +72,17 @@ public class ActAdminMenu extends BaseActivity implements ActAdminMenuMvp.ViewLi
     public void clickedProfile()
     {
         navigationManager.toActProfileDialog(null);
+    }
+
+    private void checkForNotAdmin()
+    {
+        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+
+        Log.e(TAG, "checkForNotAdmin: user role id is "+user.getRole_id() );
+        if (user == null || user.getRole_id() != 7)
+        {
+            finish();
+        }
     }
 
 }

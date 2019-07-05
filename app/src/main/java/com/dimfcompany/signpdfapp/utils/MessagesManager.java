@@ -154,6 +154,9 @@ public class MessagesManager
             }
         });
 
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+
         dialog.show();
     }
 
@@ -161,7 +164,7 @@ public class MessagesManager
     public void showFinishedDocument(boolean hasVaucher, final DialogFinishedListener listener)
     {
         View dialogView = layoutInflater.inflate(R.layout.dialog_document_card, null);
-        RelativeLayout la_open_dogovor, la_open_check, la_send_dogovor, la_send_check, la_print_check, la_edit, la_delete,la_open_vaucher,la_send_vaucher,la_print_vaucher;
+        RelativeLayout la_open_dogovor, la_open_check, la_send_dogovor, la_send_check, la_print_check, la_edit, la_delete, la_open_vaucher, la_send_vaucher, la_print_vaucher;
 
         la_open_dogovor = dialogView.findViewById(R.id.la_open_dogovor);
         la_open_check = dialogView.findViewById(R.id.la_open_check);
@@ -176,7 +179,6 @@ public class MessagesManager
 
         final AlertDialog dialog = new AlertDialog.Builder(activity).create();
         dialog.setView(dialogView);
-
 
         la_open_dogovor.setOnClickListener(new View.OnClickListener()
         {
@@ -260,7 +262,7 @@ public class MessagesManager
             }
         });
 
-        if(!hasVaucher)
+        if (!hasVaucher)
         {
             la_open_vaucher.setVisibility(View.GONE);
             la_send_vaucher.setVisibility(View.GONE);
@@ -279,6 +281,172 @@ public class MessagesManager
         dialog.show();
     }
 
+    public void showFullDocumentDialog(Model_Document document, final DialogFinishedListener listener)
+    {
+        View dialogView = layoutInflater.inflate(R.layout.dialog_document_card_full, null);
+        RelativeLayout la_open_dogovor, la_open_check, la_send_dogovor, la_send_check, la_print_check, la_edit, la_delete, la_open_vaucher, la_send_vaucher, la_print_vaucher;
+        TextView tv_header,tv_user,tv_fio,tv_phone,tv_adress,tv_date;
+
+
+        final AlertDialog dialog = new AlertDialog.Builder(activity).create();
+        dialog.setView(dialogView);
+
+
+        tv_user = dialogView.findViewById(R.id.tv_user);
+        tv_header = dialogView.findViewById(R.id.tv_header);
+        tv_fio = dialogView.findViewById(R.id.tv_fio);
+        tv_phone = dialogView.findViewById(R.id.tv_phone);
+        tv_adress = dialogView.findViewById(R.id.tv_adress);
+        tv_date = dialogView.findViewById(R.id.tv_date);
+
+        la_open_dogovor = dialogView.findViewById(R.id.la_open_dogovor);
+        la_open_check = dialogView.findViewById(R.id.la_open_check);
+        la_open_vaucher = dialogView.findViewById(R.id.la_open_vaucher);
+        la_send_dogovor = dialogView.findViewById(R.id.la_send_dogovor);
+        la_send_check = dialogView.findViewById(R.id.la_send_check);
+        la_send_vaucher = dialogView.findViewById(R.id.la_send_vaucher);
+        la_print_check = dialogView.findViewById(R.id.la_print_check);
+        la_print_vaucher = dialogView.findViewById(R.id.la_print_vaucher);
+        la_edit = dialogView.findViewById(R.id.la_edit);
+        la_delete = dialogView.findViewById(R.id.la_delete);
+
+        tv_header.setText(document.getCode());
+        tv_user.setText(StringManager.getFullName(document.getUser()));
+
+        if(document.getFio()!= null)
+        {
+            tv_fio.setText(document.getFio());
+        }
+
+        if(document.getPhone()!= null)
+        {
+            tv_phone.setText(document.getPhone());
+        }
+
+        if(document.getAdress() != null)
+        {
+            tv_phone.setText(document.getPhone());
+        }
+
+        if(document.getAdress() != null)
+        {
+            tv_adress.setText(document.getAdress());
+        }
+
+        tv_date.setText(GlobalHelper.getDateString(document.getDate()));
+
+
+        la_open_dogovor.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedOpenDogovor();
+            }
+        });
+
+        la_open_check.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedOpenCheck();
+            }
+        });
+
+        la_send_dogovor.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedSendDogovor();
+            }
+        });
+
+        la_send_check.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedSendCheck();
+            }
+        });
+
+        la_edit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedEdit(dialog);
+            }
+        });
+
+        la_delete.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedDelete();
+            }
+        });
+
+        la_open_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedOpenVaucher();
+            }
+        });
+
+        la_send_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedSendVaucher();
+            }
+        });
+
+        la_print_vaucher.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedPrintVaucher();
+            }
+        });
+
+        if (document.getVaucher_file_name() == null)
+        {
+            la_open_vaucher.setVisibility(View.GONE);
+            la_send_vaucher.setVisibility(View.GONE);
+            la_print_vaucher.setVisibility(View.GONE);
+        }
+
+        la_print_check.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                listener.clickedPrintCheck();
+            }
+        });
+
+        GlobalHelper.makeDialogTransparentBg(dialog);
+        dialog.show();
+    }
+
     public void vibrate()
     {
         vibrate(200);
@@ -291,7 +459,8 @@ public class MessagesManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             v.vibrate(VibrationEffect.createOneShot(miliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else
+        }
+        else
         {
 
             v.vibrate(miliseconds);
@@ -327,7 +496,8 @@ public class MessagesManager
         try
         {
             progressDialog.show();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.e(TAG, "showSpotsDialog: Error on show Green Dialog");
         }

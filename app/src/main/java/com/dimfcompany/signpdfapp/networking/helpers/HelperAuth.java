@@ -8,6 +8,8 @@ import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.google.gson.Gson;
 
+import retrofit2.Response;
+
 public class HelperAuth
 {
     private static final String TAG = "HelperAuth";
@@ -15,18 +17,21 @@ public class HelperAuth
     public interface CallbackPassReset
     {
         void onSuccessPassReset();
+
         void onErrorPassReset();
     }
 
     public interface CallbackLogin
     {
         void onSuccessLogin(Model_User user);
-        void onErrorLogin();
+
+        void onErrorLogin(String error);
     }
-    
+
     public interface CallbackRegister
     {
         void onSuccessRegister();
+
         void onErrorRegister(String text);
     }
 
@@ -77,7 +82,8 @@ public class HelperAuth
                             }
                         });
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -125,7 +131,8 @@ public class HelperAuth
                             callback.onSuccessPassReset();
                         }
                     });
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -141,8 +148,8 @@ public class HelperAuth
             }
         }).start();
     }
-    
-    public void login(final String email, final String pass, final String fb_token, final CallbackLogin callback)
+
+    public void login(final String email, final String pass, final String fb_token,final String app_version, final CallbackLogin callback)
     {
         new Thread(new Runnable()
         {
@@ -151,30 +158,41 @@ public class HelperAuth
             {
                 try
                 {
-                    final Model_User user = wintecApi.login(email,pass,fb_token).execute().body();
+                    String response = wintecApi.login(email, pass, fb_token, app_version).execute().body();
+                    Model_User user = null;
+                    try
+                    {
+                        user = gson.fromJson(response, Model_User.class);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.e(TAG, "run: Exception on casting");
+                    }
 
-                    if(user == null)
+                    if (user == null)
                     {
                         new Handler(Looper.getMainLooper()).post(new Runnable()
                         {
                             @Override
                             public void run()
                             {
-                                callback.onErrorLogin();
+                                callback.onErrorLogin(response);
                             }
                         });
                         return;
                     }
 
+                    Model_User finalUser = user;
                     new Handler(Looper.getMainLooper()).post(new Runnable()
                     {
                         @Override
                         public void run()
                         {
-                            callback.onSuccessLogin(user);
+                            callback.onSuccessLogin(finalUser);
                         }
                     });
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -183,7 +201,7 @@ public class HelperAuth
                         @Override
                         public void run()
                         {
-                            callback.onErrorLogin();
+                            callback.onErrorLogin("catch error");
                         }
                     });
                 }

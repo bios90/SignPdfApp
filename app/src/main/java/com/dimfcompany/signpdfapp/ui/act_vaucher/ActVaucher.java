@@ -34,7 +34,8 @@ public class ActVaucher extends BaseActivity implements ActVaucherMvp.ViewListen
         if (request_code == null)
         {
             activity.startActivity(intent);
-        } else
+        }
+        else
         {
             activity.startActivityForResult(intent, request_code);
         }
@@ -58,7 +59,6 @@ public class ActVaucher extends BaseActivity implements ActVaucherMvp.ViewListen
         mvpView.bindHeaderSpinner(Constants.headerStrings);
         checkForEdit();
     }
-
 
 
     @Override
@@ -187,9 +187,9 @@ public class ActVaucher extends BaseActivity implements ActVaucherMvp.ViewListen
 
     private void checkForEdit()
     {
-        if(getDocument().getVaucher() != null)
+        if (getDocument().getVaucher() != null)
         {
-            if(getDocument().getVaucher().getHeader() != null)
+            if (getDocument().getVaucher().getHeader() != null)
             {
                 mvpView.bindHeader(getDocument().getVaucher().getHeader());
             }
@@ -202,9 +202,20 @@ public class ActVaucher extends BaseActivity implements ActVaucherMvp.ViewListen
     public void onBackPressed()
     {
         Intent intent = new Intent();
-        intent.putExtra(Constants.EXTRA_MODEL_DOCUMENT,getDocument());
-        getDocument().getVaucher().setHeader(mvpView.getHeaderString());
-        setResult(Activity.RESULT_OK,intent);
+
+        String vaucher_text = mvpView.getHeaderString();
+        if (vaucher_text != null)
+        {
+            if (getDocument().getVaucher() == null)
+            {
+                getDocument().setVaucher(new Model_Vaucher());
+            }
+
+            getDocument().getVaucher().setHeader(mvpView.getHeaderString());
+        }
+
+        intent.putExtra(Constants.EXTRA_MODEL_DOCUMENT, getDocument());
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 }

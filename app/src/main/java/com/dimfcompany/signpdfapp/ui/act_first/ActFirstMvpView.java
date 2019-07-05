@@ -10,16 +10,17 @@ import android.widget.TextView;
 import com.dimfcompany.signpdfapp.BuildConfig;
 import com.dimfcompany.signpdfapp.R;
 import com.dimfcompany.signpdfapp.base.mvpview.BaseObservableViewAbstr;
+import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 
 public class ActFirstMvpView extends BaseObservableViewAbstr<ActFirstMvp.ViewListener>
         implements ActFirstMvp.MvpView
 {
     private static final String TAG = "ActFirstMvpView";
 
-    EditText et_email,et_password;
+    EditText et_email, et_password;
     TextView tv_forgot_pass;
     RelativeLayout la_enter;
-    TextView tv_register,tv_version;
+    TextView tv_register, tv_version;
 
     public ActFirstMvpView(LayoutInflater layoutInflater, ViewGroup viewGroup)
     {
@@ -83,7 +84,6 @@ public class ActFirstMvpView extends BaseObservableViewAbstr<ActFirstMvp.ViewLis
     @Override
     public void bindVersion()
     {
-        String versionName = BuildConfig.VERSION_NAME;
-        tv_version.setText("Версия: "+versionName);
+        tv_version.setText("Версия: " + GlobalHelper.APP_VERSION());
     }
 }

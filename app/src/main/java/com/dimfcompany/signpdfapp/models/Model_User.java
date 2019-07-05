@@ -2,6 +2,7 @@ package com.dimfcompany.signpdfapp.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Model_User implements Serializable
@@ -10,11 +11,17 @@ public class Model_User implements Serializable
     String first_name;
     String last_name;
     String email;
+    int verified;
     String password;
     String fb_token;
     int role_id;
+    int admin_approved;
+    String app_version;
+
+    Date created_at;
 
     Model_Role role;
+
 
     List<Model_Document> documents = new ArrayList<>();
 
@@ -56,6 +63,16 @@ public class Model_User implements Serializable
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public int getVerified()
+    {
+        return verified;
+    }
+
+    public void setVerified(int verified)
+    {
+        this.verified = verified;
     }
 
     public String getPassword()
@@ -106,5 +123,35 @@ public class Model_User implements Serializable
     public void setRole(Model_Role role)
     {
         this.role = role;
+    }
+
+    public int getAdmin_approved()
+    {
+        return admin_approved;
+    }
+
+    public void setAdmin_approved(int admin_approved)
+    {
+        this.admin_approved = admin_approved;
+    }
+
+    public Date getCreated_at()
+    {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at)
+    {
+        this.created_at = created_at;
+    }
+
+    public String getApp_version()
+    {
+        return app_version;
+    }
+
+    public void setApp_version(String app_version)
+    {
+        this.app_version = app_version;
     }
 }

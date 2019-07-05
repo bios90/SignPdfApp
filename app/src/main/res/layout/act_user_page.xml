@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sign="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_gray0"
+        android:elevation="12dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_black"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_header"
+
+                style="@style/TVReg.S"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:text="Данные пользователя"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_user_name_header"
+
+                style="@style/TVSemi.M"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:text="Вася пупкин"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Имя"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_user"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_first_name"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Фамилия"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_user_tie"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_last_name"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Email"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_email"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_email"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Подтвержден Email"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_tick"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_email_verified"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Одобрен"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_user_tick"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_admin_approved"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Дата регистрации"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_date"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_created_at"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Доступ"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_lock_open"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_role"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/la_docs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Документов"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_file_pdf"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_docs_count"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Версия"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/ic_phone_device"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_app_version"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="-"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_bottom_white"
+                android:elevation="8dp"
+                android:padding="8dp">
+
+                <Button
+                    android:id="@+id/btn_toggle_approved"
+
+                    style="@style/Btn.Sm"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="10"
+                    android:background="@drawable/btn_empty_orange_rounded"
+                    android:text="Отозвать"
+                    android:textColor="@color/sel_white" />
+
+
+                <Button
+                    android:id="@+id/btn_edit"
+
+                    style="@style/Btn.Sm"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="10"
+                    android:background="@drawable/btn_grad_orange_rounded"
+                    android:text="Редактировать"
+                    android:textColor="@color/sel_white" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

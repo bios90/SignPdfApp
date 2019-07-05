@@ -1,8 +1,10 @@
 package com.dimfcompany.signpdfapp.utils;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -26,9 +28,11 @@ import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
+import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Map;
 
 public class NotificationManager
@@ -36,11 +40,13 @@ public class NotificationManager
     private static final String TAG = "NotificationManager";
     private final Gson gson;
     private final SharedPrefsHelper sharedPrefsHelper;
+    private final Context appContext;
 
-    public NotificationManager(Gson gson, SharedPrefsHelper sharedPrefsHelper)
+    public NotificationManager(Gson gson, SharedPrefsHelper sharedPrefsHelper, Context appContext)
     {
         this.gson = gson;
         this.sharedPrefsHelper = sharedPrefsHelper;
+        this.appContext = appContext;
     }
 
     public void notify(final RemoteMessage remoteMessage)
@@ -69,6 +75,11 @@ public class NotificationManager
                     makeRoleChange(remoteMessage);
                 }
 
+                if (type.equals("logout"))
+                {
+                    make_logout();
+                }
+
             }
             catch (Exception e)
             {
@@ -90,9 +101,9 @@ public class NotificationManager
 
         int role_id = Integer.valueOf(remoteMessage.getData().get("role_id"));
 
-        if(role_id == user.getRole_id())
+        if (role_id == user.getRole_id())
         {
-            Log.e(TAG, "makeRoleChange: User role id is "+user.getRole_id()+" nad getted id is "+role_id );
+            Log.e(TAG, "makeRoleChange: User role id is " + user.getRole_id() + " nad getted id is " + role_id);
             return;
         }
 
@@ -100,10 +111,24 @@ public class NotificationManager
 
         sharedPrefsHelper.saveUserToShared(user);
 
-        if (role_id == 999)
+        make_logout();
+    }
+
+    private void make_logout()
+    {
+        Log.e(TAG, "make_logout: got logout task");
+
+        sharedPrefsHelper.clearUserLocalData();
+
+        if (isAppOnForeground())
         {
-            sharedPrefsHelper.clearUserLocalData();
-            android.os.Process.killProcess(android.os.Process.myPid());
+            Intent dialogIntent = new Intent(appContext, ActFirst.class);
+            dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            appContext.startActivity(dialogIntent);
+        }
+        else
+        {
+            appContext.sendBroadcast(new Intent(Constants.BROADCAST_KILL_APPLICATION));
         }
     }
 
@@ -203,5 +228,24 @@ public class NotificationManager
     {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(AppClass.getApp());
         notificationManagerCompat.notify(GlobalHelper.getRandomInt(), notification);
+    }
+
+    private boolean isAppOnForeground()
+    {
+        ActivityManager activityManager = (ActivityManager) appContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (appProcesses == null)
+        {
+            return false;
+        }
+        final String packageName = appContext.getPackageName();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses)
+        {
+            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

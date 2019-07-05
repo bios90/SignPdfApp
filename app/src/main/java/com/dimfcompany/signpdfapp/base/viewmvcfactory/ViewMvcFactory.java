@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.ui.act_access.ActAccessMvp;
 import com.dimfcompany.signpdfapp.ui.act_access.ActAccessMvpView;
 import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialogMvp;
@@ -21,6 +22,8 @@ import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvp;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinishedMvpView;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvp;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvpView;
+import com.dimfcompany.signpdfapp.ui.act_geo.ActGeoMvp;
+import com.dimfcompany.signpdfapp.ui.act_geo.ActGeoMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvp;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvp;
@@ -39,9 +42,12 @@ import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvp;
 import com.dimfcompany.signpdfapp.ui.act_sign.ActSignMvpView;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_signature_dialog.ActSignatureDialogMvpView;
-import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialog;
+import com.dimfcompany.signpdfapp.ui.act_user_auth_dialog.ActUserAuthDialogMvp;
+import com.dimfcompany.signpdfapp.ui.act_user_auth_dialog.ActUserAuthMvpView;
 import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialogMvp;
 import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialogMvpView;
+import com.dimfcompany.signpdfapp.ui.act_user_page.ActUserPageMvp;
+import com.dimfcompany.signpdfapp.ui.act_user_page.ActUserPageMvpView;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvp;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucherMvpView;
 import com.dimfcompany.signpdfapp.utils.FileManager;
@@ -56,14 +62,16 @@ public class ViewMvcFactory
     private final StringManager stringManager;
     private final GlobalHelper globalHelper;
     private final MessagesManager messagesManager;
+    private final SharedPrefsHelper sharedPrefsHelper;
 
-    public ViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager, GlobalHelper globalHelper, MessagesManager messagesManager)
+    public ViewMvcFactory(LayoutInflater layoutInflater, FileManager fileManager, StringManager stringManager, GlobalHelper globalHelper, MessagesManager messagesManager, SharedPrefsHelper sharedPrefsHelper)
     {
         this.layoutInflater = layoutInflater;
         this.fileManager = fileManager;
         this.stringManager = stringManager;
         this.globalHelper = globalHelper;
         this.messagesManager = messagesManager;
+        this.sharedPrefsHelper = sharedPrefsHelper;
     }
 
 
@@ -160,5 +168,20 @@ public class ViewMvcFactory
     public ActUserDocsDialogMvp.MvpView getActUserDialogMvpView(@Nullable ViewGroup parent)
     {
         return new ActUserDocsDialogMvpView(layoutInflater, parent);
+    }
+
+    public ActUserPageMvp.MvpView getActUserPageMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActUserPageMvpView(layoutInflater, parent);
+    }
+
+    public ActUserAuthDialogMvp.MvpView getActUserAuthMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActUserAuthMvpView(layoutInflater, parent, sharedPrefsHelper);
+    }
+
+    public ActGeoMvp.MvpView getActGeoMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActGeoMvpView(layoutInflater, parent);
     }
 }

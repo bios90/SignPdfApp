@@ -9,6 +9,9 @@
     <color name="orangeLight">#FE8733</color>
     <color name="orangeGradMax">#FF522E</color>
     <color name="orangeGradMin">#FF6A00</color>
+
+    <color name="red">#F51C1C</color>
+    <color name="redLight">#E22F49</color>
     <color name="redBase">#F51C1C</color>
     <color name="redDark">#c70303</color>
     <color name="yellow">#FFBB00</color>
@@ -43,7 +46,7 @@
     <color name="green">#009B72</color>
     <color name="blue">#009DDC</color>
     <color name="prenColor">#4169e1</color>
-    
+
     
     <color name="el_red">#FF0E18</color>
     <color name="el_red_dark">#D9040D</color>
@@ -77,7 +80,8 @@
     <color name="el_pink">#FF004F</color>
     <color name="el_pink_dark">#DB0044</color>
     <color name="el_pink_light">#FC3975</color>
-    
+
+
 
 
 

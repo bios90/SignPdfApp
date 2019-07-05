@@ -99,6 +99,7 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
         String email = mvpView.getEmail();
         String password = mvpView.getPassword();
         String fb_token = sharedPrefsHelper.getUserToken();
+        String app_version = GlobalHelper.APP_VERSION;
 
         if (!ValidationManager.validateForLogin(email, password, fb_token))
         {
@@ -110,7 +111,7 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
 
 
         messagesManager.showProgressDialog();
-        helperAuth.login(email, password, fb_token, this);
+        helperAuth.login(email, password, fb_token, app_version, this);
     }
 
     @Override
@@ -146,14 +147,32 @@ public class ActFirst extends BaseActivity implements ActFirstMvp.ViewListener, 
             return;
         }
 
+        if (user.getAdmin_approved() == 0)
+        {
+            messagesManager.showRedAlerter("Ваш аккаунт ожидает подтверждения администратора");
+            return;
+        }
+
         toMainScreen();
     }
 
     @Override
-    public void onErrorLogin()
+    public void onErrorLogin(String error)
     {
         messagesManager.dismissProgressDialog();
-        messagesManager.showRedAlerter("Ошибка входа, проверьте введенные данные");
+
+        String message = null;
+
+        if (error.equals("error_not_verified"))
+        {
+            message = "Необходимо подтвердить email пройдя по ссылке в письме";
+        }
+        else
+        {
+            message = "Ошибка входа, проверьте введенные данные";
+        }
+
+        messagesManager.showRedAlerter(message);
     }
 
     private void toMainScreen()

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/la_for_tv"
+
+        android:orientation="vertical"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@drawable/btn_grad_orange_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_date"
+
+            android:maxWidth="134dp"
+            android:lines="1"
+            android:ellipsize="end"
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+
+        <TextView
+            android:id="@+id/tv_fio"
+
+            android:maxWidth="134dp"
+            tools:text="Вася пупкович"
+            android:lines="1"
+            android:ellipsize="end"
+            style="@style/TVSemi.Xs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left" />
+
+
+        <TextView
+            android:id="@+id/tv_adress"
+
+            android:maxWidth="134dp"
+            tools:text="Улица Есенина До Каруселина"
+            android:lines="1"
+            android:ellipsize="end"
+            style="@style/TVSemi.Xs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left" />
+
+
+        <TextView
+            android:id="@+id/tv_sum"
+
+            android:maxWidth="134dp"
+            tools:text="14 568 р"
+            android:lines="1"
+            android:ellipsize="end"
+            style="@style/TVSemi.S"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_marginTop="-21dp"
+        android:textColor="@color/orangeGradMax"
+        android:layout_below="@id/la_for_tv"
+        android:layout_centerHorizontal="true"
+        android:textSize="38dp"
+        android:text="@string/ic_carret_down"
+        style="@style/IconTv.M"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

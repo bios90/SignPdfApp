@@ -141,7 +141,7 @@ public class FileManager
         }
     }
 
-    public File getDocumentFile(Model_Document document, Downloader.DocumentFileType type)
+    public File getDocumentFile(Model_Document document, DocumentManipulator.DocumentFileType type)
     {
         File file = null;
         switch (type)

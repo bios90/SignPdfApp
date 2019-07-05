@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
-    android:layout_marginRight="6dp"
-    android:layout_marginLeft="6dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="6dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginRight="6dp"
+    android:layout_marginBottom="2dp"
     android:orientation="vertical"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
@@ -36,15 +35,35 @@
             android:textColor="@color/gray5"
             tools:text="Василий Пупкин" />
 
-        <TextView
-            android:id="@+id/tv_email"
-
-            style="@style/TVReg.S"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textColor="@color/gray4"
-            tools:text="bios90@mail.ru" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_email"
+
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="left"
+                android:textColor="@color/gray4"
+                tools:text="bios90@mail.ru" />
+
+
+            <TextView
+                android:id="@+id/tv_approved"
+
+                style="@style/TVBold.M"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center"
+                android:textColor="@color/green"
+                tools:text="Одобрен" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -100,6 +119,34 @@
                 android:paddingRight="6dp"
                 android:textColor="@color/gray5"
                 tools:text="16 договоров" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TVReg.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="10"
+                android:text="Версия приложения:"
+                android:textColor="@color/gray4" />
+
+            <TextView
+                android:id="@+id/tv_app_version"
+
+                style="@style/TVBold.S"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="10"
+                android:text="1.2.14"
+                android:textColor="@color/gray4" />
 
         </LinearLayout>
 

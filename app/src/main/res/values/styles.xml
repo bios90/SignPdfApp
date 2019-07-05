@@ -18,7 +18,6 @@
     </style>
 
 
-
     <style name="TVReg">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/sel_white</item>
@@ -49,8 +48,6 @@
     <style name="TVReg.Xl" parent="TVReg">
         <item name="android:textSize">18dp</item>
     </style>
-
-
 
 
     <style name="TVSemi">
@@ -86,7 +83,6 @@
     </style>
 
 
-
     <style name="TVBold">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/sel_white</item>
@@ -118,8 +114,7 @@
     <style name="TVBold.Xl" parent="TVBold">
         <item name="android:textSize">18dp</item>
     </style>
-    
-    
+
 
     <style name="IconTv">
         <item name="android:gravity">center</item>
@@ -190,6 +185,48 @@
 
     <style name="Btn.Lg" parent="Btn">
         <item name="android:textSize">16dp</item>
+    </style>
+
+
+    <style name="Switch" parent="Theme.AppCompat.Light">
+        <item name="colorBorder">@color/orangeBase</item>
+        <item name="colorOn">@color/orangeBase</item>
+        <item name="android:textSize">14dp</item>
+        <item name="fontFamily">@font/monbold</item>
+        <item name="android:showText">true</item>
+        <item name="textOff">Нет</item>
+        <item name="textOn">Да</item>
+    </style>
+
+    <style name="RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:fontFamily">@font/monbold</item>
+        <item name="android:textColor">@color/sel_radio</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:minHeight">32dp</item>
+    </style>
+
+    <style name="RadioButton.Right" parent="RadioButton">
+        <item name="android:background">@drawable/radio_right_green</item>
+    </style>
+
+    <style name="RadioButton.Left" parent="RadioButton">
+        <item name="android:background">@drawable/radio_left_red</item>
+    </style>
+
+    <style name="RadioButton.Middle" parent="RadioButton">
+        <item name="android:background">@drawable/radio_middle_blue</item>
+    </style>
+
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColorPrimary">@color/blue</item>
+        <item name="android:colorControlNormal">@color/blue</item>
     </style>
 
 </resources>

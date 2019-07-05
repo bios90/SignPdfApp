@@ -52,6 +52,15 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
         holder.tv_date.setText(date);
         holder.tv_user.setText(StringManager.getFullName(document.getUser()));
 
+        if (document.getVaucher_file_name() != null || document.getVaucher() != null)
+        {
+            holder.tv_has_vaucher.setVisibility(View.VISIBLE);
+        }else
+        {
+            holder.tv_has_vaucher.setVisibility(View.GONE);
+        }
+
+
 
         holder.root_view.setOnClickListener(new View.OnClickListener()
         {
@@ -106,6 +115,7 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
         TextView tv_adress;
         TextView tv_date;
         TextView tv_user;
+        TextView tv_has_vaucher;
         Button btn_delete;
         Button btn_send;
         View root_view;
@@ -120,6 +130,7 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
             tv_adress = itemView.findViewById(R.id.tv_adress);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_user = itemView.findViewById(R.id.tv_user);
+            tv_has_vaucher = itemView.findViewById(R.id.tv_has_vaucher);
             btn_delete = itemView.findViewById(R.id.btn_delete);
             btn_send = itemView.findViewById(R.id.btn_send);
             root_view = itemView.findViewById(R.id.root_view);

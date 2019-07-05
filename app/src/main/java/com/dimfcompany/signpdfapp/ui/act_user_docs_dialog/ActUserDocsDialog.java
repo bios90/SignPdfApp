@@ -18,6 +18,7 @@ import com.dimfcompany.signpdfapp.networking.helpers.HelperDocuments;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperUser;
 import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialog;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
+import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 
@@ -90,7 +91,7 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
         helperUser.getUserFull(getUserId(), new HelperUser.CallbackGetUserFull()
         {
             @Override
-            public void onSuccessGetUserFull(Model_User user)
+            public void onSuccessGetUserFull(Model_User user, String alst_version)
             {
                 messagesManager.dismissProgressDialog();
                 mvpView.bindUser(user, ActUserDocsDialog.this);
@@ -122,6 +123,7 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
         mvpView.unregisterListener(this);
     }
 
+
     @Override
     public void clickedCard(Model_Document document)
     {
@@ -132,49 +134,49 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
             @Override
             public void clickedOpenDogovor()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_DOCUMENT, OPEN);
             }
 
             @Override
             public void clickedOpenCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, OPEN);
             }
 
             @Override
             public void clickedOpenVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER, OPEN);
             }
 
             @Override
             public void clickedSendDogovor()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_DOCUMENT, SHARE);
             }
 
             @Override
             public void clickedSendCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, SHARE);
             }
 
             @Override
             public void clickedSendVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, SHARE);
             }
 
             @Override
             public void clickedPrintCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, PRINT);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, PRINT);
             }
 
             @Override
             public void clickedPrintVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, PRINT);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER, PRINT);
             }
 
             @Override
@@ -192,7 +194,7 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
         });
     }
 
-    private void manipulateDocument(Model_Document document, Downloader.DocumentFileType type, final int action)
+    private void manipulateDocument(Model_Document document, DocumentManipulator.DocumentFileType type, final int action)
     {
         if (!globalHelper.isNetworkAvailable())
         {
@@ -219,7 +221,7 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
                             GlobalHelper.shareFile(ActUserDocsDialog.this, file);
                             break;
                         case PRINT:
-                            globalHelper.sendToPrint(file);
+                            GlobalHelper.sendToPrint(ActUserDocsDialog.this, file);
                             break;
                     }
                 }

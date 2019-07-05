@@ -46,6 +46,8 @@ public class Model_Document implements Serializable
     String dop_info;
 
     int sync_status;
+    double lat;
+    double lon;
 
     @Ignore
     @SerializedName("products")
@@ -312,6 +314,26 @@ public class Model_Document implements Serializable
     public void setVaucher_file_name(String vaucher_file_name)
     {
         this.vaucher_file_name = vaucher_file_name;
+    }
+
+    public double getLat()
+    {
+        return lat;
+    }
+
+    public void setLat(double lat)
+    {
+        this.lat = lat;
+    }
+
+    public double getLon()
+    {
+        return lon;
+    }
+
+    public void setLon(double lon)
+    {
+        this.lon = lon;
     }
 
     @Override

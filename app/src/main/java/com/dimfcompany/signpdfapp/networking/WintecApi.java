@@ -1,11 +1,15 @@
 package com.dimfcompany.signpdfapp.networking;
 
+import androidx.annotation.Nullable;
+
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
 
+import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -33,7 +37,13 @@ public interface WintecApi
 
     @FormUrlEncoded
     @POST(Constants.URL_LOGIN)
-    Call<Model_User> login(@Field("email") String email, @Field("password") String password, @Field("fb_token") String fb_token);
+    Call<String> login
+            (
+                    @Field("email") String email,
+                    @Field("password") String password,
+                    @Field("fb_token") String fb_token,
+                    @Field("app_version") String app_version
+            );
 
     @Multipart
     @POST(Constants.URL_INSERT_DOCUMENT)
@@ -45,6 +55,9 @@ public interface WintecApi
                     @Part MultipartBody.Part signature_file,
                     @Part MultipartBody.Part vaucher_file
             );
+
+    @GET(Constants.URL_GET_APP_LAST_VERSION)
+    Call<String> getAppLastVersion();
 
     @GET(Constants.URL_USER_ROLE_NAME)
     Call<String> getUserRoleName(@Query("id") int user_id);
@@ -73,4 +86,25 @@ public interface WintecApi
     @GET(Constants.URL_GET_USER_WITH_DOCS)
     Call<Model_User> getUserFull(@Query("user_id") int user_id);
 
+    @POST(Constants.URL_TOGGLE_APPROVED)
+    Call<String> toggleUserApproved(@Query("user_id") int user_id, @Query("approved_value") Integer approved_value);
+
+    @POST(Constants.URL_INSERT_UPDATE_USER_NEW)
+    Call<String> insertOrUpdateUserNew(@Query("user_id") Integer user_id,
+                                       @Query("first_name") String first_name,
+                                       @Query("last_name") String last_name,
+                                       @Query("email") String email,
+                                       @Query("password") String password,
+                                       @Query("verified") int verified,
+                                       @Query("admin_approved") int admin_approved,
+                                       @Query("role_id") int role_id);
+
+    @GET(Constants.URL_GET_DOCUMENTS_SEARCH)
+    Observable<List<Model_Document>> getSearchDocuments(
+            @Query("search") String search,
+            @Query("date_min") String date_min,
+            @Query("date_max") String date_max,
+            @Query("sum_min") Integer sum_min,
+            @Query("sum_max") Integer sum_max
+    );
 }

@@ -21,18 +21,24 @@ public class AdapterRvUsers extends RecyclerView.Adapter<AdapterRvUsers.CardUser
     public interface UsersListener
     {
         void clickedCard(Model_User user);
+
+        void clickedDocuments(Model_User user);
+
         void clickedRole(Model_User user);
     }
 
     List<Model_User> users;
-    int colorBlue, colorGreen, colorRed;
+    int colorBlue, colorGreen, colorRed, colorYellow, colorGray4;
     UsersListener listener;
+    String last_app_version;
 
     public AdapterRvUsers(Context context)
     {
         colorBlue = ResourcesCompat.getColor(context.getResources(), R.color.blue, null);
         colorGreen = ResourcesCompat.getColor(context.getResources(), R.color.green, null);
         colorRed = ResourcesCompat.getColor(context.getResources(), R.color.redBase, null);
+        colorYellow = ResourcesCompat.getColor(context.getResources(), R.color.yellow, null);
+        colorGray4 = ResourcesCompat.getColor(context.getResources(), R.color.gray4, null);
     }
 
     @NonNull
@@ -66,9 +72,48 @@ public class AdapterRvUsers extends RecyclerView.Adapter<AdapterRvUsers.CardUser
             holder.tv_role.setTextColor(colorBlue);
         }
 
+        if (user.getAdmin_approved() == 0)
+        {
+            holder.tv_approved.setText("Ожидает одобрения");
+            holder.tv_approved.setTextColor(colorYellow);
+        }
+        else if (user.getAdmin_approved() == 1)
+        {
+            holder.tv_approved.setText("Одобрен");
+            holder.tv_approved.setTextColor(colorGreen);
+        }
+
+        String user_version = "-";
+        int version_color = colorGray4;
+
+        if (user.getApp_version() != null)
+        {
+            user_version = user.getApp_version();
+            if (last_app_version != null)
+            {
+                if (user_version.equals(last_app_version))
+                {
+                    version_color = colorGreen;
+                }
+                else
+                {
+                    version_color = colorRed;
+                }
+            }
+        }
+
+        holder.tv_app_version.setText(user_version);
+        holder.tv_app_version.setTextColor(version_color);
+
+
         holder.tv_role.setOnClickListener(view ->
         {
             listener.clickedRole(user);
+        });
+
+        holder.tv_docs_count.setOnClickListener((view) ->
+        {
+            listener.clickedDocuments(user);
         });
 
         holder.itemView.setOnClickListener((view) ->
@@ -93,6 +138,11 @@ public class AdapterRvUsers extends RecyclerView.Adapter<AdapterRvUsers.CardUser
         notifyDataSetChanged();
     }
 
+    public void setLast_app_version(String last_app_version)
+    {
+        this.last_app_version = last_app_version;
+    }
+
     public void setListener(UsersListener listener)
     {
         this.listener = listener;
@@ -104,6 +154,8 @@ public class AdapterRvUsers extends RecyclerView.Adapter<AdapterRvUsers.CardUser
         private TextView tv_email;
         private TextView tv_role;
         private TextView tv_docs_count;
+        private TextView tv_approved;
+        private TextView tv_app_version;
 
         public CardUser(@NonNull View itemView)
         {
@@ -112,6 +164,8 @@ public class AdapterRvUsers extends RecyclerView.Adapter<AdapterRvUsers.CardUser
             tv_email = itemView.findViewById(R.id.tv_email);
             tv_role = itemView.findViewById(R.id.tv_role);
             tv_docs_count = itemView.findViewById(R.id.tv_docs_count);
+            tv_approved = itemView.findViewById(R.id.tv_approved);
+            tv_app_version = itemView.findViewById(R.id.tv_app_version);
         }
     }
 }

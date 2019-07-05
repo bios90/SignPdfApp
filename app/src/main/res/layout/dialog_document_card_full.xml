@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp" xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_gray0"
+    android:elevation="12dp"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_header"
+
+            style="@style/TVSemi.M"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_top_black"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/white"
+            tools:text="77-47826 22.05.2018 Cочи" />
+
+        <TextView
+            android:id="@+id/tv_has_vaucher"
+
+            style="@style/TVBold.S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:text="Ваучер"
+            android:textColor="@color/yellow"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:padding="4dp"
+                    android:text="Сотрудник"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/ic_tools"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_user"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Пушкин Александр"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:padding="4dp"
+                    android:text="Заказчик"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/ic_user"
+                    android:textColor="@color/orangeBase" />
+
+
+                <TextView
+                    android:id="@+id/tv_fio"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Пупкин Василий Андреевич"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:padding="4dp"
+                    android:text="Телефон"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/ic_phone"
+                    android:textColor="@color/orangeBase" />
+
+                <TextView
+                    android:id="@+id/tv_phone"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="+79167027324"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:padding="4dp"
+                    android:text="Адрес"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/ic_adress"
+                    android:textColor="@color/orangeBase" />
+
+                <TextView
+                    android:id="@+id/tv_adress"
+
+                    style="@style/TVSemi.S"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="Сочи ул Сторителей 25"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TVReg.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:padding="4dp"
+                    android:text="Дата"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+                <TextView
+                    style="@style/IconTv.M"
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/ic_date"
+                    android:textColor="@color/orangeBase" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+
+                    style="@style/TVSemi.M"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="10"
+                    android:padding="4dp"
+                    android:text="22 августа 2019"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_open_dogovor"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_hands" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Открыть договор" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_open_check"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_check" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Открыть чек" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_open_vaucher"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_orange_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_vaucher" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Открыть ваучер" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_send_dogovor"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_blue_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_share" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Отправить договор" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_send_check"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_blue_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_share" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Отправить чек" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/la_send_vaucher"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_blue_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_share" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Отправить ваучер" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_print_check"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_green_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_print" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Распечатать чек" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_print_vaucher"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_green_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_print" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Распечатать ваучер" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/la_edit"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_grad_green_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_edit" />
+
+
+                <TextView
+                    style="@style/TVSemi.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Редактировать" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/la_delete"
+
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/btn_empty_red_rounded">
+
+                <TextView
+                    style="@style/IconTv.L"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/ic_delete"
+                    android:textColor="@color/sel_red" />
+
+
+                <TextView
+                    style="@style/TVBold.S"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="Удалить"
+                    android:textColor="@color/sel_red" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

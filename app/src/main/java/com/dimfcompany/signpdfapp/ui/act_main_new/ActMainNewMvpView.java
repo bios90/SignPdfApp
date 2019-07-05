@@ -104,6 +104,8 @@ public class ActMainNewMvpView extends BaseObservableViewAbstr<ActMainNewMvp.Vie
         adapter_finished.setItems(documents);
     }
 
+
+
     @Override
     public void clearRecycler()
     {

@@ -29,6 +29,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -62,6 +63,7 @@ public class ApplicationModule
                 .baseUrl(Constants.URL_BASE)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(httpClient.build())
                 .build();
     }
@@ -128,7 +130,7 @@ public class ApplicationModule
     }
 
     @Provides
-    HelperDocuments getHelperDocuments(WintecApi wintecApi,Downloader downloader)
+    HelperDocuments getHelperDocuments(WintecApi wintecApi, Downloader downloader)
     {
         return new HelperDocuments(wintecApi, downloader);
     }
@@ -146,15 +148,15 @@ public class ApplicationModule
     }
 
     @Provides
-    Synchronizer getSynchronizer(Application application, WintecApi wintecApi, FileManager fileManager, LocalDatabase localDatabase, Gson gson,SharedPrefsHelper sharedPrefsHelper, Downloader downloader)
+    Synchronizer getSynchronizer(Application application, WintecApi wintecApi, FileManager fileManager, LocalDatabase localDatabase, Gson gson, SharedPrefsHelper sharedPrefsHelper, Downloader downloader)
     {
         return new SyncManager(application, wintecApi, fileManager, localDatabase, gson, sharedPrefsHelper, downloader);
     }
 
     @Provides
-    NotificationManager getNotificationManager(Gson gson,SharedPrefsHelper sharedPrefsHelper)
+    NotificationManager getNotificationManager(Gson gson, SharedPrefsHelper sharedPrefsHelper, Application application)
     {
-        return new NotificationManager(gson, sharedPrefsHelper);
+        return new NotificationManager(gson, sharedPrefsHelper, application);
     }
 
 

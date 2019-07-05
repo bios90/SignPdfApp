@@ -86,19 +86,19 @@ public class ActProfileDialog extends BaseActivity implements ActProfileDialogMv
         }
 
         helperUser.getDocsCount(user.getId(), this);
-        helperUser.getUserRoleName(user.getId(),this);
+        helperUser.getUserRoleName(user.getId(), this);
     }
 
     @Override
     public void clickedSync()
     {
-        if(!globalHelper.isNetworkAvailable())
+        if (!globalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
             return;
         }
 
-        if(user == null)
+        if (user == null)
         {
             return;
         }
@@ -161,5 +161,11 @@ public class ActProfileDialog extends BaseActivity implements ActProfileDialogMv
     {
         messagesManager.dismissProgressDialog();
         messagesManager.showRedAlerter("Не удалось загрузить документы");
+    }
+
+    @Override
+    public void clickedEditUser()
+    {
+        navigationManager.toActUserAuthDialog(null, user.getId());
     }
 }

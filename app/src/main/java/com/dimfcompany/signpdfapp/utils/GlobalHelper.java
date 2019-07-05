@@ -1,10 +1,13 @@
 package com.dimfcompany.signpdfapp.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,6 +16,7 @@ import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -21,9 +25,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dimfcompany.signpdfapp.BuildConfig;
 import com.dimfcompany.signpdfapp.R;
+import com.dimfcompany.signpdfapp.base.AppClass;
 import com.dimfcompany.signpdfapp.models.Model_Color;
 import com.dimfcompany.signpdfapp.models.Model_Control;
 import com.dimfcompany.signpdfapp.models.Model_Document;
@@ -46,6 +53,9 @@ public class GlobalHelper
     private static final String TAG = "GlobalHelper";
 
     public static final String FORMAT_FULL_MONTH = "d MMMM yyyy";
+    public static final String FORMAT_LARAVEL = "yyyy-MM-dd HH:mm:ss";
+
+    public static final String APP_VERSION = BuildConfig.VERSION_NAME;
 
     private final Context context;
 
@@ -54,10 +64,10 @@ public class GlobalHelper
         this.context = context;
     }
 
-    public boolean isNetworkAvailable()
+    public static boolean isNetworkAvailable()
     {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) AppClass.getApp().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
@@ -67,8 +77,17 @@ public class GlobalHelper
         return getDateString(new Date(), FORMAT_FULL_MONTH);
     }
 
+    public static String getDateString(Date date)
+    {
+        return DateFormat.format(FORMAT_FULL_MONTH, date).toString();
+    }
+
     public static String getDateString(Date date, String format)
     {
+        if(date == null)
+        {
+            return null;
+        }
         return DateFormat.format(format, date).toString();
     }
 
@@ -171,13 +190,13 @@ public class GlobalHelper
         }
     }
 
-    public Uri getUriFromFile(File file)
+    public static Uri getUriFromFile(File file)
     {
-        return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+        return FileProvider.getUriForFile(AppClass.getApp(), AppClass.getApp().getPackageName() + ".provider", file);
     }
 
 
-    public void sendToPrint(File file)
+    public static void sendToPrint(AppCompatActivity activity, File file)
     {
         Uri uri = getUriFromFile(file);
 
@@ -191,7 +210,7 @@ public class GlobalHelper
 
 
         final String appPackageName = "ru.a402d.rawbtprinter";
-        PackageManager pm = context.getPackageManager();
+        PackageManager pm = activity.getPackageManager();
 
         PackageInfo pi = null;
         if (pm != null)
@@ -209,17 +228,17 @@ public class GlobalHelper
         {
             try
             {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
             }
             catch (android.content.ActivityNotFoundException anfe)
             {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         }
         else
         {
             intent.setPackage(appPackageName);
-            context.startActivity(intent);
+            activity.startActivity(intent);
         }
     }
 
@@ -424,6 +443,20 @@ public class GlobalHelper
         catch (Exception e)
         {
             return 0;
+        }
+    }
+
+    public static Integer getEtIntegerValueOrNull(EditText editText)
+    {
+        try
+        {
+            String str = editText.getText().toString().trim();
+            str = str.replaceAll("[^\\d.]", "");
+            return Integer.valueOf(str);
+        }
+        catch (Exception e)
+        {
+            return null;
         }
     }
 
@@ -736,7 +769,7 @@ public class GlobalHelper
         return user.getLast_name() + " " + user.getFirst_name();
     }
 
-    public static int getRadioGroupValue(RadioGroup radioGroup) throws Exception
+    public static int getRadioGroupValue(RadioGroup radioGroup)
     {
         Integer value = null;
         for (int a = 0; a < radioGroup.getChildCount(); a++)
@@ -750,7 +783,7 @@ public class GlobalHelper
 
         if (value == null)
         {
-            throw new Exception("**** ERROR ON GETTING RADIO BUTTON VALUE - NO VALUE ****");
+            throw new RuntimeException("**** ERROR ON GETTING RADIO BUTTON VALUE - NO VALUE ****");
         }
 
         return value;
@@ -779,11 +812,18 @@ public class GlobalHelper
                 case 4:
                     sort = "role_id";
                     break;
+                case 5:
+                    sort = "admin_approved";
+                    break;
+                case 6:
+                    sort = "app_version";
+                    break;
             }
         }
 
         return sort;
     }
+
     public static String getSortStringFromIntRus(Integer sortInt)
     {
         String sort = null;
@@ -807,9 +847,83 @@ public class GlobalHelper
                 case 4:
                     sort = "По доступу";
                     break;
+                case 5:
+                    sort = "По одобрениям";
+                    break;
+                case 6:
+                    sort = "По версии приложения";
+                    break;
             }
         }
 
         return sort;
+    }
+
+    public static int getRolesSpinnerId(Spinner spinner)
+    {
+        switch (spinner.getSelectedItemPosition())
+        {
+            case 0:
+                return 1;
+            case 1:
+                return 7;
+            case 2:
+                return 999;
+
+            default:
+                throw new RuntimeException("Error invalid spinner role id");
+        }
+    }
+
+    public static void setRadioSelectedAt(RadioGroup rg, int position)
+    {
+        RadioButton rb = (RadioButton) rg.getChildAt(position);
+        rb.setChecked(true);
+    }
+
+    public static boolean isLocationEnabled()
+    {
+        int locationMode = 0;
+        Context context = AppClass.getApp();
+        String locationProviders;
+
+        try
+        {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        }
+        catch (Settings.SettingNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+    }
+
+    public static String APP_VERSION()
+    {
+        return BuildConfig.VERSION_NAME;
+    }
+
+    public static double getRandomDouble(double min, double max)
+    {
+        Random r = new Random();
+        return min + (max - min) * r.nextDouble();
+    }
+
+    public static Bitmap getBitmapFromView(View view)
+    {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public static void makeDialogTransparentBg(AlertDialog dialog)
+    {
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 }

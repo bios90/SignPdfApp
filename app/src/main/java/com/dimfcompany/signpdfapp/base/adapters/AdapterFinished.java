@@ -78,6 +78,14 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
             cardFinished.tv_status_1.setVisibility(View.GONE);
         }
 
+        if (document.getVaucher_file_name() != null || document.getVaucher() != null)
+        {
+            cardFinished.tv_has_vaucher.setVisibility(View.VISIBLE);
+        }else
+            {
+                cardFinished.tv_has_vaucher.setVisibility(View.GONE);
+            }
+
         cardFinished.root_view.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -134,8 +142,9 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         TextView tv_phone;
         TextView tv_adress;
         TextView tv_date;
-        TextView tv_status_1;
         TextView tv_status_0;
+        TextView tv_status_1;
+        TextView tv_has_vaucher;
         Button btn_delete;
         Button btn_send;
         View root_view;
@@ -154,6 +163,7 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
             root_view = itemView.findViewById(R.id.root_view);
             tv_status_0 = itemView.findViewById(R.id.tv_status_0);
             tv_status_1 = itemView.findViewById(R.id.tv_status_1);
+            tv_has_vaucher = itemView.findViewById(R.id.tv_has_vaucher);
         }
     }
 }

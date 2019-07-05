@@ -7,7 +7,7 @@ import java.util.List;
 public class Constants
 {
     //TODO make base url Here
-    public static final String URL_BASE = "http://192.168.1.66/wintec/";
+    public static final String URL_BASE = "http://192.168.1.68/wintec/";
     //    public static final String URL_BASE = "https://wintec-smart.ru/";
     public static final String URL_REGISTER = "register";
     public static final String URL_LOGIN = "login";
@@ -22,6 +22,10 @@ public class Constants
     public static final String URL_GET_ALL_USERS = "get_all_users";
     public static final String URL_CHANGE_ROLE = "change_role";
     public static final String URL_GET_USER_WITH_DOCS = "get_user_with_docs";
+    public static final String URL_TOGGLE_APPROVED = "toggle_approved";
+    public static final String URL_INSERT_UPDATE_USER_NEW = "insert_update_user_new";
+    public static final String URL_GET_APP_LAST_VERSION = "get_app_version";
+    public static final String URL_GET_DOCUMENTS_SEARCH = "get_documents_search";
 
 
     public static final int RQ_TAKE_SIGNATURE = 9000;
@@ -33,10 +37,14 @@ public class Constants
     public static final int RQ_EDIT_PRICE_ELEMENT = 9007;
     public static final int RQ_SEARCH_DIALOG = 9008;
     public static final int RQ_ACCESS_DIALOG = 9009;
+    public static final int RQ_EDIT_USER = 9010;
+    public static final int RQ_CREATE_USER = 9010;
+    public static final int RQ_USER_PAGE = 9011;
 
     public static final int JOB_ID_SYNC = 7000;
 
     public static final String BROADCAST_UPDATE_FINISHED_UI = "com.dimfcompany.signpdfapp.base.update_finished_ui";
+    public static final String BROADCAST_KILL_APPLICATION = "com.dimfcompany.signpdfapp.kill_application";
 
 
     public static final String ERROR_NO_FIRSTNAME = "Заполните поле \"Имя\"";
@@ -60,6 +68,7 @@ public class Constants
     public static final String EXTRA_USER = "Extra_User";
     public static final String EXTRA_ROLE_ID = "Extra_Role_Id";
     public static final String EXTRA_USER_ID = "Extra_User_Id";
+    public static final String EXTRA_NEED_TO_SHOW_GEO_DIALOG = "Need_To_Show_Geo_Dialog";
 
     public static final String EXTANSION_PNG = "png";
     public static final String EXTANSION_PDF = "pdf";
@@ -78,7 +87,7 @@ public class Constants
     public static final String FB_TOKEN = "Fb_Token";
 
 
-    public static final List<String> headerStrings = Arrays.asList("Заглавие 1", "Заглавие 2", "Заглавие 3");
+    public static final List<String> headerStrings = Arrays.asList("Ваучер", "Заказать");
 
 
     public static final String NOTIFICATION_CHANEL1 = "Напомнинания о добоавлении нового документа";

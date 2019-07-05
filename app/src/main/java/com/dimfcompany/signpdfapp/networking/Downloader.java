@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
+import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.StringManager;
 
@@ -25,13 +26,6 @@ public class Downloader
 {
     private static final String TAG = "Downloader";
 
-    public enum DocumentFileType
-    {
-        TYPE_SIGNATURE,
-        TYPE_CHECK,
-        TYPE_DOCUMENT,
-        TYPE_VAUCHER
-    }
 
     public interface CallbackDownloadDocumentFiles
     {
@@ -62,22 +56,22 @@ public class Downloader
         {
             if (document.getSignature_file_name() != null)
             {
-                downloadDocumentFile(document, DocumentFileType.TYPE_SIGNATURE);
+                downloadDocumentFile(document, DocumentManipulator.DocumentFileType.TYPE_SIGNATURE);
             }
 
             if (document.getPdf_file_name() != null)
             {
-                downloadDocumentFile(document, DocumentFileType.TYPE_DOCUMENT);
+                downloadDocumentFile(document, DocumentManipulator.DocumentFileType.TYPE_DOCUMENT);
             }
 
             if (document.getCheck_file_name() != null)
             {
-                downloadDocumentFile(document, DocumentFileType.TYPE_CHECK);
+                downloadDocumentFile(document, DocumentManipulator.DocumentFileType.TYPE_CHECK);
             }
 
             if(document.getVaucher_file_name() != null)
             {
-                downloadDocumentFile(document,DocumentFileType.TYPE_VAUCHER);
+                downloadDocumentFile(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER);
             }
         }
     }
@@ -154,7 +148,7 @@ public class Downloader
         }).start();
     }
 
-    public void downloadDocumentFileAsync(final Model_Document document, final DocumentFileType type, final CallbackDownloadFile callback)
+    public void downloadDocumentFileAsync(final Model_Document document, final DocumentManipulator.DocumentFileType type, final CallbackDownloadFile callback)
     {
         new Thread(new Runnable()
         {
@@ -191,7 +185,7 @@ public class Downloader
 
 
     @Nullable
-    public File downloadDocumentFile(Model_Document document, DocumentFileType type)
+    public File downloadDocumentFile(Model_Document document, DocumentManipulator.DocumentFileType type)
     {
         String url = null;
         File file = null;
@@ -236,6 +230,8 @@ public class Downloader
                 }
                 file = fileManager.createFile(document.getVaucher_file_name(),null,Constants.FOLDER_VAUCHERS);
                 url = stringManager.getAnyUserVauchersUrl(document.getUser_id())+document.getVaucher_file_name();
+
+                Log.e(TAG, "downloadDocumentFile: Vaucher url is "+url );
 
                 break;
         }

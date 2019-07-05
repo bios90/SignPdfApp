@@ -36,6 +36,14 @@
     <string name="ic_location">&#xf124;</string>
     <string name="ic_search">&#xf002;</string>
     <string name="ic_sort">&#xf160;</string>
+    <string name="ic_user_tie">&#xf508;</string>
+    <string name="ic_user_tick">&#xf4fc;</string>
+    <string name="ic_block">&#xf05e;</string>
+    <string name="ic_user_plus">&#xf234;</string>
+    <string name="ic_phone_device">&#xf3cd;</string>
+    <string name="ic_plus">&#xf067;</string>
+    <string name="ic_minus">&#xf068;</string>
+    <string name="ic_carret_down">&#xf0d7;</string>
 
     <string name="pre_show_header"><b>ООО «Лаборатория Уюта»</b>, именуемое в дальнейшем <b>«Исполнитель»</b>, в лице <b>Рыбакиной Ларисы Витальевны</b>,
         действующей на основании Устава, с одной стороны, и <b>«Заказчик»</b> (Данные заказчика указываются внизу страницы), с

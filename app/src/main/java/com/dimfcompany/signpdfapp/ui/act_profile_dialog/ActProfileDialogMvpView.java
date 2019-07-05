@@ -14,12 +14,12 @@ public class ActProfileDialogMvpView extends BaseObservableViewAbstr<ActProfileD
 {
     private static final String TAG = "ActProfileDialogMvpView";
 
-    TextView tv_name,tv_email,tv_role,tv_all_docs_count;
-    RelativeLayout la_sync,la_exit;
+    TextView tv_name, tv_email, tv_role, tv_all_docs_count;
+    RelativeLayout la_sync, la_exit, la_edit_user;
 
     public ActProfileDialogMvpView(LayoutInflater layoutInflater, ViewGroup parent)
     {
-        setRootView(layoutInflater.inflate(R.layout.act_profile_dialog,parent,false));
+        setRootView(layoutInflater.inflate(R.layout.act_profile_dialog, parent, false));
         initViews();
         setListeners();
     }
@@ -32,6 +32,7 @@ public class ActProfileDialogMvpView extends BaseObservableViewAbstr<ActProfileD
         tv_all_docs_count = findViewById(R.id.tv_all_docs_count);
         la_sync = findViewById(R.id.la_sync);
         la_exit = findViewById(R.id.la_exit);
+        la_edit_user = findViewById(R.id.la_edit_user);
     }
 
     private void setListeners()
@@ -51,6 +52,15 @@ public class ActProfileDialogMvpView extends BaseObservableViewAbstr<ActProfileD
             public void onClick(View v)
             {
                 getListener().clickedSync();
+            }
+        });
+
+        la_edit_user.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                getListener().clickedEditUser();
             }
         });
     }

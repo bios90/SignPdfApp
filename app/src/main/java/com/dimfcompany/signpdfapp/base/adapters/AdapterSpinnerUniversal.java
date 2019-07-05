@@ -75,9 +75,9 @@ public class AdapterSpinnerUniversal<T> extends ArrayAdapter<T>
     private String getTextFromObject(Object object)
     {
         String text = "Cant Cast";
-        if(object instanceof String)
+        if (object instanceof String)
         {
-            text = (String)object;
+            text = (String) object;
         }
 
         return text;

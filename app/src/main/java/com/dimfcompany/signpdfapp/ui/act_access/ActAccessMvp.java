@@ -10,13 +10,17 @@ public interface ActAccessMvp
 {
     interface MvpView extends BaseObservableView<ViewListener>
     {
-        void setUsers(List<Model_User> users, AdapterRvUsers.UsersListener listener);
+        void setUsers(List<Model_User> users, String app_last_version, AdapterRvUsers.UsersListener listener);
+
         void bindSearchText(String search);
+
         void bindSortText(String sort);
     }
 
     interface ViewListener
     {
         void clickedSearch();
+
+        void clickedAddUser();
     }
 }

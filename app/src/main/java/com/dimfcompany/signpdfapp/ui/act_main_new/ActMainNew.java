@@ -22,6 +22,7 @@ import com.dimfcompany.signpdfapp.sync.Synchronizer;
 import com.dimfcompany.signpdfapp.sync.UpdateFinishedBroadcastReceiver;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
+import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
@@ -151,49 +152,49 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             @Override
             public void clickedOpenDogovor()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_DOCUMENT, OPEN);
             }
 
             @Override
             public void clickedOpenCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, OPEN);
             }
 
             @Override
             public void clickedOpenVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, OPEN);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER, OPEN);
             }
 
             @Override
             public void clickedSendDogovor()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_DOCUMENT, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_DOCUMENT, SHARE);
             }
 
             @Override
             public void clickedSendCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, SHARE);
             }
 
             @Override
             public void clickedSendVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, SHARE);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER, SHARE);
             }
 
             @Override
             public void clickedPrintCheck()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_CHECK, PRINT);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_CHECK, PRINT);
             }
 
             @Override
             public void clickedPrintVaucher()
             {
-                manipulateDocument(document, Downloader.DocumentFileType.TYPE_VAUCHER, PRINT);
+                manipulateDocument(document, DocumentManipulator.DocumentFileType.TYPE_VAUCHER, PRINT);
             }
 
             @Override
@@ -253,14 +254,12 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
 
     private void checkForAdmin()
     {
-        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
-        if (user == null)
-        {
-            return;
-        }
-
-//        mvpView.toggleAdminBtn(user.getRole_id() == 7);
-        mvpView.toggleAdminBtn(false);
+//        Model_User user = sharedPrefsHelper.getUserFromSharedPrefs();
+//        if (user != null && user.getRole_id() == 7)
+//        {
+//            navigationManager.toActAdminMenu(null);
+//            finish();
+//        }
     }
 
 
@@ -278,7 +277,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
         super.onStop();
     }
 
-    private void manipulateDocument(Model_Document document, Downloader.DocumentFileType type, final int action)
+    private void manipulateDocument(Model_Document document, DocumentManipulator.DocumentFileType type, final int action)
     {
         File file = fileManager.getDocumentFile(document, type);
 
@@ -297,7 +296,7 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
                 GlobalHelper.shareFile(ActMainNew.this, file);
                 break;
             case PRINT:
-                globalHelper.sendToPrint(file);
+                GlobalHelper.sendToPrint(ActMainNew.this,file);
                 break;
         }
     }

@@ -3,6 +3,9 @@ package com.dimfcompany.signpdfapp.ui.act_sign;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -13,24 +16,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.local_db.raw.LocalDatabase;
-import com.dimfcompany.signpdfapp.local_db.room.RoomCrudHelper;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
-import com.dimfcompany.signpdfapp.models.Model_Vaucher;
 import com.dimfcompany.signpdfapp.sync.SyncManager;
 import com.dimfcompany.signpdfapp.sync.Synchronizer;
-import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
+import com.dimfcompany.signpdfapp.utils.MyLocationManager;
 import com.dimfcompany.signpdfapp.utils.PdfCreator;
 import com.dimfcompany.signpdfapp.utils.StringManager;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, PdfCreator.PdfCreationCallback, SyncManager.CallbackInsertWithSync
 {
@@ -44,7 +53,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         if (request_code == null)
         {
             activity.startActivity(intent);
-        } else
+        }
+        else
         {
             activity.startActivityForResult(intent, request_code);
         }
@@ -62,6 +72,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     Synchronizer synchronizer;
     @Inject
     SharedPrefsHelper sharedPrefsHelper;
+    @Inject
+    MyLocationManager myLocationManager;
 
     ActSignMvp.MvpView mvpView;
 
@@ -83,6 +95,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         user = sharedPrefsHelper.getUserFromSharedPrefs();
         mvpView.setSignatureSizes();
         checkForEditMode();
+        checkGeoPermissions();
     }
 
 
@@ -106,12 +119,44 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     }
 
     @Override
+    @SuppressWarnings({"MissingPermission"})
     public void clickedCreatePDf()
     {
-        messagesManager.showProgressDialog();
-        model_document = collectDocumentData();
-        model_document.setUser_id(user.getId());
-        pdfCreator.createPdfAsync(model_document, false, this);
+        if (!GlobalHelper.isLocationEnabled())
+        {
+            messagesManager.showRedAlerter("Включите Геолокацию для сохранения документа");
+            return;
+        }
+
+        messagesManager.showProgressDialog("Поиск местоположения");
+        myLocationManager.getCurrentLocation(true, new MyLocationManager.GetLocationCallback()
+        {
+            @Override
+            public void onGetLocationSuccess(Location location)
+            {
+                messagesManager.dismissProgressDialog();
+                model_document.setLat(location.getLatitude());
+                model_document.setLon(location.getLongitude());
+
+                //Todo remove later
+                model_document.setLat(location.getLatitude() + GlobalHelper.getRandomDouble(0, 1));
+                model_document.setLon(location.getLongitude() + GlobalHelper.getRandomDouble(0, 1));
+                //
+
+                messagesManager.showProgressDialog("Создание документов");
+                model_document = collectDocumentData();
+                model_document.setUser_id(user.getId());
+                pdfCreator.createPdfAsync(model_document, false, ActSign.this);
+            }
+
+            @Override
+            public void onUnableGetLocation()
+            {
+                messagesManager.dismissProgressDialog();
+                messagesManager.showRedAlerter("Не удалось найти местоположение");
+            }
+        });
+
     }
 
     @Override
@@ -136,7 +181,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         try
         {
             GlobalHelper.openPdf(ActSign.this, file);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.e(TAG, "Error on pf intent " + e.getMessage());
             messagesManager.showRedAlerter("Ошибка", "На устройстве ну установлены приложения для просмотра pdf");
@@ -269,6 +315,46 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         editMode = true;
         mvpView.bindModelDocument(model_document);
         mvpView.updateMaterialButton();
+    }
+
+    private void checkGeoPermissions()
+    {
+        myLocationManager.checkPermissions(new MyLocationManager.CheckPermissionCallback()
+        {
+            @Override
+            public void onCheckPermissionOk()
+            {
+
+            }
+
+            @Override
+            public void onCheckPermissionDenied()
+            {
+                messagesManager.showRedAlerter("Работа приложения невозможна без доступа к геолокации");
+                Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                        .subscribe(() ->
+                        {
+                            messagesManager.showSimpleDialog("Настйроки", "Перейти в настрйоки доступа геолокации?", "Перейти", "Отмена", new MessagesManager.DialogButtonsListener()
+                            {
+                                @Override
+                                public void onOkClicked(DialogInterface dialog)
+                                {
+                                    dialog.dismiss();
+                                    XXPermissions.gotoPermissionSettings(ActSign.this);
+                                    finish();
+
+                                }
+
+                                @Override
+                                public void onCancelClicked(DialogInterface dialog)
+                                {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        });
+            }
+        });
     }
 
     @Override

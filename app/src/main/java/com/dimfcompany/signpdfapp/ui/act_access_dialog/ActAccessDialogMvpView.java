@@ -58,18 +58,7 @@ public class ActAccessDialogMvpView extends BaseObservableViewAbstr<ActAccessDia
     @Override
     public int getSelectedRoleId()
     {
-        switch (spinner_access.getSelectedItemPosition())
-        {
-            case 0:
-                return 1;
-            case 1:
-                return 7;
-            case 2:
-                return 999;
-
-            default:
-                throw new RuntimeException("Error invalid spinner role id");
-        }
+        return GlobalHelper.getRolesSpinnerId(spinner_access);
     }
 
     @Override

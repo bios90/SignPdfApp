@@ -141,6 +141,26 @@
                     android:textAlignment="center"
                     android:textColor="@color/gray4" />
 
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По одобрениям"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue"
+                    android:fontFamily="@font/monmedium"
+                    android:text="По версии приложения"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray4" />
+
             </RadioGroup>
 
             <LinearLayout

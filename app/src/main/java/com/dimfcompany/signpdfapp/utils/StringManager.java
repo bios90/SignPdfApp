@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.local_db.sharedprefs.SharedPrefsHelper;
+import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.models.Model_User;
 import com.dimfcompany.signpdfapp.utils.custom_classes.CustomTypefaceSpan;
 
@@ -98,6 +99,11 @@ public class StringManager
 
         formated = listOfStringToSingle(wordsAsList, " ");
         return formated;
+    }
+
+    public static String listOfStringToSingle(List<String> strings)
+    {
+        return listOfStringToSingle(strings, "\n");
     }
 
     public static String listOfStringToSingle(List<String> strings, String separator)
@@ -344,6 +350,24 @@ public class StringManager
             return null;
         }
         return str;
+    }
+
+    public static String getTextForMarker(Model_Document document)
+    {
+        String text = "";
+
+        text = text + GlobalHelper.getDateString(document.getDate()) + " | ";
+        if (document.getFio() != null)
+        {
+            text += document.getFio() + " | ";
+        }
+
+        if (document.getAdress() != null)
+        {
+            text += document.getAdress();
+        }
+
+        return text;
     }
 
 }

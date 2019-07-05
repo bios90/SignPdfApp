@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
 
     <application
@@ -16,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <service android:name=".networking.fbmessaging.FbMessagingService">
             <intent-filter>
@@ -82,6 +88,13 @@
         <activity
             android:name=".ui.act_user_docs_dialog.ActUserDocsDialog"
             android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".ui.act_user_page.ActUserPage"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".ui.act_user_auth_dialog.ActUserAuthDialog"
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".ui.act_geo.ActGeo" />
     </application>
 
 

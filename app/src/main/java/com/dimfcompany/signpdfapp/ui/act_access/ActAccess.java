@@ -3,6 +3,7 @@ package com.dimfcompany.signpdfapp.ui.act_access;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,7 +33,8 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
     MessagesManager messagesManager;
     @Inject
     HelperUser helperUser;
-
+    @Inject
+    SharedPrefsHelper sharedPrefsHelper;
 
     private String search;
     private int sort = 999999;
@@ -54,6 +56,7 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
         makeSearch(null, null);
     }
 
+
     @Override
     public void clickedSearch()
     {
@@ -72,10 +75,10 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
     }
 
     @Override
-    public void onSuccessGetUsers(List<Model_User> users)
+    public void onSuccessGetUsers(List<Model_User> users, String app_last_version)
     {
         messagesManager.dismissProgressDialog();
-        mvpView.setUsers(users, this);
+        mvpView.setUsers(users, app_last_version, this);
         bindSearchSortText();
     }
 
@@ -107,12 +110,30 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
     @Override
     public void clickedCard(Model_User user)
     {
-        navigationManager.toActUserDocsDialog(null,user.getId());
+        navigationManager.toActUserPageDialog(Constants.RQ_USER_PAGE, user.getId());
     }
+
+    @Override
+    public void clickedDocuments(Model_User user)
+    {
+        navigationManager.toActUserDocsDialog(null, user.getId());
+    }
+
+    @Override
+    public void clickedAddUser()
+    {
+        navigationManager.toActUserAuthDialog(Constants.RQ_CREATE_USER, null);
+    }
+
 
     @Override
     public void clickedRole(Model_User user)
     {
+        if (sharedPrefsHelper.getUserFromSharedPrefs().getId() == user.getId())
+        {
+            Log.e(TAG, "clickedCard: Clicked self role ");
+            return;
+        }
         navigationManager.toActAccessDialog(Constants.RQ_ACCESS_DIALOG, user);
     }
 
@@ -120,6 +141,13 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.RQ_USER_PAGE)
+        {
+            makeSearch(search, GlobalHelper.getSortStringFromInt(sort));
+            return;
+        }
+
         if (resultCode == Activity.RESULT_OK)
         {
             switch (requestCode)
@@ -134,6 +162,10 @@ public class ActAccess extends BaseActivity implements ActAccessMvp.ViewListener
                     int user_id = ((Model_User) data.getSerializableExtra(Constants.EXTRA_USER)).getId();
                     int role_id = data.getIntExtra(Constants.EXTRA_ROLE_ID, 999999);
                     changeRole(user_id, role_id);
+                    break;
+
+                case Constants.RQ_CREATE_USER:
+                    makeSearch(search, GlobalHelper.getSortStringFromInt(sort));
                     break;
             }
         }

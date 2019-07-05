@@ -31,6 +31,19 @@
                 android:textColor="@color/white"
                 tools:text="77-47826 22.05.2018 Cочи" />
 
+            <TextView
+                android:id="@+id/tv_has_vaucher"
+
+                style="@style/TVBold.S"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:text="Ваучер"
+                android:textColor="@color/yellow"
+                android:visibility="gone" />
+
 
         </RelativeLayout>
 

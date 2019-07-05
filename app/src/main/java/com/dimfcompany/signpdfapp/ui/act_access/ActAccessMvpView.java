@@ -1,8 +1,10 @@
 package com.dimfcompany.signpdfapp.ui.act_access;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ public class ActAccessMvpView extends BaseObservableViewAbstr<ActAccessMvp.ViewL
     TextView tv_search;
     TextView tv_search_text, tv_sort_text;
     RecyclerView rec_all_users;
+    RelativeLayout la_create_user;
 
     AdapterRvUsers adapter;
 
@@ -40,6 +43,7 @@ public class ActAccessMvpView extends BaseObservableViewAbstr<ActAccessMvp.ViewL
         tv_search_text = findViewById(R.id.tv_search_text);
         tv_sort_text = findViewById(R.id.tv_sort_text);
         rec_all_users = findViewById(R.id.rec_all_users);
+        la_create_user = findViewById(R.id.la_create_user);
 
         rec_all_users.setLayoutManager(new LinearLayoutManager(getRootView().getContext()));
         adapter = new AdapterRvUsers(getRootView().getContext());
@@ -52,11 +56,14 @@ public class ActAccessMvpView extends BaseObservableViewAbstr<ActAccessMvp.ViewL
         {
             getListener().clickedSearch();
         });
+
+        la_create_user.setOnClickListener(v -> getListener().clickedAddUser());
     }
 
     @Override
-    public void setUsers(List<Model_User> users, AdapterRvUsers.UsersListener listener)
+    public void setUsers(List<Model_User> users, String app_last_version, AdapterRvUsers.UsersListener listener)
     {
+        adapter.setLast_app_version(app_last_version);
         adapter.setUsers(users);
         adapter.setListener(listener);
     }

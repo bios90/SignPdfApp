@@ -97,11 +97,51 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/la_bottom"
         android:layout_below="@id/la_search_sort"
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:elevation="8dp"
+        android:id="@+id/la_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="8dp">
+
+
+        <RelativeLayout
+            android:id="@+id/la_create_user"
+
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="@drawable/btn_grad_orange_rounded">
+
+            <TextView
+                style="@style/IconTv.S"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="4dp"
+                android:text="@string/ic_user_plus" />
+
+
+            <TextView
+                style="@style/TVSemi.S"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="Добавить пользователя" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </RelativeLayout>
