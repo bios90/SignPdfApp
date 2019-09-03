@@ -84,7 +84,7 @@ public class GlobalHelper
 
     public static String getDateString(Date date, String format)
     {
-        if(date == null)
+        if (date == null)
         {
             return null;
         }
@@ -198,14 +198,21 @@ public class GlobalHelper
 
     public static void sendToPrint(AppCompatActivity activity, File file)
     {
+//        file = ImageManager.getImageFileFromPdf(file);
         Uri uri = getUriFromFile(file);
 
 //        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 //        intent.setFlags(FLAG_GRANT_READ_URI_PERMISSION | FLAG_GRANT_WRITE_URI_PERMISSION);
 
+        String type = "application/pdf";
+        if (!FileManager.isPdf(file))
+        {
+            type = "image/*";
+        }
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.setType("application/pdf");
+        intent.setType(type);
         intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
 
 

@@ -9,6 +9,7 @@ import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialog;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
 import com.dimfcompany.signpdfapp.ui.act_geo.ActGeo;
+import com.dimfcompany.signpdfapp.ui.act_geo_choosing.ActGeoChoosing;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNew;
 import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShow;
@@ -50,4 +51,5 @@ public interface PresenterComponent
     void inject(ActUserPage actUserPage);
     void inject(ActUserAuthDialog actUserAuthDialog);
     void inject(ActGeo actGeo);
+    void inject(ActGeoChoosing actGeoChoosing);
 }

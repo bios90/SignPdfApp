@@ -11,4 +11,7 @@ public interface DaoVaucher extends BaseDao<Model_Vaucher>
 {
     @Query("SELECT * FROM vauchers WHERE document_id=:document_id LIMIT 1")
     Model_Vaucher getVaucherOfDocument(final long document_id);
+
+    @Query("DELETE FROM vauchers")
+    public void nukeTable();
 }

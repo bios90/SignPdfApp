@@ -13,4 +13,7 @@ public interface DaoControl extends BaseDao<Model_Control>
 {
     @Query("SELECT * FROM controls WHERE product_id=:product_id LIMIT 1")
     Model_Control findControlsOfProduct(final long product_id);
+
+    @Query("DELETE FROM controls")
+    public void nukeTable();
 }

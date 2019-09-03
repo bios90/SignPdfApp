@@ -6,13 +6,21 @@ import android.graphics.BitmapFactory;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
+
+import android.graphics.pdf.PdfRenderer;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.dimfcompany.signpdfapp.base.AppClass;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageManager
 {
@@ -25,7 +33,7 @@ public class ImageManager
 
     public static Bitmap getBitmapFromFile(File file)
     {
-        if(file == null)
+        if (file == null)
         {
             return null;
         }
@@ -55,7 +63,8 @@ public class ImageManager
         {
             width = maxSize;
             height = (int) (width / bitmapRatio);
-        } else
+        }
+        else
         {
             height = maxSize;
             width = (int) (height * bitmapRatio);
@@ -69,10 +78,55 @@ public class ImageManager
     {
         Context context = view.getContext();
         final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackgroundDrawable(context.getDrawable(resId) );
-        } else {
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN)
+        {
+            view.setBackgroundDrawable(context.getDrawable(resId));
+        }
+        else
+        {
             view.setBackground(ContextCompat.getDrawable(context, resId));
         }
+    }
+
+    public static List<Bitmap> pdfToBitmap(File pdfFile)
+    {
+        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+
+        try
+        {
+            PdfRenderer pdfRenderer = new PdfRenderer(ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY));
+
+            int pageCount = pdfRenderer.getPageCount();
+
+            for (int i = 0; i < pageCount; i++)
+            {
+                PdfRenderer.Page page = pdfRenderer.openPage(i);
+
+                int width = AppClass.getApp().getResources().getDisplayMetrics().densityDpi / 72 * page.getWidth();
+                int height = AppClass.getApp().getResources().getDisplayMetrics().densityDpi / 72 * page.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+                page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+
+                bitmaps.add(bitmap);
+
+                page.close();
+            }
+
+            pdfRenderer.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return bitmaps;
+    }
+
+    public static File getImageFileFromPdf(File pdfFile)
+    {
+        List<Bitmap> bitmaps = pdfToBitmap(pdfFile);
+
+        return FileManager.saveBitmapToFile(bitmaps.get(0));
     }
 }

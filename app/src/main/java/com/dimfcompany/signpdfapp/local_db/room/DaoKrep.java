@@ -13,4 +13,7 @@ public interface DaoKrep extends BaseDao<Model_Krep>
 {
     @Query("SELECT * FROM kreps WHERE product_id=:product_id LIMIT 1")
     Model_Krep findKrepsOfProduct(final long product_id);
+
+    @Query("DELETE FROM kreps")
+    public void nukeTable();
 }

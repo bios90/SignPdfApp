@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
     <application
@@ -95,6 +95,9 @@
             android:name=".ui.act_user_auth_dialog.ActUserAuthDialog"
             android:theme="@style/Theme.Transparent" />
         <activity android:name=".ui.act_geo.ActGeo" />
+        <activity
+            android:name=".ui.act_geo_choosing.ActGeoChoosing"
+            android:theme="@style/Theme.Transparent" />
     </application>
 
 

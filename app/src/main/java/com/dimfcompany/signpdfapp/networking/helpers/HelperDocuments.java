@@ -11,6 +11,11 @@ import com.dimfcompany.signpdfapp.networking.WintecApi;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class HelperDocuments
 {
     private static final String TAG = "HelperDocuments";
@@ -79,7 +84,8 @@ public class HelperDocuments
                         }
                     });
 
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -133,7 +139,8 @@ public class HelperDocuments
                             callback.onSuccessGetFullDocument(document);
                         }
                     });
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     Log.e(TAG, "Exception " + e.getMessage());
@@ -200,5 +207,24 @@ public class HelperDocuments
                 }
             }
         }).start();
+    }
+
+    public Completable updateDocumentLocation(long document_id, double lat, double lon)
+    {
+        return wintecApi.update_document_location(document_id, lat, lon)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(s ->
+                {
+                    if (s.equals("success"))
+                    {
+                        return Observer::onComplete;
+                    }
+                    else
+                    {
+                        throw new RuntimeException("not success location update update");
+                    }
+                })
+                .ignoreElements();
     }
 }

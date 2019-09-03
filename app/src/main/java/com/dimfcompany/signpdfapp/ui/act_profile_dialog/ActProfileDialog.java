@@ -92,7 +92,7 @@ public class ActProfileDialog extends BaseActivity implements ActProfileDialogMv
     @Override
     public void clickedSync()
     {
-        if (!globalHelper.isNetworkAvailable())
+        if (!GlobalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
             return;
@@ -104,7 +104,22 @@ public class ActProfileDialog extends BaseActivity implements ActProfileDialogMv
         }
 
         messagesManager.showProgressDialog();
-        synchronizer.makeSyncFromServer(this);
+        synchronizer.syncronizeNotSynced(new SyncManager.CallbackSyncronizeNoSynced()
+        {
+            @Override
+            public void onSuccessSync()
+            {
+                synchronizer.makeSyncFromServer(ActProfileDialog.this);
+            }
+
+            @Override
+            public void onErrorSync()
+            {
+                Log.e(TAG, "onErrorSync: Error on pre sync");
+                messagesManager.dismissProgressDialog();
+                messagesManager.showRedAlerter("Не удалось загрузить документы");
+            }
+        });
     }
 
     @Override

@@ -83,7 +83,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"
                 android:padding="4dp"
-                android:text="Пушкин Александр"
+                tools:text="Пушкин Александр"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
@@ -124,9 +124,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"
                 android:padding="4dp"
-                android:text="Пупкин Василий Андреевич"
                 android:textAlignment="center"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                tools:text="Пупкин Василий Андреевич" />
 
         </LinearLayout>
 
@@ -165,7 +165,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"
                 android:padding="4dp"
-                android:text="+79167027324"
+                tools:text="+79167027324"
                 android:textAlignment="center"
                 android:textColor="@color/blue" />
 
@@ -173,6 +173,8 @@
 
 
         <LinearLayout
+            android:id="@+id/la_adress"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -206,7 +208,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"
                 android:padding="4dp"
-                android:text="Сочи ул Сторителей 25"
+                tools:text="Сочи ул Сторителей 25"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
@@ -248,7 +250,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="10"
                 android:padding="4dp"
-                android:text="22 августа 2019"
+                tools:text="22 августа 2019"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 

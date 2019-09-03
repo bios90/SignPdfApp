@@ -1,6 +1,8 @@
 package com.dimfcompany.signpdfapp.utils;
 
 
+import android.location.Location;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,7 @@ import com.dimfcompany.signpdfapp.ui.act_element_dialog.ActElementDialog;
 import com.dimfcompany.signpdfapp.ui.act_finished.ActFinished;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirst;
 import com.dimfcompany.signpdfapp.ui.act_geo.ActGeo;
+import com.dimfcompany.signpdfapp.ui.act_geo_choosing.ActGeoChoosing;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNew;
 import com.dimfcompany.signpdfapp.ui.act_pre_show.ActPreShow;
@@ -32,6 +35,7 @@ import com.dimfcompany.signpdfapp.ui.act_user_auth_dialog.ActUserAuthDialog;
 import com.dimfcompany.signpdfapp.ui.act_user_docs_dialog.ActUserDocsDialog;
 import com.dimfcompany.signpdfapp.ui.act_user_page.ActUserPage;
 import com.dimfcompany.signpdfapp.ui.act_vaucher.ActVaucher;
+import com.google.android.gms.maps.model.LatLng;
 
 public class NavigationManager
 {
@@ -145,5 +149,10 @@ public class NavigationManager
     public void toActGeo(@Nullable Integer requestCode)
     {
         BaseActivity.startScreen(activity, ActGeo.class, requestCode);
+    }
+
+    public void toActGeoChoosing(@Nullable Integer requestCode, @Nullable LatLng latLng)
+    {
+        ActGeoChoosing.startScreenOver(activity, requestCode, latLng);
     }
 }

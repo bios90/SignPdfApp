@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,12 +56,13 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
         if (document.getVaucher_file_name() != null || document.getVaucher() != null)
         {
             holder.tv_has_vaucher.setVisibility(View.VISIBLE);
-        }else
+        }
+        else
         {
             holder.tv_has_vaucher.setVisibility(View.GONE);
         }
 
-
+        holder.la_adress.setOnClickListener(v -> callback.clickedAdress(document));
 
         holder.root_view.setOnClickListener(new View.OnClickListener()
         {
@@ -87,7 +89,7 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
     @Override
     public int getItemCount()
     {
-        if(documents == null)
+        if (documents == null)
         {
             return 0;
         }
@@ -116,6 +118,7 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
         TextView tv_date;
         TextView tv_user;
         TextView tv_has_vaucher;
+        LinearLayout la_adress;
         Button btn_delete;
         Button btn_send;
         View root_view;
@@ -131,6 +134,7 @@ public class AdapterAdmin extends RecyclerView.Adapter<AdapterAdmin.Card>
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_user = itemView.findViewById(R.id.tv_user);
             tv_has_vaucher = itemView.findViewById(R.id.tv_has_vaucher);
+            la_adress = itemView.findViewById(R.id.la_adress);
             btn_delete = itemView.findViewById(R.id.btn_delete);
             btn_send = itemView.findViewById(R.id.btn_send);
             root_view = itemView.findViewById(R.id.root_view);

@@ -160,6 +160,17 @@ public class StringManager
         return formatWithPattern(value, pattern);
     }
 
+
+    public static String formatWithPattern(String value, String pattern)
+    {
+        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+        formatSymbols.setDecimalSeparator('.');
+        formatSymbols.setGroupingSeparator(' ');
+        DecimalFormat df = new DecimalFormat(pattern, formatSymbols);
+        return df.format(Double.valueOf(value));
+    }
+
+
     public static String transliterate(String message)
     {
         char[] abcCyr = {' ', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
@@ -185,17 +196,6 @@ public class StringManager
         }
         return builder.toString();
     }
-
-
-    public static String formatWithPattern(String value, String pattern)
-    {
-        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
-        formatSymbols.setDecimalSeparator('.');
-        formatSymbols.setGroupingSeparator(' ');
-        DecimalFormat df = new DecimalFormat(pattern, formatSymbols);
-        return df.format(Double.valueOf(value));
-    }
-
 
     public SpannableString getBoldSpannable(String str, int color)
     {

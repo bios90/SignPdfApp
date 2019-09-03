@@ -24,6 +24,8 @@ import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvp;
 import com.dimfcompany.signpdfapp.ui.act_first.ActFirstMvpView;
 import com.dimfcompany.signpdfapp.ui.act_geo.ActGeoMvp;
 import com.dimfcompany.signpdfapp.ui.act_geo.ActGeoMvpView;
+import com.dimfcompany.signpdfapp.ui.act_geo_choosing.ActGeoChoosingMvp;
+import com.dimfcompany.signpdfapp.ui.act_geo_choosing.ActGeoChoosingMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvp;
 import com.dimfcompany.signpdfapp.ui.act_main.ActMainMvpView;
 import com.dimfcompany.signpdfapp.ui.act_main_new.ActMainNewMvp;
@@ -183,5 +185,10 @@ public class ViewMvcFactory
     public ActGeoMvp.MvpView getActGeoMvpView(@Nullable ViewGroup parent)
     {
         return new ActGeoMvpView(layoutInflater, parent);
+    }
+
+    public ActGeoChoosingMvp.MvpView getActGeoChoosingMvpView(@Nullable ViewGroup parent)
+    {
+        return new ActGeoChoosingMvpView(layoutInflater,parent);
     }
 }

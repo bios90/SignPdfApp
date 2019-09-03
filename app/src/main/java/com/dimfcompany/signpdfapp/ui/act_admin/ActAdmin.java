@@ -1,25 +1,42 @@
 package com.dimfcompany.signpdfapp.ui.act_admin;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.base.adapters.AdapterFinished;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.networking.Downloader;
+import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperDocuments;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
+import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
+import com.dimfcompany.signpdfapp.utils.ImageManager;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, AdapterFinished.CardFinishedCallback
 {
@@ -35,10 +52,14 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
     HelperDocuments helperDocuments;
     @Inject
     Downloader downloader;
+    @Inject
+    WintecApi wintecApi;
 
     public static final int OPEN = 7000;
     public static final int SHARE = 7001;
     public static final int PRINT = 7002;
+
+    private Model_Document lastCalledForGeoChange = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -102,6 +123,21 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
     {
         mvpView.unregisterListener(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void clickedAdress(Model_Document document)
+    {
+        lastCalledForGeoChange = document;
+
+        LatLng latLng = null;
+
+        if (document.getLat() != 0 && document.getLon() != 0)
+        {
+            latLng = new LatLng(document.getLat(), document.getLon());
+        }
+
+        navigationManager.toActGeoChoosing(Constants.RQ_GEO_CHOOSING_DIALOG, latLng);
     }
 
     @Override
@@ -171,8 +207,15 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
             {
                 makeDeleteOnServer(document);
             }
+
+            @Override
+            public void clickedAddress()
+            {
+
+            }
         });
     }
+
 
     private void makeDeleteOnServer(final Model_Document document)
     {
@@ -269,10 +312,13 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
                             GlobalHelper.shareFile(ActAdmin.this, file);
                             break;
                         case PRINT:
-                            GlobalHelper.sendToPrint(ActAdmin.this,file);
+                            file = ImageManager.getImageFileFromPdf(file);
+                            Log.e(TAG, "onSuccessDownload: File Name is "+file.getName() );
+//                            GlobalHelper.sendToPrint(ActAdmin.this, file);
                             break;
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -291,5 +337,58 @@ public class ActAdmin extends BaseActivity implements ActAdminMvp.ViewListener, 
     public void clickedPhone(Model_Document document)
     {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case Constants.RQ_GEO_CHOOSING_DIALOG:
+                    LatLng latLng = data.getParcelableExtra(Constants.EXTRA_LAT_LNG);
+                    updateDocumentLocation(latLng);
+                    break;
+            }
+        }
+    }
+
+    private void updateDocumentLocation(LatLng latLng)
+    {
+        if (!GlobalHelper.isNetworkAvailable())
+        {
+            messagesManager.showNoInternetAlerter();
+            return;
+        }
+
+        compositeDisposable.add(
+                wintecApi.update_document_location(lastCalledForGeoChange.getId(), latLng.latitude, latLng.longitude)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> messagesManager.showProgressDialog())
+                        .doOnTerminate(() -> messagesManager.dismissProgressDialog())
+                        .flatMap(s ->
+                        {
+                            if (s.equals("success"))
+                            {
+                                return Observer::onComplete;
+                            }
+                            else
+                            {
+                                throw new RuntimeException("not success location update update");
+                            }
+                        })
+                        .ignoreElements()
+                        .subscribe(() ->
+                        {
+                            messagesManager.showGreenAlerter("Геолокация документа изменена");
+                            loadAllDocuments();
+                        }, throwable ->
+                        {
+                            throwable.printStackTrace();
+                            messagesManager.showRedAlerter("Ошибка при изменении геолокации");
+                        }));
     }
 }

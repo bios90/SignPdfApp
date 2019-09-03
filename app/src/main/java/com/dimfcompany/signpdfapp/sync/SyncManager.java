@@ -17,6 +17,7 @@ import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.networking.Downloader;
 import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.dimfcompany.signpdfapp.utils.FileManager;
+import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -77,48 +78,45 @@ public class SyncManager implements Synchronizer
     @Override
     public void insertDocumentWithSync(final Model_Document document, final CallbackInsertWithSync callback)
     {
-        new Thread(new Runnable()
+        new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
-                {
-                    boolean uploaded = false;
-                    insertLocally(document);
+                boolean uploaded = false;
+                insertLocally(document);
 
-                    if (isNetworkAvailable())
-                    {
-                        syncNewCreated();
-                        uploaded = true;
-                    }
-                    else
-                        {
-                            putSynchronizeTask();
-                        }
-
-                    final boolean finalUploaded = uploaded;
-                    new Handler(Looper.getMainLooper()).post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            callback.onSuccessInsert(finalUploaded);
-                        }
-                    });
-                } catch (Exception e)
+                if (GlobalHelper.isNetworkAvailable())
                 {
-                    e.printStackTrace();
-                    Log.e(TAG, "Exception " + e.getMessage());
-                    new Handler(Looper.getMainLooper()).post(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            callback.onErrorInsert();
-                        }
-                    });
+                    syncNewCreated();
+                    uploaded = true;
                 }
+                else
+                    {
+                        Log.e(TAG, "run: has no internet cant insert" );
+                        putSynchronizeTask();
+                    }
+
+                final boolean finalUploaded = uploaded;
+                new Handler(Looper.getMainLooper()).post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        callback.onSuccessInsert(finalUploaded);
+                    }
+                });
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e(TAG, "Exception " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        callback.onErrorInsert();
+                    }
+                });
             }
         }).start();
     }

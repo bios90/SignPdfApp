@@ -25,6 +25,7 @@ import com.dimfcompany.signpdfapp.ui.act_main.ActMain;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.FileManager;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
+import com.dimfcompany.signpdfapp.utils.ImageManager;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 
 import java.io.File;
@@ -209,6 +210,12 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
             {
                 showDeleteDialog(document);
             }
+
+            @Override
+            public void clickedAddress()
+            {
+
+            }
         });
     }
 
@@ -296,9 +303,15 @@ public class ActMainNew extends BaseActivity implements ActMainNewMvp.ViewListen
                 GlobalHelper.shareFile(ActMainNew.this, file);
                 break;
             case PRINT:
-                GlobalHelper.sendToPrint(ActMainNew.this,file);
+                GlobalHelper.sendToPrint(ActMainNew.this, file);
                 break;
         }
+    }
+
+    @Override
+    public void clickedAdress(Model_Document document)
+    {
+
     }
 
     @Override

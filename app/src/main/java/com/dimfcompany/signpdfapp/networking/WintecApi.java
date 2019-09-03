@@ -107,4 +107,7 @@ public interface WintecApi
             @Query("sum_min") Integer sum_min,
             @Query("sum_max") Integer sum_max
     );
+
+    @POST(Constants.URL_UPDATE_DOCUMENT_LOCATION)
+    Observable<String> update_document_location(@Query("document_id") long document_id, @Query("lat") double lat, @Query("lon") double lon);
 }

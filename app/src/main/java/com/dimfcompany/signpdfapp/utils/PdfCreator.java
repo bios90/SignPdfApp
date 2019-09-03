@@ -52,6 +52,7 @@ public class PdfCreator
         void onSuccessPdfCreation(Model_Document model_document);
 
         void onShowCallSuccess(String fileName);
+
         void onErrorPdfCreation();
     }
 
@@ -168,9 +169,12 @@ public class PdfCreator
             }
 
 
-            String newMainFileName = getRenamedFile(false,false);
+            String newMainFileName = getRenamedFile(false, false);
             newMainFileName += ".pdf";
-            if (FileManager.rename(file, newMainFileName, null)) ;
+            if (FileManager.rename(file, newMainFileName, null))
+            {
+
+            }
             {
                 file = fileManager.getFileFromTemp(newMainFileName, Constants.FOLDER_CONTRACTS, null);
             }
@@ -190,7 +194,8 @@ public class PdfCreator
             });
 
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             Log.e(TAG, "createPdfSync: Exception on creating pdf!" + e.getMessage() + " ||| Line  is " + e.getStackTrace()[0].getLineNumber());
@@ -234,9 +239,12 @@ public class PdfCreator
 
         document.close();
 
-        String newVaucherFileName = getRenamedFile(false,true);
+        String newVaucherFileName = getRenamedFile(false, true);
         newVaucherFileName += ".pdf";
-        if (FileManager.rename(fileVaucher, newVaucherFileName, null)) ;
+        if (FileManager.rename(fileVaucher, newVaucherFileName, null))
+        {
+            ;
+        }
         {
             Log.e(TAG, "makeCheck: renamed ok");
             fileVaucher = fileManager.getFileFromTemp(newVaucherFileName, Constants.FOLDER_VAUCHERS, null);
@@ -275,9 +283,12 @@ public class PdfCreator
 
         document.close();
 
-        String newChekFileName = getRenamedFile(true,false);
+        String newChekFileName = getRenamedFile(true, false);
         newChekFileName += ".pdf";
-        if (FileManager.rename(fileCheck, newChekFileName, null)) ;
+        if (FileManager.rename(fileCheck, newChekFileName, null))
+        {
+            ;
+        }
         {
             Log.e(TAG, "makeCheck: renamed ok");
             fileCheck = fileManager.getFileFromTemp(newChekFileName, Constants.FOLDER_CHECKS, null);
@@ -296,7 +307,7 @@ public class PdfCreator
         PdfPTable tableVaucher = new PdfPTable(4);
         tableVaucher.setTotalWidth(272);
         tableVaucher.setLockedWidth(true);
-        tableVaucher.setWidths(new int[]{30, 25, 20, 25});
+        tableVaucher.setWidths(new int[]{20, 25, 15, 35});
 
         PdfPCell cellLine = getCellLine();
         cellLine.setColspan(4);
@@ -311,7 +322,7 @@ public class PdfCreator
         for (Model_Price_Element price_element : model_document.getVaucher().getPrice_elements())
         {
             String text = price_element.getText();
-            String price = "= " + StringManager.formatNum(price_element.getPrice(),false);
+            String price = "= " + StringManager.formatNum(price_element.getPrice(), false);
 
             PdfPCell cellLeft = getParCell(text, pt28, padding, borderMode, 2, null, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE);
             tableVaucher.addCell(cellLeft);
@@ -346,7 +357,7 @@ public class PdfCreator
         PdfPTable tableProducts = new PdfPTable(4);
         tableProducts.setTotalWidth(272);
         tableProducts.setLockedWidth(true);
-        tableProducts.setWidths(new int[]{30, 25, 20, 25});
+        tableProducts.setWidths(new int[]{20, 25, 15, 35});
 
         for (Model_Product product : model_document.getListOfProducts())
         {
@@ -630,9 +641,9 @@ public class PdfCreator
 
         tableLarge.addCell(getEmptyCell(1, 1, false));
         String address = "  ";
-        if(model_document.getAdress() != null)
+        if (model_document.getAdress() != null)
         {
-            address+=model_document.getAdress();
+            address += model_document.getAdress();
         }
         Paragraph parAddress = new Paragraph(address);
         parAddress.setLeading(18, 0);
@@ -653,9 +664,9 @@ public class PdfCreator
 
         tableLarge.addCell(getEmptyCell(1, 1, false));
         String phone = "  ";
-        if(model_document.getPhone() != null)
+        if (model_document.getPhone() != null)
         {
-            phone+=model_document.getPhone();
+            phone += model_document.getPhone();
         }
         PdfPCell cellPhone = getParCell(phone, reg10Underline, false, null, null, true, 44f);
         cellPhone.setPaddingTop(17);
@@ -750,7 +761,8 @@ public class PdfCreator
         if (TextUtils.isEmpty(product.getWidth()))
         {
             width = "-";
-        } else
+        }
+        else
         {
             width = product.getWidth();
         }
@@ -760,7 +772,8 @@ public class PdfCreator
         if (TextUtils.isEmpty(product.getHeight()))
         {
             height = "-";
-        } else
+        }
+        else
         {
             height = product.getHeight();
         }
@@ -939,12 +952,12 @@ public class PdfCreator
         italic10 = new Font(globalItalic, 10);
         timesNewRoman10 = new Font(globalTimesNewRoman, 10);
 
-        pt46 = new Font(globalPt, 26);
-        pt36 = new Font(globalPt, 18);
-        pt30 = new Font(globalPt, 16);
-        pt28 = new Font(globalPt, 14);
-        pt26 = new Font(globalPt, 13);
-        pt24 = new Font(globalPt, 11);
+        pt46 = new Font(globalPt, 24);
+        pt36 = new Font(globalPt, 16);
+        pt30 = new Font(globalPt, 14);
+        pt28 = new Font(globalPt, 12);
+        pt26 = new Font(globalPt, 11);
+        pt24 = new Font(globalPt, 9);
 
         yellow = new BaseColor(255, 192, 0);
         trans = new BaseColor(0, 0, 0, 0);
@@ -1004,7 +1017,8 @@ public class PdfCreator
         if (border)
         {
             cell.setBorder(Rectangle.BOX);
-        } else
+        }
+        else
         {
             cell.setBorder(Rectangle.NO_BORDER);
         }
@@ -1031,7 +1045,8 @@ public class PdfCreator
         if (border)
         {
             cell.setBorder(Rectangle.BOX);
-        } else
+        }
+        else
         {
             cell.setBorder(Rectangle.NO_BORDER);
         }
@@ -1062,7 +1077,8 @@ public class PdfCreator
         if (border)
         {
             emptyCell.setBorder(Rectangle.BOX);
-        } else
+        }
+        else
         {
             emptyCell.setBorder(Rectangle.NO_BORDER);
         }
@@ -1095,7 +1111,8 @@ public class PdfCreator
         if (borderBottom)
         {
             pdfPCell.setBorder(Rectangle.BOTTOM);
-        } else
+        }
+        else
         {
             pdfPCell.setBorder(Rectangle.NO_BORDER);
         }
@@ -1200,7 +1217,14 @@ public class PdfCreator
         String name = model_document.getCode();
         if (model_document.getFio() != null && model_document.getFio().trim().length() > 0)
         {
-            name = StringManager.transliterate(model_document.getFio()) + "_" + name;
+            String fio = StringManager.transliterate(model_document.getFio());
+
+            if (fio.length() > 40)
+            {
+                fio = fio.substring(0, 40);
+            }
+
+            name = fio + "_" + name;
         }
 
         if (isCheck)
@@ -1270,7 +1294,8 @@ public class PdfCreator
                 document.add(getFormOrderTable());
                 document.add(new Paragraph(32, "\u00a0"));
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.e(TAG, "onStartPage: Exception on page start");
             }
@@ -1287,7 +1312,8 @@ public class PdfCreator
                 if (document.getPageNumber() == 1)
                 {
                     pageNumber = 1;
-                } else
+                }
+                else
                 {
                     pageNumber = 2;
                 }
@@ -1301,7 +1327,8 @@ public class PdfCreator
 
                 document.setMargins(0, 0, 52, 88);
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.e(TAG, "onEndPage: Exception on template adding");
             }

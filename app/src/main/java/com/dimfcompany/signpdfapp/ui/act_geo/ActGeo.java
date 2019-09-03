@@ -1,33 +1,32 @@
 package com.dimfcompany.signpdfapp.ui.act_geo;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.location.Location;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.base.activity.BaseActivity;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.networking.WintecApi;
 import com.dimfcompany.signpdfapp.networking.helpers.HelperDocuments;
-import com.dimfcompany.signpdfapp.ui.act_sign.ActSign;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator.ActionType;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator.DocumentFileType;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.MyLocationManager;
-import com.dimfcompany.signpdfapp.utils.StringManager;
 import com.dimfcompany.signpdfapp.utils.ValidationManager;
 import com.dimfcompany.signpdfapp.utils.dates.MyDatePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.hjq.permissions.XXPermissions;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -64,6 +63,8 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
     private Integer sum_min;
     private Integer sum_max;
     private String search;
+
+    private Model_Document lastCalledForGeoChange = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -105,21 +106,14 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
     public void clickedMyLocation()
     {
         Log.e(TAG, "clickedMyLocation: Will get Location");
-        myLocationManager.getCurrentLocation(true, new MyLocationManager.GetLocationCallback()
-        {
-            @Override
-            public void onGetLocationSuccess(Location location)
-            {
-                Log.e(TAG, "onGetLocationSuccess: Got location ok!!!");
-                mvpView.moveCameraToLocation(MyLocationManager.locationToLatLng(location));
-            }
-
-            @Override
-            public void onUnableGetLocation()
-            {
-                messagesManager.showRedAlerter("Нет доступа к текущему метоположению,включите геолокацию");
-            }
-        });
+        myLocationManager.getRxFusedLocation()
+                .subscribe(location ->
+                {
+                    mvpView.moveCameraToLocation(MyLocationManager.locationToLatLng(location));
+                }, throwable ->
+                {
+                    messagesManager.showRedAlerter("Не удалось найти местоположение пользователя");
+                });
     }
 
     @Override
@@ -131,7 +125,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
             return;
         }
 
-        compositeDisposable.add(wintecApi.getSearchDocuments(search, GlobalHelper.getDateString(date_min,GlobalHelper.FORMAT_LARAVEL), GlobalHelper.getDateString(date_max,GlobalHelper.FORMAT_LARAVEL), sum_min, sum_max)
+        compositeDisposable.add(wintecApi.getSearchDocuments(search, GlobalHelper.getDateString(date_min, GlobalHelper.FORMAT_LARAVEL), GlobalHelper.getDateString(date_max, GlobalHelper.FORMAT_LARAVEL), sum_min, sum_max)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable ->
@@ -144,7 +138,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
                 })
                 .subscribe(documents ->
                         {
-                            if(documents.size() == 0)
+                            if (documents.size() == 0)
                             {
                                 messagesManager.showRedAlerter("Не найдено документов по данному запросу");
                             }
@@ -225,6 +219,20 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
             }
 
             @Override
+            public void clickedAddress()
+            {
+                LatLng latLng = null;
+
+                if (document.getLat() != 0 && document.getLon() != 0)
+                {
+                    latLng = new LatLng(document.getLat(), document.getLon());
+                }
+
+                lastCalledForGeoChange = document;
+                navigationManager.toActGeoChoosing(Constants.RQ_GEO_CHOOSING_DIALOG, latLng);
+            }
+
+            @Override
             public void clickedDelete()
             {
                 messagesManager.showSimpleDialog("Удаление", "Удалить с сервера документ " + document.getCode() + "?", "Удалить", "Отмена", new MessagesManager.DialogButtonsListener()
@@ -235,7 +243,6 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
                         dialog.dismiss();
                         messagesManager.showProgressDialog();
                         documentManipulator.manipulateFromServer(document, DocumentFileType.TYPE_DOCUMENT, ActionType.DELETE, ActGeo.this);
-                        loadDocuments();
                     }
 
                     @Override
@@ -262,7 +269,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
             public void onCheckPermissionDenied()
             {
                 messagesManager.showRedAlerter("Работа приложения невозможна без доступа к геолокации");
-                Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                compositeDisposable.add(Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                         .subscribe(() ->
                         {
                             messagesManager.showSimpleDialog("Настйроки", "Перейти в настрйоки доступа геолокации?", "Перейти", "Отмена", new MessagesManager.DialogButtonsListener()
@@ -283,7 +290,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
                                     finish();
                                 }
                             });
-                        });
+                        }));
             }
         });
     }
@@ -351,7 +358,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
     {
         messagesManager.dismissProgressDialog();
         GlobalHelper.resetDocumentIds(document);
-        navigationManager.toSignActivity(null, document);
+        navigationManager.toSignActivity(Constants.RQ_EDIT_TEMPLATE, document);
     }
 
     @Override
@@ -366,6 +373,7 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
     {
         messagesManager.dismissProgressDialog();
         messagesManager.showGreenAlerter("Документ удален");
+        loadDocuments();
     }
 
     @Override
@@ -373,5 +381,47 @@ public class ActGeo extends BaseActivity implements ActGeoMvp.ViewListener, Docu
     {
         messagesManager.dismissProgressDialog();
         messagesManager.showRedAlerter("Ошибка при удалении докуметов");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.RQ_EDIT_TEMPLATE)
+        {
+            loadDocuments();
+        }
+
+        if (resultCode == Activity.RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case Constants.RQ_GEO_CHOOSING_DIALOG:
+                    LatLng latLng = data.getParcelableExtra(Constants.EXTRA_LAT_LNG);
+                    updateDocumentLocation(latLng);
+                    break;
+            }
+        }
+    }
+
+    private void updateDocumentLocation(LatLng latLng)
+    {
+        if (!GlobalHelper.isNetworkAvailable())
+        {
+            messagesManager.showNoInternetAlerter();
+            return;
+        }
+
+        compositeDisposable.add(
+                helperDocuments.updateDocumentLocation(lastCalledForGeoChange.getId(), latLng.latitude, latLng.longitude)
+                        .doOnSubscribe(disposable -> messagesManager.showProgressDialog())
+                        .doOnTerminate(() -> messagesManager.dismissProgressDialog())
+                        .subscribe(() ->
+                        {
+                            messagesManager.showGreenAlerter("Геолокация документа изменена");
+                            loadDocuments();
+                        }, throwable -> messagesManager.showRedAlerter("Ошибка при изменении геолокации"))
+
+        );
     }
 }

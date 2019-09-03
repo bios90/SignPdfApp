@@ -7,8 +7,9 @@ import java.util.List;
 public class Constants
 {
     //TODO make base url Here
-    public static final String URL_BASE = "http://192.168.1.68/wintec/";
-    //    public static final String URL_BASE = "https://wintec-smart.ru/";
+//    public static final String URL_BASE = "http://192.168.1.68/wintec/";
+    public static final String URL_BASE = "https://wintec-smart.ru/";
+//            public static final String URL_BASE = "http://wintec-roll.ru/";
     public static final String URL_REGISTER = "register";
     public static final String URL_LOGIN = "login";
     public static final String URL_RESETPASS = "forgotpass";
@@ -26,6 +27,7 @@ public class Constants
     public static final String URL_INSERT_UPDATE_USER_NEW = "insert_update_user_new";
     public static final String URL_GET_APP_LAST_VERSION = "get_app_version";
     public static final String URL_GET_DOCUMENTS_SEARCH = "get_documents_search";
+    public static final String URL_UPDATE_DOCUMENT_LOCATION = "update_document_location";
 
 
     public static final int RQ_TAKE_SIGNATURE = 9000;
@@ -40,6 +42,8 @@ public class Constants
     public static final int RQ_EDIT_USER = 9010;
     public static final int RQ_CREATE_USER = 9010;
     public static final int RQ_USER_PAGE = 9011;
+    public static final int RQ_EDIT_TEMPLATE = 9012;
+    public static final int RQ_GEO_CHOOSING_DIALOG = 9014;
 
     public static final int JOB_ID_SYNC = 7000;
 
@@ -69,6 +73,7 @@ public class Constants
     public static final String EXTRA_ROLE_ID = "Extra_Role_Id";
     public static final String EXTRA_USER_ID = "Extra_User_Id";
     public static final String EXTRA_NEED_TO_SHOW_GEO_DIALOG = "Need_To_Show_Geo_Dialog";
+    public static final String EXTRA_LAT_LNG = "Extra_Lat_Lng";
 
     public static final String EXTANSION_PNG = "png";
     public static final String EXTANSION_PDF = "pdf";
@@ -87,7 +92,7 @@ public class Constants
     public static final String FB_TOKEN = "Fb_Token";
 
 
-    public static final List<String> headerStrings = Arrays.asList("Ваучер", "Заказать");
+    public static final List<String> headerStrings = Arrays.asList("Ваучер", "Предоплата", "Доплата");
 
 
     public static final String NOTIFICATION_CHANEL1 = "Напомнинания о добоавлении нового документа";

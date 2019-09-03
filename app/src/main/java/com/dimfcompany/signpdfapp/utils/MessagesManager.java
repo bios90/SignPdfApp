@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,6 +68,8 @@ public class MessagesManager
         void clickedEdit(Dialog dialog);
 
         void clickedDelete();
+
+        void clickedAddress();
     }
 
     public MessagesManager(AppCompatActivity activity)
@@ -285,6 +288,7 @@ public class MessagesManager
     {
         View dialogView = layoutInflater.inflate(R.layout.dialog_document_card_full, null);
         RelativeLayout la_open_dogovor, la_open_check, la_send_dogovor, la_send_check, la_print_check, la_edit, la_delete, la_open_vaucher, la_send_vaucher, la_print_vaucher;
+        LinearLayout la_adress;
         TextView tv_header,tv_user,tv_fio,tv_phone,tv_adress,tv_date;
 
 
@@ -298,6 +302,7 @@ public class MessagesManager
         tv_phone = dialogView.findViewById(R.id.tv_phone);
         tv_adress = dialogView.findViewById(R.id.tv_adress);
         tv_date = dialogView.findViewById(R.id.tv_date);
+        la_adress = dialogView.findViewById(R.id.la_adress);
 
         la_open_dogovor = dialogView.findViewById(R.id.la_open_dogovor);
         la_open_check = dialogView.findViewById(R.id.la_open_check);
@@ -424,6 +429,12 @@ public class MessagesManager
                 dialog.dismiss();
                 listener.clickedPrintVaucher();
             }
+        });
+
+        la_adress.setOnClickListener(v ->
+        {
+            dialog.dismiss();
+            listener.clickedAddress();
         });
 
         if (document.getVaucher_file_name() == null)

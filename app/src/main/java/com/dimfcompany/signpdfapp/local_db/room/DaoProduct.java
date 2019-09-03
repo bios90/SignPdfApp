@@ -28,4 +28,7 @@ public interface DaoProduct extends BaseDao<Model_Product>
 
     @Query("SELECT * FROM materials WHERE product_id=:product_id LIMIT 1")
     Model_Material getProductMaterial(long product_id);
+
+    @Query("DELETE FROM products")
+    public void nukeTable();
 }

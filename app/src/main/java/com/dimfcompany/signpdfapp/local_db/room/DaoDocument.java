@@ -29,4 +29,7 @@ public interface DaoDocument extends BaseDao<Model_Document>
 
     @Query("UPDATE documents SET deleted_at=:deleted_at, sync_status=0 WHERE id=:document_id")
     void deleteSoftByUserId(long document_id, long deleted_at);
+
+    @Query("DELETE FROM documents")
+    public void nukeTable();
 }

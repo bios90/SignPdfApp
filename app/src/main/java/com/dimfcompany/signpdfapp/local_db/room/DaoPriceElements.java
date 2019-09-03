@@ -13,4 +13,7 @@ public interface DaoPriceElements extends BaseDao<Model_Price_Element>
 {
     @Query("SELECT * FROM price_elements WHERE vaucher_id=:vaucher_id")
     List<Model_Price_Element> getPriceElementsOfVaucher(final long vaucher_id);
+
+    @Query("DELETE FROM price_elements")
+    public void nukeTable();
 }

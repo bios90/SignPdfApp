@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.dimfcompany.signpdfapp.base.AppClass;
 import com.dimfcompany.signpdfapp.base.Constants;
 import com.dimfcompany.signpdfapp.models.Model_Document;
 import com.dimfcompany.signpdfapp.networking.Downloader;
@@ -26,12 +27,12 @@ public class FileManager
         this.context = context;
     }
 
-    public File createRandomNameFile(String extansion)
+    public static File createRandomNameFile(String extansion)
     {
         return createRandomNameFile(extansion, Constants.FOLDER_TEMP_FILES);
     }
 
-    public File createRandomNameFile(String extansion, String folder)
+    public static File createRandomNameFile(String extansion, String folder)
     {
         return createFile(StringManager.randomStr(), extansion, folder);
     }
@@ -41,13 +42,13 @@ public class FileManager
         return createFile(name, extension, Constants.FOLDER_TEMP_FILES);
     }
 
-    public File createFile(String name, @Nullable String extension, String folder)
+    public static File createFile(String name, @Nullable String extension, String folder)
     {
         try
         {
             File file;
 
-            String root = context.getExternalFilesDir(null).toString();
+            String root = AppClass.getApp().getExternalFilesDir(null).toString();
             File folder_file = new File(root + "/" + folder);
             if (!folder_file.exists())
             {
@@ -67,7 +68,8 @@ public class FileManager
             file.createNewFile();
 
             return file;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return null;
         }
@@ -94,7 +96,8 @@ public class FileManager
             file = new File(dir_temp_files, fileName);
 
             return file;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.e(TAG, "createRandomNameFile: Excetpion on getting file" + e.getMessage());
             return null;
@@ -118,14 +121,15 @@ public class FileManager
 
             return from.getParentFile().exists() && from.exists() && from.renameTo(destinaition);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.e(TAG, "rename: " + e.getMessage());
             return false;
         }
     }
 
-    public File saveBitmapToFile(Bitmap bitmap)
+    public static File saveBitmapToFile(Bitmap bitmap)
     {
         try
         {
@@ -134,7 +138,8 @@ public class FileManager
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
             return file;
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             Log.e(TAG, "saveBitmapToFile: Error on saving bitmap to file");
             return null;
@@ -167,8 +172,7 @@ public class FileManager
         }
 
 
-
-        if(file!= null && !file.exists())
+        if (file != null && !file.exists())
         {
             file = null;
         }
@@ -191,7 +195,8 @@ public class FileManager
         {
             InputStream inputStream = context.getAssets().open("dogovor.pdf");
             return inputStream;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.e(TAG, "getTemplateStream: Exception On opening dogovor.pdf");
             return null;
@@ -238,10 +243,23 @@ public class FileManager
     void deleteRecursive(File fileOrDirectory)
     {
         if (fileOrDirectory.isDirectory())
+        {
             for (File child : fileOrDirectory.listFiles())
+            {
                 deleteRecursive(child);
+            }
+        }
 
         fileOrDirectory.delete();
+    }
 
+    public static boolean isPdf(File file)
+    {
+        if(file == null)
+        {
+            return false;
+        }
+
+        return file.getAbsolutePath().toLowerCase().endsWith(".pdf");
     }
 }

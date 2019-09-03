@@ -25,6 +25,8 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         void clickedCard(Model_Document document);
 
         void clickedPhone(Model_Document document);
+
+        void clickedAdress(Model_Document document);
     }
 
     List<Model_Document> listOfDocuments = new ArrayList<>();
@@ -81,10 +83,11 @@ public class AdapterFinished extends RecyclerView.Adapter<AdapterFinished.CardFi
         if (document.getVaucher_file_name() != null || document.getVaucher() != null)
         {
             cardFinished.tv_has_vaucher.setVisibility(View.VISIBLE);
-        }else
-            {
-                cardFinished.tv_has_vaucher.setVisibility(View.GONE);
-            }
+        }
+        else
+        {
+            cardFinished.tv_has_vaucher.setVisibility(View.GONE);
+        }
 
         cardFinished.root_view.setOnClickListener(new View.OnClickListener()
         {

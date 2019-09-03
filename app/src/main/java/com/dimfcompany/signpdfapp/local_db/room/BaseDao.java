@@ -11,7 +11,7 @@ import com.dimfcompany.signpdfapp.models.Model_Color;
 @Dao
 public interface BaseDao<Model>
 {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Model model);
 
     @Update

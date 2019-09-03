@@ -166,6 +166,11 @@ public class ActFinished extends BaseActivity implements ActFinishedMvp.ViewList
 //        });
     }
 
+    @Override
+    public void clickedAdress(Model_Document document)
+    {
+
+    }
 
     private void showDeleteDialog(final Model_Document document)
     {

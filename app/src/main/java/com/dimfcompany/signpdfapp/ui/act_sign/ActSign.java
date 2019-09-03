@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -27,19 +25,22 @@ import com.dimfcompany.signpdfapp.utils.MessagesManager;
 import com.dimfcompany.signpdfapp.utils.MyLocationManager;
 import com.dimfcompany.signpdfapp.utils.PdfCreator;
 import com.dimfcompany.signpdfapp.utils.StringManager;
-import com.hjq.permissions.OnPermission;
-import com.hjq.permissions.Permission;
+import com.google.android.gms.maps.model.LatLng;
 import com.hjq.permissions.XXPermissions;
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, PdfCreator.PdfCreationCallback, SyncManager.CallbackInsertWithSync
 {
@@ -79,6 +80,8 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
 
     Model_Document model_document;
     Model_User user;
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     boolean editMode;
 
@@ -122,49 +125,63 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @SuppressWarnings({"MissingPermission"})
     public void clickedCreatePDf()
     {
-        if (!GlobalHelper.isLocationEnabled())
+        if (user.getRole_id() == 7)
         {
-            messagesManager.showRedAlerter("Включите Геолокацию для сохранения документа");
-            return;
+            makeAdminGeoChoose();
         }
-
-        messagesManager.showProgressDialog("Поиск местоположения");
-        myLocationManager.getCurrentLocation(true, new MyLocationManager.GetLocationCallback()
+        else
         {
-            @Override
-            public void onGetLocationSuccess(Location location)
+            if (!GlobalHelper.isLocationEnabled())
             {
-                messagesManager.dismissProgressDialog();
-                model_document.setLat(location.getLatitude());
-                model_document.setLon(location.getLongitude());
-
-                //Todo remove later
-                model_document.setLat(location.getLatitude() + GlobalHelper.getRandomDouble(0, 1));
-                model_document.setLon(location.getLongitude() + GlobalHelper.getRandomDouble(0, 1));
-                //
-
-                messagesManager.showProgressDialog("Создание документов");
-                model_document = collectDocumentData();
-                model_document.setUser_id(user.getId());
-                pdfCreator.createPdfAsync(model_document, false, ActSign.this);
+                messagesManager.showRedAlerter("Включите Геолокацию для сохранения документа");
+                return;
             }
+            makeUserGeoSearch();
+        }
+    }
 
-            @Override
-            public void onUnableGetLocation()
-            {
-                messagesManager.dismissProgressDialog();
-                messagesManager.showRedAlerter("Не удалось найти местоположение");
-            }
-        });
+    private void makeUserGeoSearch()
+    {
+        compositeDisposable.add(
+                myLocationManager.getRxFusedLocation()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(disposable -> messagesManager.showProgressDialog("Поиск местоположения"))
+                        .doOnTerminate(() -> messagesManager.dismissProgressDialog())
+                        .subscribe(location ->
+                        {
+                            compositeDisposable.clear();
 
+                            model_document.setLat(location.getLatitude());
+                            model_document.setLon(location.getLongitude());
+
+                            messagesManager.showProgressDialog("Создание документов");
+                            model_document = collectDocumentData();
+                            model_document.setUser_id(user.getId());
+                            pdfCreator.createPdfAsync(model_document, false, ActSign.this);
+                        }, throwable ->
+                        {
+                            throwable.printStackTrace();
+                            messagesManager.showRedAlerter("Не удалось найти местоположение");
+                        })
+
+        );
+    }
+
+    private void makeAdminGeoChoose()
+    {
+        LatLng latLng = null;
+        Model_Document document = collectDocumentData();
+        if (document.getLat() != 0 && document.getLon() != 0)
+        {
+            latLng = new LatLng(document.getLat(), document.getLon());
+        }
+        navigationManager.toActGeoChoosing(Constants.RQ_GEO_CHOOSING_DIALOG, latLng);
     }
 
     @Override
     public void clickedPreShow()
     {
         navigationManager.toActPreShow(null);
-//        model_document = collectDocumentData();
-//        pdfCreator.createPdfAsync(model_document, true, this);
     }
 
     @Override
@@ -257,6 +274,17 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
                         mvpView.bindModelDocument(model_document);
                     }
                     break;
+
+                case Constants.RQ_GEO_CHOOSING_DIALOG:
+                    LatLng latLng = data.getParcelableExtra(Constants.EXTRA_LAT_LNG);
+                    model_document.setLat(latLng.latitude);
+                    model_document.setLon(latLng.longitude);
+
+                    messagesManager.showProgressDialog("Создание документов");
+                    model_document = collectDocumentData();
+                    model_document.setUser_id(user.getId());
+                    pdfCreator.createPdfAsync(model_document, false, ActSign.this);
+                    break;
             }
         }
     }
@@ -264,9 +292,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
     @Override
     public void onSuccessPdfCreation(Model_Document model_document)
     {
-//        localDatabase.insertDocument(model_document);
         synchronizer.insertDocumentWithSync(model_document, this);
-//        messagesManager.showGreenAlerter("Успешно", "Новый договор успешно создан");
     }
 
     @Override
@@ -312,6 +338,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
             return;
         }
 
+        model_document.setSync_status(0);
         editMode = true;
         mvpView.bindModelDocument(model_document);
         mvpView.updateMaterialButton();
@@ -331,7 +358,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
             public void onCheckPermissionDenied()
             {
                 messagesManager.showRedAlerter("Работа приложения невозможна без доступа к геолокации");
-                Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                compositeDisposable.add(Completable.timer(5, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                         .subscribe(() ->
                         {
                             messagesManager.showSimpleDialog("Настйроки", "Перейти в настрйоки доступа геолокации?", "Перейти", "Отмена", new MessagesManager.DialogButtonsListener()
@@ -352,7 +379,7 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
                                     finish();
                                 }
                             });
-                        });
+                        }));
             }
         });
     }
@@ -366,6 +393,13 @@ public class ActSign extends BaseActivity implements ActSignMvp.ViewListener, Pd
         {
             synchronizer.putSynchronizeTask();
         }
+
+        compositeDisposable.add(Completable.timer(3, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(() ->
+                {
+                    navigationManager.toActMainNew(null);
+                    finish();
+                }));
     }
 
     @Override

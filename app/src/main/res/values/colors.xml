@@ -24,6 +24,7 @@
     <color name="orangeGradDarkMin">#E86507</color>
 
     <color name="black">#2A2D34</color>
+    <color name="blackTrans">#802A2D34</color>
     <color name="white">#ffffff</color>
     <color name="gray0">#F9F9F9</color>
     <color name="gray1">#EBEBEC</color>

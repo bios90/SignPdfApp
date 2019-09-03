@@ -20,6 +20,7 @@ import com.dimfcompany.signpdfapp.ui.act_access_dialog.ActAccessDialog;
 import com.dimfcompany.signpdfapp.ui.act_admin.ActAdmin;
 import com.dimfcompany.signpdfapp.utils.DocumentManipulator;
 import com.dimfcompany.signpdfapp.utils.GlobalHelper;
+import com.dimfcompany.signpdfapp.utils.ImageManager;
 import com.dimfcompany.signpdfapp.utils.MessagesManager;
 
 import java.io.File;
@@ -191,6 +192,12 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
             {
                 makeDeleteOnServer(document);
             }
+
+            @Override
+            public void clickedAddress()
+            {
+
+            }
         });
     }
 
@@ -243,7 +250,7 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
 
     private void makeEdit(Model_Document doc)
     {
-        if (!globalHelper.isNetworkAvailable())
+        if (!GlobalHelper.isNetworkAvailable())
         {
             messagesManager.showNoInternetAlerter();
         }
@@ -311,6 +318,11 @@ public class ActUserDocsDialog extends BaseActivity implements ActUserDocsDialog
         });
     }
 
+    @Override
+    public void clickedAdress(Model_Document document)
+    {
+
+    }
 
     @Override
     public void clickedPhone(Model_Document document)

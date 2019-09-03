@@ -45,6 +45,5 @@ public interface ActGeoMvp
         void clickedDocument(Model_Document document);
 
         void clickedDate(boolean max);
-
     }
 }

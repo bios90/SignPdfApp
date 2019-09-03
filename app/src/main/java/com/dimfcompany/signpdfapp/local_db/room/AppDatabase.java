@@ -12,7 +12,7 @@ import com.dimfcompany.signpdfapp.models.Model_Price_Element;
 import com.dimfcompany.signpdfapp.models.Model_Product;
 import com.dimfcompany.signpdfapp.models.Model_Vaucher;
 
-@Database(entities = {Model_Document.class, Model_Product.class,Model_Color.class, Model_Control.class, Model_Krep.class, Model_Material.class, Model_Vaucher.class, Model_Price_Element.class},version = 9)
+@Database(entities = {Model_Document.class, Model_Product.class,Model_Color.class, Model_Control.class, Model_Krep.class, Model_Material.class, Model_Vaucher.class, Model_Price_Element.class},version = 11)
 public abstract class AppDatabase extends RoomDatabase
 {
     public abstract DaoDocument getDaoDocument();
