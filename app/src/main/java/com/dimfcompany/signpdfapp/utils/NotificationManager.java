@@ -166,7 +166,6 @@ public class NotificationManager
     {
         String title = "Добавлен новый документ | Сумма " + StringManager.formatNum(document.getSum(), false);
 
-
         String message = "";
         if (document.getAdress() != null)
         {
